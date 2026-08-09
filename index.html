@@ -113,7 +113,10 @@
         <h1>Last.fm Stream Widget</h1>
 
         <p>
-            Enter a Last.fm username to generate a widget URL.
+            Enter the streamer's Last.fm username,
+            preview the widget, then copy the generated URL
+            into Pogly as a browser/web source.
+            
         </p>
 
         <label for="username">
@@ -181,7 +184,7 @@
             document.getElementById('copy');
 
 
-        function generateWidget() {
+       async function generateWidget() {
 
             const username =
                 usernameInput.value.trim();
@@ -191,77 +194,58 @@
                 return;
             }
 
+            generateButton.disabled = true;
+            generateButton.textContent = 'Checking...';
 
-            const widgetURL =
-                `${window.location.origin}/musicplayer2.html?user=${encodeURIComponent(username)}`;
+            try {
 
+                const response =
+                    await fetch(`/api/lastfm?username=${encodeURIComponent(username)}`
+            );
 
-            widgetURLInput.value =
-                widgetURL;
+        const data =
+            await response.json();
 
-            preview.src =
-                widgetURL;
+        if (!response.ok || data.error) {
 
-            output.style.display =
-                'block';
+            alert(
+                data.message ||
+                'Last.fm user not found.'
+            );
+
+            return;
         }
 
 
-        generateButton.addEventListener(
-            'click',
-            generateWidget
+        const widgetURL =
+            `${window.location.origin}/widget.html?user=${encodeURIComponent(username)}`;
+
+
+        widgetURLInput.value =
+            widgetURL;
+
+        preview.src =
+            widgetURL;
+
+        output.style.display =
+            'block';
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert(
+            'Unable to check Last.fm right now.'
         );
 
+    } finally {
 
-        usernameInput.addEventListener(
-            'keydown',
-            function(event) {
-
-                if (event.key === 'Enter') {
-                    generateWidget();
-                }
-            }
-        );
-
-
-        copyButton.addEventListener(
-            'click',
-            async function() {
-
-                const widgetURL =
-                    widgetURLInput.value;
-
-                if (!widgetURL) {
-                    return;
-                }
-
-
-                try {
-
-                    await navigator.clipboard.writeText(
-                        widgetURL
-                    );
-
-                    copyButton.textContent =
-                        'Copied!';
-
-                    setTimeout(() => {
-
-                        copyButton.textContent =
-                            'Copy';
-
-                    }, 1500);
-
-                } catch {
-
-                    widgetURLInput.select();
-
-                    document.execCommand(
-                        'copy'
-                    );
-                }
-            }
-        );
+        generateButton.disabled = false;
+        generateButton.textContent =
+            'Generate Widget';
+    }
+}
+          
 
     </script>
 
