@@ -1,26 +1,48 @@
 /* ==================================================
-   SETTINGS
+   URL SETTINGS
 ================================================== */
 
-/*
- * Reads the Last.fm username from the URL.
- *
- * Example:
- * musicplayer2.html?user=ilyjonatan
- */
+const params =
+    new URLSearchParams(
+        window.location.search
+    );
 
-const params = new URLSearchParams(window.location.search);
 
 const LASTFM_USERNAME =
     params.get('user') ||
     params.get('username');
 
 
-/*
- * 5000 = check every 5 seconds
- */
+const SHOW_ART =
+    params.get('art') !== '0';
 
-const UPDATE_INTERVAL = 5000;
+
+const SHOW_STATUS =
+    params.get('status') !== '0';
+
+
+const OPACITY =
+    Math.min(
+        100,
+        Math.max(
+            0,
+            Number(
+                params.get('opacity') || 92
+            )
+        )
+    );
+
+
+const BACKGROUND_COLOR =
+    params.get('bg') || '14141c';
+
+
+const ACCENT_COLOR =
+    params.get('accent') || 'ffffff';
+
+
+const UPDATE_INTERVAL =
+    5000;
 
 
 /* ==================================================
@@ -30,31 +52,152 @@ const UPDATE_INTERVAL = 5000;
 const widget =
     document.getElementById('widget');
 
+const albumContainer =
+    document.getElementById(
+        'album-container'
+    );
+
 const albumArt =
-    document.getElementById('album-art');
+    document.getElementById(
+        'album-art'
+    );
 
 const songTitle =
-    document.getElementById('song-title');
+    document.getElementById(
+        'song-title'
+    );
 
 const artistName =
-    document.getElementById('artist-name');
+    document.getElementById(
+        'artist-name'
+    );
 
 const status =
-    document.getElementById('status');
+    document.getElementById(
+        'status'
+    );
 
 const statusText =
-    document.getElementById('status-text');
+    document.getElementById(
+        'status-text'
+    );
 
 const musicIndicator =
-    document.getElementById('music-indicator');
+    document.getElementById(
+        'music-indicator'
+    );
+
+
+/* ==================================================
+   COLOR HELPERS
+================================================== */
+
+function isValidHexColor(value) {
+
+    return /^[0-9a-fA-F]{6}$/.test(
+        value
+    );
+}
+
+
+function hexToRgb(hex) {
+
+    if (!isValidHexColor(hex)) {
+
+        return {
+            r: 20,
+            g: 20,
+            b: 28
+        };
+    }
+
+
+    return {
+        r: parseInt(
+            hex.slice(0, 2),
+            16
+        ),
+
+        g: parseInt(
+            hex.slice(2, 4),
+            16
+        ),
+
+        b: parseInt(
+            hex.slice(4, 6),
+            16
+        )
+    };
+}
+
+
+/* ==================================================
+   APPLY CUSTOMIZATION
+================================================== */
+
+function applyCustomization() {
+
+    const bg =
+        hexToRgb(
+            BACKGROUND_COLOR
+        );
+
+
+    const alpha =
+        OPACITY / 100;
+
+
+    widget.style.background =
+        `rgba(${bg.r}, ${bg.g}, ${bg.b}, ${alpha})`;
+
+
+    if (
+        isValidHexColor(
+            ACCENT_COLOR
+        )
+    ) {
+
+        const accent =
+            `#${ACCENT_COLOR}`;
+
+
+        songTitle.style.color =
+            accent;
+
+        status.style.color =
+            accent;
+
+        musicIndicator.style.background =
+            accent;
+
+        document.documentElement.style
+            .setProperty(
+                '--accent-color',
+                accent
+            );
+    }
+
+
+    if (!SHOW_ART) {
+
+        albumContainer.style.display =
+            'none';
+    }
+
+
+    if (!SHOW_STATUS) {
+
+        status.style.display =
+            'none';
+    }
+}
 
 
 /* ==================================================
    DEFAULT ART
 ================================================== */
 
-const DEFAULT_ART =
-    'https://picsum.photos/300';
+const DEFAULT_ART = '';
 
 
 /* ==================================================
@@ -64,7 +207,9 @@ const DEFAULT_ART =
 function showPlaying(track) {
 
     const title =
-        track.name || 'Unknown Track';
+        track.name ||
+        'Unknown Track';
+
 
     const artist =
         track.artist &&
@@ -73,15 +218,22 @@ function showPlaying(track) {
             : 'Unknown Artist';
 
 
-    songTitle.textContent = title;
-    artistName.textContent = artist;
+    songTitle.textContent =
+        title;
+
+    artistName.textContent =
+        artist;
 
 
-    let imageURL = DEFAULT_ART;
+    let imageURL =
+        DEFAULT_ART;
+
 
     if (
         track.image &&
-        Array.isArray(track.image)
+        Array.isArray(
+            track.image
+        )
     ) {
 
         const imageSizes = [
@@ -91,56 +243,113 @@ function showPlaying(track) {
             'small'
         ];
 
-        for (const size of imageSizes) {
+
+        for (
+            const size
+            of imageSizes
+        ) {
 
             const image =
                 track.image.find(
-                    img => img.size === size
+                    img =>
+                        img.size === size
                 );
+
 
             if (
                 image &&
                 image['#text']
             ) {
-                imageURL = image['#text'];
+
+                imageURL =
+                    image['#text'];
+
                 break;
             }
         }
     }
 
 
-    albumArt.classList.add('loading');
+    if (
+        SHOW_ART &&
+        imageURL
+    ) {
 
-    const newImage = new Image();
-
-    newImage.onload = function () {
-
-        albumArt.src = imageURL;
-
-        setTimeout(() => {
-            albumArt.classList.remove('loading');
-        }, 50);
-    };
-
-    newImage.onerror = function () {
-
-        albumArt.src = DEFAULT_ART;
-        albumArt.classList.remove('loading');
-    };
-
-    newImage.src = imageURL;
+        albumContainer.style.display =
+            'block';
 
 
-    widget.classList.remove('idle');
+        albumArt.classList.add(
+            'loading'
+        );
 
-    status.classList.add('playing');
+
+        const newImage =
+            new Image();
+
+
+        newImage.onload =
+            function () {
+
+                albumArt.src =
+                    imageURL;
+
+                setTimeout(
+                    () => {
+
+                        albumArt.classList.remove(
+                            'loading'
+                        );
+
+                    },
+                    50
+                );
+            };
+
+
+        newImage.onerror =
+            function () {
+
+                albumArt.removeAttribute(
+                    'src'
+                );
+
+                albumArt.classList.remove(
+                    'loading'
+                );
+            };
+
+
+        newImage.src =
+            imageURL;
+    }
+
+
+    widget.classList.remove(
+        'idle'
+    );
+
+
+    status.classList.add(
+        'playing'
+    );
+
 
     statusText.textContent =
         'NOW PLAYING';
 
-    musicIndicator.classList.remove('idle');
 
-    musicIndicator.classList.add('playing');
+    musicIndicator.classList.remove(
+        'idle'
+    );
+
+
+    musicIndicator.classList.add(
+        'playing'
+    );
+
+
+    applyCustomization();
 }
 
 
@@ -153,22 +362,45 @@ function showNothingPlaying() {
     songTitle.textContent =
         'Nothing Playing';
 
+
     artistName.textContent =
         'No active Last.fm scrobble';
 
-    albumArt.src =
-        DEFAULT_ART;
 
-    widget.classList.add('idle');
+    albumArt.removeAttribute(
+        'src'
+    );
 
-    status.classList.remove('playing');
+
+    albumContainer.style.display =
+        'none';
+
+
+    widget.classList.add(
+        'idle'
+    );
+
+
+    status.classList.remove(
+        'playing'
+    );
+
 
     statusText.textContent =
         'NOT PLAYING';
 
-    musicIndicator.classList.remove('playing');
 
-    musicIndicator.classList.add('idle');
+    musicIndicator.classList.remove(
+        'playing'
+    );
+
+
+    musicIndicator.classList.add(
+        'idle'
+    );
+
+
+    applyCustomization();
 }
 
 
@@ -176,24 +408,48 @@ function showNothingPlaying() {
    SHOW ERROR
 ================================================== */
 
-function showError(message = 'Unable to connect to Last.fm') {
+function showError(
+    message =
+        'Unable to connect to Last.fm'
+) {
 
     songTitle.textContent =
         'Last.fm Error';
 
+
     artistName.textContent =
         message;
 
-    widget.classList.add('idle');
 
-    status.classList.remove('playing');
+    albumContainer.style.display =
+        'none';
+
+
+    widget.classList.add(
+        'idle'
+    );
+
+
+    status.classList.remove(
+        'playing'
+    );
+
 
     statusText.textContent =
         'ERROR';
 
-    musicIndicator.classList.remove('playing');
 
-    musicIndicator.classList.add('idle');
+    musicIndicator.classList.remove(
+        'playing'
+    );
+
+
+    musicIndicator.classList.add(
+        'idle'
+    );
+
+
+    applyCustomization();
 }
 
 
@@ -201,7 +457,9 @@ function showError(message = 'Unable to connect to Last.fm') {
    HANDLE LAST.FM DATA
 ================================================== */
 
-function handleLastFMResponse(data) {
+function handleLastFMResponse(
+    data
+) {
 
     try {
 
@@ -215,12 +473,14 @@ function handleLastFMResponse(data) {
                 data
             );
 
+
             showError(
                 data &&
                 data.message
                     ? data.message
                     : 'Check the Last.fm username'
             );
+
 
             return;
         }
@@ -232,6 +492,7 @@ function handleLastFMResponse(data) {
         ) {
 
             showNothingPlaying();
+
             return;
         }
 
@@ -239,8 +500,11 @@ function handleLastFMResponse(data) {
         const tracks =
             data.recenttracks.track;
 
+
         const track =
-            Array.isArray(tracks)
+            Array.isArray(
+                tracks
+            )
                 ? tracks[0]
                 : tracks;
 
@@ -248,23 +512,29 @@ function handleLastFMResponse(data) {
         if (!track) {
 
             showNothingPlaying();
+
             return;
         }
 
 
         const isPlaying =
             track['@attr'] &&
-            track['@attr'].nowplaying === 'true';
+            track['@attr']
+                .nowplaying ===
+                'true';
 
 
         if (isPlaying) {
 
-            showPlaying(track);
+            showPlaying(
+                track
+            );
 
         } else {
 
             showNothingPlaying();
         }
+
 
     } catch (error) {
 
@@ -273,18 +543,21 @@ function handleLastFMResponse(data) {
             error
         );
 
+
         showError();
     }
 }
 
 
 /* ==================================================
-   QUERY OUR API
+   QUERY API
 ================================================== */
 
 async function queryLastFM() {
 
-    if (!LASTFM_USERNAME) {
+    if (
+        !LASTFM_USERNAME
+    ) {
 
         showError(
             'No Last.fm username provided'
@@ -308,12 +581,15 @@ async function queryLastFM() {
             await response.json();
 
 
-        if (!response.ok) {
+        if (
+            !response.ok
+        ) {
 
             console.error(
                 'Widget API error:',
                 data
             );
+
 
             showError(
                 data.message ||
@@ -321,11 +597,15 @@ async function queryLastFM() {
                 'Unable to retrieve Last.fm data'
             );
 
+
             return;
         }
 
 
-        handleLastFMResponse(data);
+        handleLastFMResponse(
+            data
+        );
+
 
     } catch (error) {
 
@@ -333,6 +613,7 @@ async function queryLastFM() {
             'Could not connect to widget API:',
             error
         );
+
 
         showError(
             'Unable to connect to server'
@@ -345,9 +626,14 @@ async function queryLastFM() {
    START
 ================================================== */
 
+applyCustomization();
+
 queryLastFM();
 
-if (LASTFM_USERNAME) {
+
+if (
+    LASTFM_USERNAME
+) {
 
     setInterval(
         queryLastFM,
