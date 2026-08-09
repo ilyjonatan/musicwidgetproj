@@ -35,7 +35,7 @@
             padding: 28px;
 
             background: #1c1c26;
-            border: 1px solid rgba(255,255,255,0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 18px;
         }
 
@@ -44,7 +44,7 @@
         }
 
         p {
-            color: rgba(255,255,255,0.65);
+            color: rgba(255, 255, 255, 0.65);
         }
 
         label {
@@ -57,7 +57,7 @@
             width: 100%;
             padding: 12px 14px;
 
-            border: 1px solid rgba(255,255,255,0.15);
+            border: 1px solid rgba(255, 255, 255, 0.15);
             border-radius: 10px;
 
             background: #121219;
@@ -80,6 +80,11 @@
             cursor: pointer;
         }
 
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
         .output {
             margin-top: 24px;
             display: none;
@@ -92,12 +97,18 @@
 
         .url-row input {
             flex: 1;
+            min-width: 0;
+        }
+
+        .url-row button {
+            margin-top: 0;
         }
 
         iframe {
             margin-top: 20px;
 
             width: 420px;
+            max-width: 100%;
             height: 130px;
 
             border: 0;
@@ -106,18 +117,21 @@
     </style>
 </head>
 
+
 <body>
 
     <div class="setup">
 
-        <h1>Last.fm Stream Widget</h1>
+        <h1>
+            Last.fm Stream Widget
+        </h1>
 
         <p>
             Enter the streamer's Last.fm username,
             preview the widget, then copy the generated URL
             into Pogly as a browser/web source.
-            
         </p>
+
 
         <label for="username">
             Last.fm Username
@@ -127,23 +141,30 @@
             id="username"
             type="text"
             placeholder="ilyjonatan"
+            autocomplete="off"
         >
+
 
         <button id="generate">
             Generate Widget
         </button>
 
 
-        <div class="output" id="output">
+        <div
+            class="output"
+            id="output"
+        >
 
-            <label>
+            <label for="widget-url">
                 Widget URL
             </label>
+
 
             <div class="url-row">
 
                 <input
                     id="widget-url"
+                    type="text"
                     readonly
                 >
 
@@ -152,6 +173,7 @@
                 </button>
 
             </div>
+
 
             <iframe
                 id="preview"
@@ -164,6 +186,10 @@
 
 
     <script>
+
+        /* ================================
+           ELEMENTS
+        ================================ */
 
         const usernameInput =
             document.getElementById('username');
@@ -184,68 +210,201 @@
             document.getElementById('copy');
 
 
-       async function generateWidget() {
+        /* ================================
+           GENERATE WIDGET
+        ================================ */
+
+        async function generateWidget() {
 
             const username =
                 usernameInput.value.trim();
 
+
             if (!username) {
-                alert('Enter a Last.fm username.');
+
+                alert(
+                    'Enter a Last.fm username.'
+                );
+
                 return;
             }
 
+
             generateButton.disabled = true;
-            generateButton.textContent = 'Checking...';
+
+            generateButton.textContent =
+                'Checking...';
+
 
             try {
 
+                /*
+                 * Check that Last.fm can find
+                 * this username first.
+                 */
+
                 const response =
-                    await fetch(`/api/lastfm?username=${encodeURIComponent(username)}`
-            );
+                    await fetch(
+                        `/api/lastfm?username=${encodeURIComponent(username)}`
+                    );
 
-        const data =
-            await response.json();
 
-        if (!response.ok || data.error) {
+                const data =
+                    await response.json();
 
-            alert(
-                data.message ||
-                'Last.fm user not found.'
-            );
 
-            return;
+                if (
+                    !response.ok ||
+                    data.error
+                ) {
+
+                    alert(
+                        data.message ||
+                        'Last.fm user not found.'
+                    );
+
+                    return;
+                }
+
+
+                /*
+                 * Build the public widget URL.
+                 */
+
+                const widgetURL =
+                    `${window.location.origin}/widget.html?user=${encodeURIComponent(username)}`;
+
+
+                widgetURLInput.value =
+                    widgetURL;
+
+
+                /*
+                 * Load the widget in the preview.
+                 */
+
+                preview.src =
+                    widgetURL;
+
+
+                /*
+                 * Reveal the URL + preview.
+                 */
+
+                output.style.display =
+                    'block';
+
+
+            } catch (error) {
+
+                console.error(
+                    'Generator error:',
+                    error
+                );
+
+
+                alert(
+                    'Unable to check Last.fm right now.'
+                );
+
+
+            } finally {
+
+                generateButton.disabled =
+                    false;
+
+                generateButton.textContent =
+                    'Generate Widget';
+            }
         }
 
 
-        const widgetURL =
-            `${window.location.origin}/widget.html?user=${encodeURIComponent(username)}`;
+        /* ================================
+           GENERATE BUTTON
+        ================================ */
 
-
-        widgetURLInput.value =
-            widgetURL;
-
-        preview.src =
-            widgetURL;
-
-        output.style.display =
-            'block';
-
-    } catch (error) {
-
-        console.error(error);
-
-        alert(
-            'Unable to check Last.fm right now.'
+        generateButton.addEventListener(
+            'click',
+            generateWidget
         );
 
-    } finally {
 
-        generateButton.disabled = false;
-        generateButton.textContent =
-            'Generate Widget';
-    }
-}
-          
+        /*
+         * Also allow Enter to generate.
+         */
+
+        usernameInput.addEventListener(
+            'keydown',
+            function (event) {
+
+                if (event.key === 'Enter') {
+
+                    generateWidget();
+                }
+            }
+        );
+
+
+        /* ================================
+           COPY BUTTON
+        ================================ */
+
+        copyButton.addEventListener(
+            'click',
+            async function () {
+
+                const widgetURL =
+                    widgetURLInput.value;
+
+
+                if (!widgetURL) {
+                    return;
+                }
+
+
+                try {
+
+                    await navigator.clipboard.writeText(
+                        widgetURL
+                    );
+
+
+                    copyButton.textContent =
+                        'Copied!';
+
+
+                    setTimeout(
+                        function () {
+
+                            copyButton.textContent =
+                                'Copy';
+
+                        },
+                        1500
+                    );
+
+
+                } catch (error) {
+
+                    console.error(
+                        'Clipboard copy failed:',
+                        error
+                    );
+
+
+                    /*
+                     * Fallback for browsers where
+                     * Clipboard API isn't available.
+                     */
+
+                    widgetURLInput.select();
+
+                    document.execCommand(
+                        'copy'
+                    );
+                }
+            }
+        );
 
     </script>
 
