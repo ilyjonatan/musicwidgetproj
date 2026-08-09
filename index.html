@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Last.fm Stream Widget</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 24px;
+
+            background: #111118;
+            color: white;
+
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .setup {
+            width: 100%;
+            max-width: 600px;
+
+            padding: 28px;
+
+            background: #1c1c26;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 18px;
+        }
+
+        h1 {
+            margin-top: 0;
+        }
+
+        p {
+            color: rgba(255,255,255,0.65);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 14px;
+
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 10px;
+
+            background: #121219;
+            color: white;
+
+            font-size: 16px;
+        }
+
+        button {
+            margin-top: 14px;
+            padding: 12px 16px;
+
+            border: 0;
+            border-radius: 10px;
+
+            background: white;
+            color: #111118;
+
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .output {
+            margin-top: 24px;
+            display: none;
+        }
+
+        .url-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .url-row input {
+            flex: 1;
+        }
+
+        iframe {
+            margin-top: 20px;
+
+            width: 420px;
+            height: 130px;
+
+            border: 0;
+            background: transparent;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="setup">
+
+        <h1>Last.fm Stream Widget</h1>
+
+        <p>
+            Enter a Last.fm username to generate a widget URL.
+        </p>
+
+        <label for="username">
+            Last.fm Username
+        </label>
+
+        <input
+            id="username"
+            type="text"
+            placeholder="ilyjonatan"
+        >
+
+        <button id="generate">
+            Generate Widget
+        </button>
+
+
+        <div class="output" id="output">
+
+            <label>
+                Widget URL
+            </label>
+
+            <div class="url-row">
+
+                <input
+                    id="widget-url"
+                    readonly
+                >
+
+                <button id="copy">
+                    Copy
+                </button>
+
+            </div>
+
+            <iframe
+                id="preview"
+                title="Widget Preview"
+            ></iframe>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        const usernameInput =
+            document.getElementById('username');
+
+        const generateButton =
+            document.getElementById('generate');
+
+        const output =
+            document.getElementById('output');
+
+        const widgetURLInput =
+            document.getElementById('widget-url');
+
+        const preview =
+            document.getElementById('preview');
+
+        const copyButton =
+            document.getElementById('copy');
+
+
+        function generateWidget() {
+
+            const username =
+                usernameInput.value.trim();
+
+            if (!username) {
+                alert('Enter a Last.fm username.');
+                return;
+            }
+
+
+            const widgetURL =
+                `${window.location.origin}/musicplayer2.html?user=${encodeURIComponent(username)}`;
+
+
+            widgetURLInput.value =
+                widgetURL;
+
+            preview.src =
+                widgetURL;
+
+            output.style.display =
+                'block';
+        }
+
+
+        generateButton.addEventListener(
+            'click',
+            generateWidget
+        );
+
+
+        usernameInput.addEventListener(
+            'keydown',
+            function(event) {
+
+                if (event.key === 'Enter') {
+                    generateWidget();
+                }
+            }
+        );
+
+
+        copyButton.addEventListener(
+            'click',
+            async function() {
+
+                const widgetURL =
+                    widgetURLInput.value;
+
+                if (!widgetURL) {
+                    return;
+                }
+
+
+                try {
+
+                    await navigator.clipboard.writeText(
+                        widgetURL
+                    );
+
+                    copyButton.textContent =
+                        'Copied!';
+
+                    setTimeout(() => {
+
+                        copyButton.textContent =
+                            'Copy';
+
+                    }, 1500);
+
+                } catch {
+
+                    widgetURLInput.select();
+
+                    document.execCommand(
+                        'copy'
+                    );
+                }
+            }
+        );
+
+    </script>
+
+</body>
+
+</html>
