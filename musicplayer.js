@@ -13,36 +13,43 @@ const LASTFM_USERNAME =
     params.get('username');
 
 
-const SHOW_ART =
-    params.get('art') !== '0';
-
-
-const SHOW_STATUS =
-    params.get('status') !== '0';
-
-
-const OPACITY =
-    Math.min(
-        100,
-        Math.max(
-            0,
-            Number(
-                params.get('opacity') || 92
-            )
-        )
-    );
-
-
-const BACKGROUND_COLOR =
-    params.get('bg') || '14141c';
-
-
-const ACCENT_COLOR =
-    params.get('accent') || 'ffffff';
-
-
 const UPDATE_INTERVAL =
     5000;
+
+
+/* ==================================================
+   CUSTOMIZATION STATE
+================================================== */
+
+const widgetSettings = {
+
+    showArt:
+        params.get('art') !== '0',
+
+    showStatus:
+        params.get('status') !== '0',
+
+    opacity:
+        clampNumber(
+            Number(
+                params.get('opacity') || 92
+            ),
+            0,
+            100
+        ),
+
+    bg:
+        normalizeHex(
+            params.get('bg'),
+            '14141c'
+        ),
+
+    accent:
+        normalizeHex(
+            params.get('accent'),
+            'ffffff'
+        )
+};
 
 
 /* ==================================================
@@ -50,7 +57,9 @@ const UPDATE_INTERVAL =
 ================================================== */
 
 const widget =
-    document.getElementById('widget');
+    document.getElementById(
+        'widget'
+    );
 
 const albumContainer =
     document.getElementById(
@@ -89,44 +98,107 @@ const musicIndicator =
 
 
 /* ==================================================
-   COLOR HELPERS
+   CURRENT PLAYBACK STATE
 ================================================== */
 
-function isValidHexColor(value) {
+let currentlyPlaying =
+    false;
 
-    return /^[0-9a-fA-F]{6}$/.test(
-        value
+let currentArtworkURL =
+    '';
+
+
+/* ==================================================
+   HELPERS
+================================================== */
+
+function clampNumber(
+    value,
+    min,
+    max
+) {
+
+    if (!Number.isFinite(value)) {
+        return min;
+    }
+
+
+    return Math.min(
+        max,
+        Math.max(
+            min,
+            value
+        )
     );
 }
 
 
-function hexToRgb(hex) {
+function isValidHexColor(
+    value
+) {
 
-    if (!isValidHexColor(hex)) {
+    return (
+        typeof value ===
+            'string' &&
+        /^[0-9a-fA-F]{6}$/.test(
+            value
+        )
+    );
+}
 
-        return {
-            r: 20,
-            g: 20,
-            b: 28
-        };
+
+function normalizeHex(
+    value,
+    fallback
+) {
+
+    if (
+        isValidHexColor(
+            value
+        )
+    ) {
+
+        return value
+            .toLowerCase();
     }
 
 
+    return fallback;
+}
+
+
+function hexToRgb(
+    hex
+) {
+
     return {
-        r: parseInt(
-            hex.slice(0, 2),
-            16
-        ),
 
-        g: parseInt(
-            hex.slice(2, 4),
-            16
-        ),
+        r:
+            parseInt(
+                hex.slice(
+                    0,
+                    2
+                ),
+                16
+            ),
 
-        b: parseInt(
-            hex.slice(4, 6),
-            16
-        )
+        g:
+            parseInt(
+                hex.slice(
+                    2,
+                    4
+                ),
+                16
+            ),
+
+        b:
+            parseInt(
+                hex.slice(
+                    4,
+                    6
+                ),
+                16
+            )
     };
 }
 
@@ -139,72 +211,211 @@ function applyCustomization() {
 
     const bg =
         hexToRgb(
-            BACKGROUND_COLOR
+            widgetSettings.bg
         );
 
 
     const alpha =
-        OPACITY / 100;
+        widgetSettings.opacity /
+        100;
 
 
     widget.style.background =
         `rgba(${bg.r}, ${bg.g}, ${bg.b}, ${alpha})`;
 
 
+    const accent =
+        `#${widgetSettings.accent}`;
+
+
+    songTitle.style.color =
+        accent;
+
+
+    status.style.color =
+        accent;
+
+
+    musicIndicator.style.background =
+        accent;
+
+
+    document.documentElement.style
+        .setProperty(
+            '--accent-color',
+            accent
+        );
+
+
+    /*
+     * Status visibility
+     */
+
+    status.style.display =
+        widgetSettings.showStatus
+            ? ''
+            : 'none';
+
+
+    /*
+     * Album artwork visibility.
+     *
+     * Only show it if:
+     * - user enabled artwork
+     * - something is currently playing
+     * - we have artwork
+     */
+
     if (
-        isValidHexColor(
-            ACCENT_COLOR
-        )
+        widgetSettings.showArt &&
+        currentlyPlaying &&
+        currentArtworkURL
     ) {
 
-        const accent =
-            `#${ACCENT_COLOR}`;
+        albumContainer.style.display =
+            'block';
 
-
-        songTitle.style.color =
-            accent;
-
-        status.style.color =
-            accent;
-
-        musicIndicator.style.background =
-            accent;
-
-        document.documentElement.style
-            .setProperty(
-                '--accent-color',
-                accent
-            );
-    }
-
-
-    if (!SHOW_ART) {
+    } else {
 
         albumContainer.style.display =
-            'none';
-    }
-
-
-    if (!SHOW_STATUS) {
-
-        status.style.display =
             'none';
     }
 }
 
 
 /* ==================================================
-   DEFAULT ART
+   LIVE SETTINGS FROM GENERATOR
 ================================================== */
 
-const DEFAULT_ART = '';
+function applyLiveSettings(
+    settings
+) {
+
+    if (
+        !settings ||
+        typeof settings !==
+            'object'
+    ) {
+        return;
+    }
+
+
+    if (
+        typeof settings.art ===
+        'boolean'
+    ) {
+
+        widgetSettings.showArt =
+            settings.art;
+    }
+
+
+    if (
+        typeof settings.status ===
+        'boolean'
+    ) {
+
+        widgetSettings.showStatus =
+            settings.status;
+    }
+
+
+    if (
+        Number.isFinite(
+            Number(
+                settings.opacity
+            )
+        )
+    ) {
+
+        widgetSettings.opacity =
+            clampNumber(
+                Number(
+                    settings.opacity
+                ),
+                0,
+                100
+            );
+    }
+
+
+    if (
+        isValidHexColor(
+            settings.bg
+        )
+    ) {
+
+        widgetSettings.bg =
+            settings.bg.toLowerCase();
+    }
+
+
+    if (
+        isValidHexColor(
+            settings.accent
+        )
+    ) {
+
+        widgetSettings.accent =
+            settings.accent
+                .toLowerCase();
+    }
+
+
+    applyCustomization();
+}
+
+
+/* ==================================================
+   POSTMESSAGE LISTENER
+================================================== */
+
+window.addEventListener(
+    'message',
+    function (event) {
+
+        /*
+         * Only accept messages from
+         * the same website.
+         */
+
+        if (
+            event.origin !==
+            window.location.origin
+        ) {
+
+            return;
+        }
+
+
+        if (
+            !event.data ||
+            event.data.type !==
+                'widget-settings'
+        ) {
+
+            return;
+        }
+
+
+        applyLiveSettings(
+            event.data.settings
+        );
+    }
+);
 
 
 /* ==================================================
    SHOW PLAYING
 ================================================== */
 
-function showPlaying(track) {
+function showPlaying(
+    track
+) {
+
+    currentlyPlaying =
+        true;
+
 
     const title =
         track.name ||
@@ -221,12 +432,13 @@ function showPlaying(track) {
     songTitle.textContent =
         title;
 
+
     artistName.textContent =
         artist;
 
 
-    let imageURL =
-        DEFAULT_ART;
+    currentArtworkURL =
+        '';
 
 
     if (
@@ -252,7 +464,8 @@ function showPlaying(track) {
             const image =
                 track.image.find(
                     img =>
-                        img.size === size
+                        img.size ===
+                        size
                 );
 
 
@@ -261,7 +474,7 @@ function showPlaying(track) {
                 image['#text']
             ) {
 
-                imageURL =
+                currentArtworkURL =
                     image['#text'];
 
                 break;
@@ -271,13 +484,8 @@ function showPlaying(track) {
 
 
     if (
-        SHOW_ART &&
-        imageURL
+        currentArtworkURL
     ) {
-
-        albumContainer.style.display =
-            'block';
-
 
         albumArt.classList.add(
             'loading'
@@ -292,36 +500,47 @@ function showPlaying(track) {
             function () {
 
                 albumArt.src =
-                    imageURL;
+                    currentArtworkURL;
 
-                setTimeout(
-                    () => {
 
-                        albumArt.classList.remove(
-                            'loading'
-                        );
-
-                    },
-                    50
+                albumArt.classList.remove(
+                    'loading'
                 );
+
+
+                applyCustomization();
             };
 
 
         newImage.onerror =
             function () {
 
+                currentArtworkURL =
+                    '';
+
+
                 albumArt.removeAttribute(
                     'src'
                 );
 
+
                 albumArt.classList.remove(
                     'loading'
                 );
+
+
+                applyCustomization();
             };
 
 
         newImage.src =
-            imageURL;
+            currentArtworkURL;
+
+    } else {
+
+        albumArt.removeAttribute(
+            'src'
+        );
     }
 
 
@@ -359,6 +578,14 @@ function showPlaying(track) {
 
 function showNothingPlaying() {
 
+    currentlyPlaying =
+        false;
+
+
+    currentArtworkURL =
+        '';
+
+
     songTitle.textContent =
         'Nothing Playing';
 
@@ -370,10 +597,6 @@ function showNothingPlaying() {
     albumArt.removeAttribute(
         'src'
     );
-
-
-    albumContainer.style.display =
-        'none';
 
 
     widget.classList.add(
@@ -413,6 +636,14 @@ function showError(
         'Unable to connect to Last.fm'
 ) {
 
+    currentlyPlaying =
+        false;
+
+
+    currentArtworkURL =
+        '';
+
+
     songTitle.textContent =
         'Last.fm Error';
 
@@ -421,8 +652,9 @@ function showError(
         message;
 
 
-    albumContainer.style.display =
-        'none';
+    albumArt.removeAttribute(
+        'src'
+    );
 
 
     widget.classList.add(
@@ -524,7 +756,9 @@ function handleLastFMResponse(
                 'true';
 
 
-        if (isPlaying) {
+        if (
+            isPlaying
+        ) {
 
             showPlaying(
                 track
@@ -615,9 +849,18 @@ async function queryLastFM() {
         );
 
 
-        showError(
-            'Unable to connect to server'
-        );
+        /*
+         * Don't immediately destroy a working
+         * now-playing display because of one
+         * temporary failed request.
+         */
+
+        if (!currentlyPlaying) {
+
+            showError(
+                'Unable to connect to server'
+            );
+        }
     }
 }
 

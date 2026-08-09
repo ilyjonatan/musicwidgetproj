@@ -46,7 +46,6 @@
         h2 {
             margin-top: 28px;
             margin-bottom: 16px;
-
             font-size: 16px;
         }
 
@@ -58,13 +57,11 @@
         label {
             display: block;
             margin-bottom: 8px;
-
             font-weight: 600;
         }
 
         input[type="text"] {
             width: 100%;
-
             padding: 12px 14px;
 
             border: 1px solid rgba(255, 255, 255, 0.15);
@@ -105,7 +102,6 @@
             justify-content: space-between;
 
             gap: 18px;
-
             padding: 14px;
 
             background: #15151d;
@@ -126,14 +122,12 @@
         input[type="color"] {
             width: 46px;
             height: 36px;
-
             padding: 2px;
 
             border: 1px solid rgba(255, 255, 255, 0.15);
             border-radius: 8px;
 
             background: #121219;
-
             cursor: pointer;
         }
 
@@ -149,9 +143,7 @@
 
         .range-value {
             min-width: 48px;
-
             color: rgba(255, 255, 255, 0.7);
-
             text-align: right;
         }
 
@@ -164,7 +156,6 @@
         input[type="checkbox"] {
             width: 18px;
             height: 18px;
-
             cursor: pointer;
         }
 
@@ -174,7 +165,6 @@
 
         .output {
             display: none;
-
             margin-top: 28px;
         }
 
@@ -190,32 +180,14 @@
 
         .preview-wrapper {
             margin-top: 24px;
-
             padding: 18px;
-
             overflow: auto;
 
             background:
-                linear-gradient(
-                    45deg,
-                    #222 25%,
-                    transparent 25%
-                ),
-                linear-gradient(
-                    -45deg,
-                    #222 25%,
-                    transparent 25%
-                ),
-                linear-gradient(
-                    45deg,
-                    transparent 75%,
-                    #222 75%
-                ),
-                linear-gradient(
-                    -45deg,
-                    transparent 75%,
-                    #222 75%
-                );
+                linear-gradient(45deg, #222 25%, transparent 25%),
+                linear-gradient(-45deg, #222 25%, transparent 25%),
+                linear-gradient(45deg, transparent 75%, #222 75%),
+                linear-gradient(-45deg, transparent 75%, #222 75%);
 
             background-size: 20px 20px;
 
@@ -234,7 +206,6 @@
             height: 140px;
 
             border: 0;
-
             background: transparent;
         }
 
@@ -264,7 +235,6 @@
     </style>
 </head>
 
-
 <body>
 
     <div class="setup">
@@ -280,7 +250,6 @@
             as a browser/web source.
         </p>
 
-
         <label for="username">
             Last.fm Username
         </label>
@@ -292,11 +261,9 @@
             autocomplete="off"
         >
 
-
         <h2>
             Appearance
         </h2>
-
 
         <div class="option-group">
 
@@ -322,7 +289,6 @@
 
             </div>
 
-
             <div class="option-row">
 
                 <label for="accent-color">
@@ -344,7 +310,6 @@
                 </div>
 
             </div>
-
 
             <div class="option-row">
 
@@ -373,7 +338,6 @@
 
             </div>
 
-
             <div class="option-row">
 
                 <label for="show-art">
@@ -391,7 +355,6 @@
                 </div>
 
             </div>
-
 
             <div class="option-row">
 
@@ -413,7 +376,6 @@
 
         </div>
 
-
         <div class="actions">
 
             <button id="generate">
@@ -421,7 +383,6 @@
             </button>
 
         </div>
-
 
         <div
             class="output"
@@ -431,7 +392,6 @@
             <label for="widget-url">
                 Widget URL
             </label>
-
 
             <div class="url-row">
 
@@ -447,7 +407,6 @@
 
             </div>
 
-
             <div class="preview-wrapper">
 
                 <iframe
@@ -460,7 +419,6 @@
         </div>
 
     </div>
-
 
     <script>
 
@@ -522,6 +480,9 @@
             );
 
 
+        let previewLoaded = false;
+
+
         function cleanHexColor(value) {
 
             return value
@@ -530,10 +491,42 @@
         }
 
 
+        function getCurrentSettings() {
+
+            return {
+                art:
+                    showArtInput.checked,
+
+                status:
+                    showStatusInput.checked,
+
+                opacity:
+                    Number(
+                        opacityInput.value
+                    ),
+
+                bg:
+                    cleanHexColor(
+                        backgroundColorInput.value
+                    ),
+
+                accent:
+                    cleanHexColor(
+                        accentColorInput.value
+                    )
+            };
+        }
+
+
         function buildWidgetURL(username) {
+
+            const settings =
+                getCurrentSettings();
+
 
             const params =
                 new URLSearchParams();
+
 
             params.set(
                 'user',
@@ -542,35 +535,33 @@
 
             params.set(
                 'art',
-                showArtInput.checked
+                settings.art
                     ? '1'
                     : '0'
             );
 
             params.set(
                 'status',
-                showStatusInput.checked
+                settings.status
                     ? '1'
                     : '0'
             );
 
             params.set(
                 'opacity',
-                opacityInput.value
+                String(
+                    settings.opacity
+                )
             );
 
             params.set(
                 'bg',
-                cleanHexColor(
-                    backgroundColorInput.value
-                )
+                settings.bg
             );
 
             params.set(
                 'accent',
-                cleanHexColor(
-                    accentColorInput.value
-                )
+                settings.accent
             );
 
 
@@ -578,6 +569,71 @@
                 `${window.location.origin}` +
                 `/widget.html?${params.toString()}`
             );
+        }
+
+
+        function sendSettingsToPreview() {
+
+            if (
+                !previewLoaded ||
+                !preview.contentWindow
+            ) {
+                return;
+            }
+
+
+            preview.contentWindow.postMessage(
+                {
+                    type:
+                        'widget-settings',
+
+                    settings:
+                        getCurrentSettings()
+                },
+                window.location.origin
+            );
+        }
+
+
+        function updateURLField() {
+
+            const username =
+                usernameInput.value.trim();
+
+
+            if (!username) {
+                return;
+            }
+
+
+            widgetURLInput.value =
+                buildWidgetURL(
+                    username
+                );
+        }
+
+
+        function updateCustomization() {
+
+            backgroundColorValue.textContent =
+                backgroundColorInput.value;
+
+            accentColorValue.textContent =
+                accentColorInput.value;
+
+            opacityValue.textContent =
+                `${opacityInput.value}%`;
+
+
+            if (
+                output.style.display ===
+                'block'
+            ) {
+
+                updateURLField();
+
+                sendSettingsToPreview();
+            }
         }
 
 
@@ -639,8 +695,21 @@
                 widgetURLInput.value =
                     widgetURL;
 
+
+                /*
+                 * Only reload the iframe when
+                 * generating for a username.
+                 *
+                 * Customization changes after this
+                 * will NOT reload it.
+                 */
+
+                previewLoaded =
+                    false;
+
                 preview.src =
                     widgetURL;
+
 
                 output.style.display =
                     'block';
@@ -670,84 +739,45 @@
         }
 
 
-        function updatePreviewIfVisible() {
+        preview.addEventListener(
+            'load',
+            function () {
 
-            if (
-                output.style.display !==
-                'block'
-            ) {
-                return;
+                previewLoaded =
+                    true;
+
+                sendSettingsToPreview();
             }
-
-
-            const username =
-                usernameInput.value.trim();
-
-
-            if (!username) {
-                return;
-            }
-
-
-            const widgetURL =
-                buildWidgetURL(
-                    username
-                );
-
-
-            widgetURLInput.value =
-                widgetURL;
-
-            preview.src =
-                widgetURL;
-        }
+        );
 
 
         backgroundColorInput.addEventListener(
             'input',
-            function () {
-
-                backgroundColorValue.textContent =
-                    backgroundColorInput.value;
-
-                updatePreviewIfVisible();
-            }
+            updateCustomization
         );
 
 
         accentColorInput.addEventListener(
             'input',
-            function () {
-
-                accentColorValue.textContent =
-                    accentColorInput.value;
-
-                updatePreviewIfVisible();
-            }
+            updateCustomization
         );
 
 
         opacityInput.addEventListener(
             'input',
-            function () {
-
-                opacityValue.textContent =
-                    `${opacityInput.value}%`;
-
-                updatePreviewIfVisible();
-            }
+            updateCustomization
         );
 
 
         showArtInput.addEventListener(
             'change',
-            updatePreviewIfVisible
+            updateCustomization
         );
 
 
         showStatusInput.addEventListener(
             'change',
-            updatePreviewIfVisible
+            updateCustomization
         );
 
 
