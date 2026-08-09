@@ -8,14 +8,14 @@ export default async function handler(req, res) {
     }
 
 
-    // Get Last.fm username from the widget request
+    // Get username from query string
     const username =
         typeof req.query.username === 'string'
             ? req.query.username.trim()
             : '';
 
 
-    // Make sure a username was provided
+    // Require username
     if (!username) {
         return res.status(400).json({
             error: 'Missing username',
@@ -24,8 +24,14 @@ export default async function handler(req, res) {
     }
 
 
-    // Basic protection against unreasonable input
-    if (username.length > 100) {
+    /*
+     * Last.fm usernames are limited in length.
+     * Keep input conservative and reject weird values.
+     */
+    if (
+        username.length > 50 ||
+        !/^[A-Za-z0-9_-]+$/.test(username)
+    ) {
         return res.status(400).json({
             error: 'Invalid username',
             message: 'Invalid Last.fm username'
@@ -33,12 +39,7 @@ export default async function handler(req, res) {
     }
 
 
-    /*
-     * Get the API key from the server environment.
-     *
-     * IMPORTANT:
-     * Do NOT put your actual API key in this file.
-     */
+    // Read private API key from Vercel
     const apiKey =
         process.env.LASTFM_API_KEY;
 
@@ -46,17 +47,17 @@ export default async function handler(req, res) {
     if (!apiKey) {
 
         console.error(
-            'LASTFM_API_KEY environment variable is missing'
+            'LASTFM_API_KEY is missing'
         );
 
         return res.status(500).json({
-            error: 'Server configuration error',
-            message: 'Widget server is not configured correctly'
+            error: 'Server error',
+            message: 'Widget service is unavailable'
         });
     }
 
 
-    // Build the Last.fm API request
+    // Build a fixed Last.fm request
     const lastFMURL =
         new URL(
             'https://ws.audioscrobbler.com/2.0/'
@@ -89,13 +90,32 @@ export default async function handler(req, res) {
     );
 
 
+    /*
+     * Abort Last.fm request if it hangs too long.
+     */
+    const controller =
+        new AbortController();
+
+    const timeout =
+        setTimeout(
+            () => controller.abort(),
+            5000
+        );
+
+
     try {
 
-        // Contact Last.fm from our server
         const response =
             await fetch(
-                lastFMURL.toString()
+                lastFMURL.toString(),
+                {
+                    signal:
+                        controller.signal
+                }
             );
+
+
+        clearTimeout(timeout);
 
 
         if (!response.ok) {
@@ -106,7 +126,7 @@ export default async function handler(req, res) {
             );
 
             return res.status(502).json({
-                error: 'Last.fm request failed',
+                error: 'Upstream error',
                 message: 'Unable to contact Last.fm'
             });
         }
@@ -117,35 +137,73 @@ export default async function handler(req, res) {
 
 
         /*
-         * Last.fm sometimes returns API errors
-         * inside otherwise-valid JSON.
+         * Last.fm often returns API errors
+         * inside JSON.
          */
         if (data.error) {
 
             return res.status(400).json({
-                error: data.error,
+                error: 'Last.fm error',
                 message:
                     data.message ||
-                    'Last.fm returned an error'
+                    'Unable to retrieve that user'
             });
         }
 
 
         /*
-         * Cache results briefly.
+         * Cache at Vercel's CDN.
          *
-         * This reduces the number of requests
-         * your server sends to Last.fm.
+         * For 10 seconds:
+         * reuse the same response when possible.
+         *
+         * For another 20 seconds:
+         * Vercel may serve stale data while
+         * refreshing in the background.
          */
         res.setHeader(
             'Cache-Control',
-            'public, s-maxage=5, stale-while-revalidate=10'
+            'public, s-maxage=10, stale-while-revalidate=20'
         );
 
 
+        /*
+         * Prevent MIME sniffing.
+         */
+        res.setHeader(
+            'X-Content-Type-Options',
+            'nosniff'
+        );
+
+
+        /*
+         * Return only the Last.fm response.
+         * Never return env vars or stack traces.
+         */
         return res.status(200).json(data);
 
+
     } catch (error) {
+
+        clearTimeout(timeout);
+
+
+        if (
+            error &&
+            error.name ===
+                'AbortError'
+        ) {
+
+            console.error(
+                'Last.fm request timed out'
+            );
+
+            return res.status(504).json({
+                error: 'Timeout',
+                message: 'Last.fm took too long to respond'
+            });
+        }
+
 
         console.error(
             'Last.fm API request failed:',
@@ -154,7 +212,7 @@ export default async function handler(req, res) {
 
 
         return res.status(500).json({
-            error: 'Internal server error',
+            error: 'Server error',
             message: 'Unable to retrieve Last.fm data'
         });
     }
