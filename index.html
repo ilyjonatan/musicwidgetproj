@@ -2,111 +2,194 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Last.fm Stream Widget</title>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>MusicWidget</title>
+
 
     <style>
+
         * {
             box-sizing: border-box;
         }
 
         body {
             margin: 0;
-            min-height: 100vh;
-            padding: 24px;
 
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            min-height: 100vh;
+
+            padding: 40px 24px;
 
             background: #111118;
+
             color: white;
 
-            font-family: Arial, Helvetica, sans-serif;
+            font-family:
+                "Segoe UI",
+                Arial,
+                Helvetica,
+                sans-serif;
         }
 
-        .setup {
+        .page {
             width: 100%;
-            max-width: 720px;
 
+            max-width: 760px;
+
+            margin: 0 auto;
+        }
+
+        .card {
             padding: 28px;
 
+            margin-bottom: 24px;
+
             background: #1c1c26;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+
+            border:
+                1px solid
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.1
+                );
+
             border-radius: 18px;
         }
 
         h1 {
             margin-top: 0;
+
             margin-bottom: 8px;
         }
 
         h2 {
+            margin-top: 0;
+
+            font-size: 20px;
+        }
+
+        h3 {
             margin-top: 28px;
-            margin-bottom: 16px;
+
+            margin-bottom: 14px;
+
             font-size: 16px;
         }
 
         p {
-            color: rgba(255, 255, 255, 0.65);
+            color:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.65
+                );
+
             line-height: 1.5;
         }
 
         label {
             display: block;
+
             margin-bottom: 8px;
+
             font-weight: 600;
         }
 
         input[type="text"],
         input[type="number"] {
             width: 100%;
+
             padding: 12px 14px;
 
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            border:
+                1px solid
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.15
+                );
+
             border-radius: 10px;
 
             background: #121219;
+
             color: white;
 
             font-size: 16px;
         }
 
-        button {
+        button,
+        .button {
+            display: inline-flex;
+
+            align-items: center;
+            justify-content: center;
+
             padding: 12px 16px;
 
             border: 0;
+
             border-radius: 10px;
 
             background: white;
+
             color: #111118;
 
+            font-family: inherit;
+
+            font-size: 14px;
             font-weight: 700;
+
+            text-decoration: none;
+
             cursor: pointer;
         }
 
         button:disabled {
             opacity: 0.6;
+
             cursor: not-allowed;
         }
 
         .option-group {
             display: grid;
+
             gap: 18px;
         }
 
         .option-row {
             display: flex;
+
             align-items: center;
-            justify-content: space-between;
+
+            justify-content:
+                space-between;
 
             gap: 18px;
+
             padding: 14px;
 
             background: #15151d;
-            border: 1px solid rgba(255, 255, 255, 0.08);
+
+            border:
+                1px solid
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.08
+                );
+
             border-radius: 12px;
         }
 
@@ -116,19 +199,31 @@
 
         .color-control {
             display: flex;
+
             align-items: center;
+
             gap: 10px;
         }
 
         input[type="color"] {
             width: 46px;
             height: 40px;
+
             padding: 2px;
 
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            border:
+                1px solid
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.15
+                );
+
             border-radius: 8px;
 
             background: #121219;
+
             cursor: pointer;
         }
 
@@ -138,7 +233,9 @@
 
         .range-control {
             display: flex;
+
             align-items: center;
+
             gap: 10px;
         }
 
@@ -148,16 +245,14 @@
 
         .opacity-input {
             width: 76px !important;
-            text-align: center;
-        }
 
-        .percent-symbol {
-            color: rgba(255, 255, 255, 0.65);
+            text-align: center;
         }
 
         input[type="checkbox"] {
             width: 18px;
             height: 18px;
+
             cursor: pointer;
         }
 
@@ -167,31 +262,53 @@
 
         .output {
             display: none;
+
             margin-top: 28px;
         }
 
         .url-row {
             display: flex;
+
             gap: 10px;
         }
 
         .url-row input {
             flex: 1;
+
             min-width: 0;
         }
 
         .preview-wrapper {
             margin-top: 24px;
+
             padding: 18px;
+
             overflow: auto;
 
             background:
-                linear-gradient(45deg, #222 25%, transparent 25%),
-                linear-gradient(-45deg, #222 25%, transparent 25%),
-                linear-gradient(45deg, transparent 75%, #222 75%),
-                linear-gradient(-45deg, transparent 75%, #222 75%);
+                linear-gradient(
+                    45deg,
+                    #222 25%,
+                    transparent 25%
+                ),
+                linear-gradient(
+                    -45deg,
+                    #222 25%,
+                    transparent 25%
+                ),
+                linear-gradient(
+                    45deg,
+                    transparent 75%,
+                    #222 75%
+                ),
+                linear-gradient(
+                    -45deg,
+                    transparent 75%,
+                    #222 75%
+                );
 
-            background-size: 20px 20px;
+            background-size:
+                20px 20px;
 
             background-position:
                 0 0,
@@ -204,18 +321,76 @@
 
         iframe {
             width: 440px;
+
             max-width: 100%;
+
             height: 140px;
 
             border: 0;
+
             background: transparent;
         }
 
-        @media (max-width: 600px) {
+        .download-card {
+            text-align: center;
+        }
+
+        .download-card .button {
+            margin-top: 10px;
+
+            padding:
+                14px 22px;
+
+            font-size: 15px;
+        }
+
+        .steps {
+            margin-top: 24px;
+
+            text-align: left;
+
+            color:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.72
+                );
+
+            line-height: 1.7;
+        }
+
+        .credit {
+            margin-top: 18px;
+
+            font-family:
+                Baskerville,
+                "Times New Roman",
+                serif;
+
+            font-style: italic;
+
+            letter-spacing: 1px;
+
+            color:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.4
+                );
+        }
+
+        @media (
+            max-width: 600px
+        ) {
 
             .option-row {
-                align-items: flex-start;
-                flex-direction: column;
+                align-items:
+                    flex-start;
+
+                flex-direction:
+                    column;
             }
 
             .color-control,
@@ -232,224 +407,337 @@
             }
 
             .url-row {
-                flex-direction: column;
+                flex-direction:
+                    column;
             }
         }
+
     </style>
+
 </head>
+
 
 <body>
 
-    <div class="setup">
+    <main class="page">
 
-        <h1>
-            Last.fm Stream Widget
-        </h1>
 
-        <p>
-            Enter the streamer's Last.fm username,
-            customize the appearance, preview the widget,
-            then copy the generated URL into Pogly
-            as a browser/web source.
-        </p>
+        <section class="card">
 
-        <label for="username">
-            Last.fm Username
-        </label>
+            <h1>
+                MusicWidget
+            </h1>
 
-        <input
-            id="username"
-            type="text"
-            placeholder="ilyjonatan"
-            autocomplete="off"
-        >
+            <p>
+                Create a customizable
+                Last.fm now-playing widget
+                for stream overlays.
+            </p>
 
-        <h2>
-            Appearance
-        </h2>
 
-        <div class="option-group">
-
-            <div class="option-row">
-
-                <label for="background-color">
-                    Background Color
-                </label>
-
-                <div class="color-control">
-
-                    <input
-                        id="background-color"
-                        type="color"
-                        value="#14141c"
-                    >
-
-                    <input
-                        id="background-color-text"
-                        class="hex-input"
-                        type="text"
-                        value="#14141c"
-                        maxlength="7"
-                        spellcheck="false"
-                    >
-
-                </div>
-
-            </div>
-
-            <div class="option-row">
-
-                <label for="accent-color">
-                    Text / Accent Color
-                </label>
-
-                <div class="color-control">
-
-                    <input
-                        id="accent-color"
-                        type="color"
-                        value="#ffffff"
-                    >
-
-                    <input
-                        id="accent-color-text"
-                        class="hex-input"
-                        type="text"
-                        value="#ffffff"
-                        maxlength="7"
-                        spellcheck="false"
-                    >
-
-                </div>
-
-            </div>
-
-            <div class="option-row">
-
-                <label for="opacity">
-                    Background Opacity
-                </label>
-
-                <div class="range-control">
-
-                    <input
-                        id="opacity"
-                        type="range"
-                        min="0"
-                        max="100"
-                        value="92"
-                    >
-
-                    <input
-                        id="opacity-text"
-                        class="opacity-input"
-                        type="number"
-                        min="0"
-                        max="100"
-                        value="92"
-                    >
-
-                    <span class="percent-symbol">
-                        %
-                    </span>
-
-                </div>
-
-            </div>
-
-            <div class="option-row">
-
-                <label for="show-art">
-                    Show Album Artwork
-                </label>
-
-                <input
-                    id="show-art"
-                    type="checkbox"
-                    checked
-                >
-
-            </div>
-
-            <div class="option-row">
-
-                <label for="show-status">
-                    Show "NOW PLAYING"
-                </label>
-
-                <input
-                    id="show-status"
-                    type="checkbox"
-                    checked
-                >
-
-            </div>
-
-        </div>
-
-        <div class="actions">
-
-            <button id="generate">
-                Generate Widget
-            </button>
-
-        </div>
-
-        <div
-            class="output"
-            id="output"
-        >
-
-            <label for="widget-url">
-                Widget URL
+            <label for="username">
+                Last.fm Username
             </label>
 
-            <div class="url-row">
+            <input
+                id="username"
+                type="text"
+                placeholder="ilyjonatan"
+                autocomplete="off"
+            >
 
-                <input
-                    id="widget-url"
-                    type="text"
-                    readonly
-                >
 
-                <button id="copy">
-                    Copy
+            <h3>
+                Appearance
+            </h3>
+
+
+            <div class="option-group">
+
+
+                <div class="option-row">
+
+                    <label>
+                        Background Color
+                    </label>
+
+                    <div class="color-control">
+
+                        <input
+                            id="background-color"
+                            type="color"
+                            value="#14141c"
+                        >
+
+                        <input
+                            id="background-color-text"
+                            class="hex-input"
+                            type="text"
+                            value="#14141c"
+                            maxlength="7"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div class="option-row">
+
+                    <label>
+                        Accent Color
+                    </label>
+
+                    <div class="color-control">
+
+                        <input
+                            id="accent-color"
+                            type="color"
+                            value="#ffffff"
+                        >
+
+                        <input
+                            id="accent-color-text"
+                            class="hex-input"
+                            type="text"
+                            value="#ffffff"
+                            maxlength="7"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div class="option-row">
+
+                    <label>
+                        Background Opacity
+                    </label>
+
+                    <div class="range-control">
+
+                        <input
+                            id="opacity"
+                            type="range"
+                            min="0"
+                            max="100"
+                            value="92"
+                        >
+
+                        <input
+                            id="opacity-text"
+                            class="opacity-input"
+                            type="number"
+                            min="0"
+                            max="100"
+                            value="92"
+                        >
+
+                        <span>
+                            %
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="option-row">
+
+                    <label>
+                        Show Album Artwork
+                    </label>
+
+                    <input
+                        id="show-art"
+                        type="checkbox"
+                        checked
+                    >
+
+                </div>
+
+
+                <div class="option-row">
+
+                    <label>
+                        Show "NOW PLAYING"
+                    </label>
+
+                    <input
+                        id="show-status"
+                        type="checkbox"
+                        checked
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="actions">
+
+                <button id="generate">
+                    Generate Widget
                 </button>
 
             </div>
 
-            <div class="preview-wrapper">
 
-                <iframe
-                    id="preview"
-                    title="Widget Preview"
-                ></iframe>
+            <div
+                class="output"
+                id="output"
+            >
+
+                <label for="widget-url">
+                    Widget URL
+                </label>
+
+
+                <div class="url-row">
+
+                    <input
+                        id="widget-url"
+                        type="text"
+                        readonly
+                    >
+
+                    <button id="copy">
+                        Copy
+                    </button>
+
+                </div>
+
+
+                <div class="preview-wrapper">
+
+                    <iframe
+                        id="preview"
+                        title="Widget Preview"
+                    ></iframe>
+
+                </div>
 
             </div>
 
-        </div>
+        </section>
 
-    </div>
+
+        <section
+            class="card download-card"
+        >
+
+            <h2>
+                Download for Pogly
+            </h2>
+
+            <p>
+                Download the Pogly version
+                of MusicWidget and import it
+                into Pogly's Widget Creator.
+            </p>
+
+
+            <a
+                class="button"
+                href="/musicwidget-pogly-v1.json"
+                download
+            >
+                Download MusicWidget v1
+            </a>
+
+
+            <div class="steps">
+
+                <strong>
+                    How to install:
+                </strong>
+
+                <ol>
+
+                    <li>
+                        Download the widget file.
+                    </li>
+
+                    <li>
+                        Open the JSON file and
+                        copy all of its contents.
+                    </li>
+
+                    <li>
+                        Open Pogly's
+                        Widget Creator.
+                    </li>
+
+                    <li>
+                        Choose Import.
+                    </li>
+
+                    <li>
+                        Paste the widget JSON
+                        and load it.
+                    </li>
+
+                    <li>
+                        Enter the streamer's
+                        Last.fm username.
+                    </li>
+
+                    <li>
+                        Customize the colors,
+                        opacity, artwork and
+                        status options.
+                    </li>
+
+                    <li>
+                        Save the widget.
+                    </li>
+
+                </ol>
+
+            </div>
+
+
+            <div class="credit">
+                by ilyjonatan
+            </div>
+
+        </section>
+
+    </main>
+
 
     <script>
 
         const usernameInput =
-            document.getElementById('username');
+            document.getElementById(
+                'username'
+            );
 
         const generateButton =
-            document.getElementById('generate');
+            document.getElementById(
+                'generate'
+            );
 
         const output =
-            document.getElementById('output');
+            document.getElementById(
+                'output'
+            );
 
         const widgetURLInput =
-            document.getElementById('widget-url');
+            document.getElementById(
+                'widget-url'
+            );
 
         const preview =
-            document.getElementById('preview');
+            document.getElementById(
+                'preview'
+            );
 
         const copyButton =
-            document.getElementById('copy');
+            document.getElementById(
+                'copy'
+            );
 
 
         const backgroundColorInput =
@@ -498,7 +786,7 @@
 
         function normalizeHex(value) {
 
-            let hex =
+            const clean =
                 value
                     .trim()
                     .replace('#', '')
@@ -506,10 +794,12 @@
 
 
             if (
-                /^[0-9a-f]{6}$/.test(hex)
+                /^[0-9a-f]{6}$/.test(
+                    clean
+                )
             ) {
 
-                return `#${hex}`;
+                return `#${clean}`;
             }
 
 
@@ -517,7 +807,7 @@
         }
 
 
-        function cleanHexColor(value) {
+        function cleanHex(value) {
 
             return value
                 .replace('#', '')
@@ -527,12 +817,15 @@
 
         function clampOpacity(value) {
 
-            let number =
+            const number =
                 Number(value);
 
 
-            if (!Number.isFinite(number)) {
-                number = 92;
+            if (
+                !Number.isFinite(number)
+            ) {
+
+                return 92;
             }
 
 
@@ -546,7 +839,7 @@
         }
 
 
-        function getCurrentSettings() {
+        function getSettings() {
 
             return {
 
@@ -562,22 +855,26 @@
                     ),
 
                 bg:
-                    cleanHexColor(
-                        backgroundColorInput.value
+                    cleanHex(
+                        backgroundColorInput
+                            .value
                     ),
 
                 accent:
-                    cleanHexColor(
-                        accentColorInput.value
+                    cleanHex(
+                        accentColorInput
+                            .value
                     )
             };
         }
 
 
-        function buildWidgetURL(username) {
+        function buildWidgetURL(
+            username
+        ) {
 
             const settings =
-                getCurrentSettings();
+                getSettings();
 
 
             const params =
@@ -605,9 +902,7 @@
 
             params.set(
                 'opacity',
-                String(
-                    settings.opacity
-                )
+                settings.opacity
             );
 
             params.set(
@@ -628,33 +923,36 @@
         }
 
 
-        function sendSettingsToPreview() {
+        function sendSettings() {
 
             if (
                 !previewLoaded ||
                 !preview.contentWindow
             ) {
+
                 return;
             }
 
 
-            preview.contentWindow.postMessage(
-                {
-                    type:
-                        'widget-settings',
+            preview.contentWindow
+                .postMessage(
+                    {
+                        type:
+                            'widget-settings',
 
-                    settings:
-                        getCurrentSettings()
-                },
-                window.location.origin
-            );
+                        settings:
+                            getSettings()
+                    },
+                    window.location.origin
+                );
         }
 
 
-        function updateURLField() {
+        function updateURL() {
 
             const username =
-                usernameInput.value.trim();
+                usernameInput.value
+                    .trim();
 
 
             if (!username) {
@@ -676,107 +974,159 @@
                 'block'
             ) {
 
-                updateURLField();
-                sendSettingsToPreview();
+                updateURL();
+
+                sendSettings();
             }
         }
 
 
-        function syncBackgroundPickerToText() {
+        backgroundColorInput
+            .addEventListener(
+                'input',
+                function () {
 
-            backgroundColorText.value =
-                backgroundColorInput.value;
+                    backgroundColorText
+                        .value =
+                        backgroundColorInput
+                            .value;
 
-            updateCustomization();
-        }
-
-
-        function syncBackgroundTextToPicker() {
-
-            const normalized =
-                normalizeHex(
-                    backgroundColorText.value
-                );
+                    updateCustomization();
+                }
+            );
 
 
-            if (!normalized) {
-                return;
-            }
+        backgroundColorText
+            .addEventListener(
+                'input',
+                function () {
+
+                    const color =
+                        normalizeHex(
+                            backgroundColorText
+                                .value
+                        );
 
 
-            backgroundColorInput.value =
-                normalized;
-
-            backgroundColorText.value =
-                normalized;
-
-            updateCustomization();
-        }
+                    if (!color) {
+                        return;
+                    }
 
 
-        function syncAccentPickerToText() {
-
-            accentColorText.value =
-                accentColorInput.value;
-
-            updateCustomization();
-        }
+                    backgroundColorInput
+                        .value =
+                        color;
 
 
-        function syncAccentTextToPicker() {
-
-            const normalized =
-                normalizeHex(
-                    accentColorText.value
-                );
+                    backgroundColorText
+                        .value =
+                        color;
 
 
-            if (!normalized) {
-                return;
-            }
+                    updateCustomization();
+                }
+            );
 
 
-            accentColorInput.value =
-                normalized;
+        accentColorInput
+            .addEventListener(
+                'input',
+                function () {
 
-            accentColorText.value =
-                normalized;
+                    accentColorText.value =
+                        accentColorInput.value;
 
-            updateCustomization();
-        }
-
-
-        function syncOpacitySliderToText() {
-
-            opacityText.value =
-                opacityInput.value;
-
-            updateCustomization();
-        }
+                    updateCustomization();
+                }
+            );
 
 
-        function syncOpacityTextToSlider() {
+        accentColorText
+            .addEventListener(
+                'input',
+                function () {
 
-            const value =
-                clampOpacity(
-                    opacityText.value
-                );
+                    const color =
+                        normalizeHex(
+                            accentColorText
+                                .value
+                        );
 
 
-            opacityText.value =
-                value;
+                    if (!color) {
+                        return;
+                    }
 
-            opacityInput.value =
-                value;
 
-            updateCustomization();
-        }
+                    accentColorInput.value =
+                        color;
+
+
+                    accentColorText.value =
+                        color;
+
+
+                    updateCustomization();
+                }
+            );
+
+
+        opacityInput
+            .addEventListener(
+                'input',
+                function () {
+
+                    opacityText.value =
+                        opacityInput.value;
+
+                    updateCustomization();
+                }
+            );
+
+
+        opacityText
+            .addEventListener(
+                'input',
+                function () {
+
+                    const value =
+                        clampOpacity(
+                            opacityText.value
+                        );
+
+
+                    opacityText.value =
+                        value;
+
+
+                    opacityInput.value =
+                        value;
+
+
+                    updateCustomization();
+                }
+            );
+
+
+        showArtInput
+            .addEventListener(
+                'change',
+                updateCustomization
+            );
+
+
+        showStatusInput
+            .addEventListener(
+                'change',
+                updateCustomization
+            );
 
 
         async function generateWidget() {
 
             const username =
-                usernameInput.value.trim();
+                usernameInput.value
+                    .trim();
 
 
             if (!username) {
@@ -792,6 +1142,7 @@
             generateButton.disabled =
                 true;
 
+
             generateButton.textContent =
                 'Checking...';
 
@@ -800,7 +1151,7 @@
 
                 const response =
                     await fetch(
-                        `/api/lastfm?username=${encodeURIComponent(username)}`
+                        `/api/lastfm?username=${encodeURIComponent(username)}&_=${Date.now()}`
                     );
 
 
@@ -832,8 +1183,7 @@
                     widgetURL;
 
 
-                previewLoaded =
-                    false;
+                previewLoaded = false;
 
 
                 preview.src =
@@ -846,10 +1196,7 @@
 
             } catch (error) {
 
-                console.error(
-                    'Generator error:',
-                    error
-                );
+                console.error(error);
 
 
                 alert(
@@ -862,6 +1209,7 @@
                 generateButton.disabled =
                     false;
 
+
                 generateButton.textContent =
                     'Generate Widget';
             }
@@ -872,189 +1220,87 @@
             'load',
             function () {
 
-                previewLoaded =
-                    true;
+                previewLoaded = true;
 
-                sendSettingsToPreview();
+                sendSettings();
             }
         );
 
 
-        backgroundColorInput.addEventListener(
-            'input',
-            syncBackgroundPickerToText
-        );
+        generateButton
+            .addEventListener(
+                'click',
+                generateWidget
+            );
 
 
-        backgroundColorText.addEventListener(
-            'input',
-            syncBackgroundTextToPicker
-        );
+        usernameInput
+            .addEventListener(
+                'keydown',
+                function (event) {
 
+                    if (
+                        event.key ===
+                        'Enter'
+                    ) {
 
-        backgroundColorText.addEventListener(
-            'blur',
-            function () {
-
-                const normalized =
-                    normalizeHex(
-                        backgroundColorText.value
-                    );
-
-
-                if (normalized) {
-
-                    backgroundColorText.value =
-                        normalized;
-
-                } else {
-
-                    backgroundColorText.value =
-                        backgroundColorInput.value;
+                        generateWidget();
+                    }
                 }
-            }
-        );
+            );
 
 
-        accentColorInput.addEventListener(
-            'input',
-            syncAccentPickerToText
-        );
+        copyButton
+            .addEventListener(
+                'click',
+                async function () {
+
+                    const widgetURL =
+                        widgetURLInput.value;
 
 
-        accentColorText.addEventListener(
-            'input',
-            syncAccentTextToPicker
-        );
+                    if (!widgetURL) {
+                        return;
+                    }
 
 
-        accentColorText.addEventListener(
-            'blur',
-            function () {
+                    try {
 
-                const normalized =
-                    normalizeHex(
-                        accentColorText.value
-                    );
-
-
-                if (normalized) {
-
-                    accentColorText.value =
-                        normalized;
-
-                } else {
-
-                    accentColorText.value =
-                        accentColorInput.value;
-                }
-            }
-        );
+                        await navigator
+                            .clipboard
+                            .writeText(
+                                widgetURL
+                            );
 
 
-        opacityInput.addEventListener(
-            'input',
-            syncOpacitySliderToText
-        );
+                        copyButton
+                            .textContent =
+                            'Copied!';
 
 
-        opacityText.addEventListener(
-            'input',
-            syncOpacityTextToSlider
-        );
+                        setTimeout(
+                            function () {
 
-
-        opacityText.addEventListener(
-            'blur',
-            syncOpacityTextToSlider
-        );
-
-
-        showArtInput.addEventListener(
-            'change',
-            updateCustomization
-        );
-
-
-        showStatusInput.addEventListener(
-            'change',
-            updateCustomization
-        );
-
-
-        generateButton.addEventListener(
-            'click',
-            generateWidget
-        );
-
-
-        usernameInput.addEventListener(
-            'keydown',
-            function (event) {
-
-                if (
-                    event.key ===
-                    'Enter'
-                ) {
-
-                    generateWidget();
-                }
-            }
-        );
-
-
-        copyButton.addEventListener(
-            'click',
-            async function () {
-
-                const widgetURL =
-                    widgetURLInput.value;
-
-
-                if (!widgetURL) {
-                    return;
-                }
-
-
-                try {
-
-                    await navigator.clipboard
-                        .writeText(
-                            widgetURL
+                                copyButton
+                                    .textContent =
+                                    'Copy';
+                            },
+                            1500
                         );
 
 
-                    copyButton.textContent =
-                        'Copied!';
+                    } catch (error) {
+
+                        widgetURLInput
+                            .select();
 
 
-                    setTimeout(
-                        function () {
-
-                            copyButton.textContent =
-                                'Copy';
-
-                        },
-                        1500
-                    );
-
-
-                } catch (error) {
-
-                    console.error(
-                        'Clipboard copy failed:',
-                        error
-                    );
-
-
-                    widgetURLInput.select();
-
-                    document.execCommand(
-                        'copy'
-                    );
+                        document.execCommand(
+                            'copy'
+                        );
+                    }
                 }
-            }
-        );
+            );
 
     </script>
 

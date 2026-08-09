@@ -6,46 +6,96 @@ html,
 body {
     margin: 0;
     padding: 0;
+
     width: 100%;
     height: 100%;
-    background: transparent;
+
     overflow: hidden;
-    font-family: Arial, Helvetica, sans-serif;
+    background: transparent;
+
+    font-family:
+        "Segoe UI",
+        Arial,
+        Helvetica,
+        sans-serif;
 }
 
 
 /* =========================
-   MAIN WIDGET
+   WIDGET
 ========================= */
 
 #widget {
+    position: relative;
+
     width: 420px;
-    min-height: 110px;
+    height: 110px;
 
     display: flex;
     align-items: center;
-    gap: 16px;
 
+    gap: 16px;
     padding: 12px;
 
-    background: rgba(20, 20, 28, 0.92);
-    border: 1px solid rgba(255, 255, 255, 0.10);
+    background:
+        rgba(
+            20,
+            20,
+            28,
+            0.92
+        );
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.10
+        );
+
     border-radius: 18px;
 
     box-shadow:
-        0 10px 35px rgba(0, 0, 0, 0.35),
-        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        0 10px 35px
+        rgba(
+            0,
+            0,
+            0,
+            0.35
+        );
 
     color: white;
 
     transition:
-        opacity 0.4s ease,
-        transform 0.4s ease;
+        background 0.25s ease,
+        opacity 0.25s ease,
+        transform 0.25s ease;
 }
 
-#widget.hidden {
+
+/* =========================
+   SONG TRANSITION
+========================= */
+
+#widget.track-transition {
+    opacity: 0.58;
+
+    transform:
+        translateY(3px);
+}
+
+#track-info {
+    transition:
+        opacity 0.22s ease,
+        transform 0.22s ease;
+}
+
+#widget.track-transition #track-info {
     opacity: 0;
-    transform: translateY(8px);
+
+    transform:
+        translateY(4px);
 }
 
 
@@ -55,14 +105,29 @@ body {
 
 #album-container {
     position: relative;
+
     width: 86px;
     height: 86px;
+
     flex-shrink: 0;
+
+    transition:
+        opacity 0.25s ease,
+        transform 0.25s ease;
+}
+
+#widget.track-transition #album-container {
+    opacity: 0;
+
+    transform:
+        scale(0.94);
 }
 
 #album-art {
     width: 86px;
     height: 86px;
+
+    display: block;
 
     object-fit: cover;
 
@@ -71,71 +136,43 @@ body {
     background: #2a2a35;
 
     box-shadow:
-        0 5px 18px rgba(0, 0, 0, 0.35);
-
-    transition:
-        opacity 0.35s ease,
-        transform 0.35s ease;
-}
-
-#album-art.loading {
-    opacity: 0.4;
-}
-
-
-/* Small music indicator */
-
-#music-indicator {
-    position: absolute;
-
-    bottom: -4px;
-    right: -4px;
-
-    width: 25px;
-    height: 25px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    border-radius: 50%;
-
-    background: #ffffff;
-    color: #181820;
-
-    font-size: 12px;
-
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.35);
-
-    transition:
-        opacity 0.3s ease,
-        transform 0.3s ease;
-}
-
-#music-indicator.idle {
-    opacity: 0;
-    transform: scale(0.7);
+        0 5px 18px
+        rgba(
+            0,
+            0,
+            0,
+            0.35
+        );
 }
 
 
 /* =========================
-   TEXT
+   TRACK INFORMATION
 ========================= */
 
 #track-info {
-    min-width: 0;
     flex: 1;
+
+    min-width: 0;
 
     display: flex;
     flex-direction: column;
     justify-content: center;
 
     gap: 5px;
+
+    padding-bottom: 5px;
 }
+
+
+/* =========================
+   STATUS
+========================= */
 
 #status {
     display: flex;
     align-items: center;
+
     gap: 6px;
 
     font-size: 11px;
@@ -144,94 +181,145 @@ body {
     text-transform: uppercase;
     letter-spacing: 1.2px;
 
-    color: rgba(255, 255, 255, 0.55);
+    color:
+        var(
+            --accent-color,
+            #ffffff
+        );
 }
 
 #status-dot {
     width: 6px;
     height: 6px;
 
+    flex-shrink: 0;
+
     border-radius: 50%;
 
     background: #8d8d99;
-
-    transition: background 0.3s ease;
 }
 
 #status.playing #status-dot {
-    background: #ffffff;
+    background:
+        var(
+            --accent-color,
+            #ffffff
+        );
 
     box-shadow:
-        0 0 8px rgba(255, 255, 255, 0.7);
+        0 0 8px
+        rgba(
+            255,
+            255,
+            255,
+            0.7
+        );
 }
+
+
+/* =========================
+   SONG TITLE
+========================= */
 
 #song-title {
     display: block;
 
     overflow: hidden;
+
     white-space: nowrap;
+
     text-overflow: ellipsis;
 
     font-size: 18px;
     font-weight: 700;
+
     line-height: 1.2;
 
-    color: #ffffff;
+    color:
+        var(
+            --accent-color,
+            #ffffff
+        );
 }
+
+
+/* =========================
+   ARTIST
+========================= */
 
 #artist-name {
     display: block;
 
     overflow: hidden;
+
     white-space: nowrap;
+
     text-overflow: ellipsis;
 
     font-size: 14px;
+    font-weight: 400;
+
     line-height: 1.2;
 
-    color: rgba(255, 255, 255, 0.62);
+    color:
+        var(
+            --accent-color,
+            #ffffff
+        );
+
+    opacity: 0.62;
 }
 
 
 /* =========================
-   IDLE STATE
+   IDLE
 ========================= */
-
-#widget.idle {
-    background: rgba(20, 20, 28, 0.75);
-}
-
-#widget.idle #album-art {
-    filter: grayscale(1);
-    opacity: 0.45;
-}
-
-#widget.idle #song-title {
-    color: rgba(255, 255, 255, 0.75);
-}
 
 #widget.idle #album-container {
     display: none;
 }
 
+
 /* =========================
-   ANIMATION
+   WATERMARK
 ========================= */
 
-@keyframes pulse {
-    0% {
-        transform: scale(1);
-    }
+#watermark {
+    position: absolute;
 
-    50% {
-        transform: scale(1.08);
-    }
+    right: 10px;
+    bottom: 6px;
 
-    100% {
-        transform: scale(1);
-    }
+    font-family:
+        "Baskerville",
+        "Times New Roman",
+        serif;
+
+    font-size: 13px;
+    font-weight: 400;
+    font-style: italic;
+
+    line-height: 1.1;
+
+    letter-spacing: 1.2px;
+
+    color:
+        var(
+            --accent-color,
+            #ffffff
+        );
+
+    opacity: 0.46;
+
+    white-space: nowrap;
+
+    pointer-events: none;
+    user-select: none;
+
+    transition:
+        opacity 0.25s ease;
 }
 
-#music-indicator.playing {
-    animation: pulse 1.5s ease-in-out infinite;
+#widget.track-transition #watermark {
+    opacity: 0.24;
 }

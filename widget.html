@@ -3,49 +3,68 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Last.fm Now Playing</title>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-    <link rel="stylesheet" href="style.css">
+    <title>MusicWidget</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
 </head>
 
 <body>
 
-    <div id="widget" class="idle">
+    <div
+        id="widget"
+        class="idle"
+    >
 
         <div id="album-container">
 
             <img
                 id="album-art"
-                src="https://picsum.photos/300"
                 alt="Album Art"
             >
 
-            <div id="music-indicator" class="idle">
-                ♪
-            </div>
-
         </div>
+
 
         <div id="track-info">
 
             <div id="status">
+
                 <span id="status-dot"></span>
-                <span id="status-text">NOT PLAYING</span>
+
+                <span id="status-text">
+                    LOADING
+                </span>
+
             </div>
 
+
             <span id="song-title">
-                Nothing Playing
+                Loading...
             </span>
 
+
             <span id="artist-name">
-                Start some music to sync
+                Connecting to Last.fm
             </span>
 
         </div>
 
+
+        <div id="watermark">
+            by ilyjonatan
+        </div>
+
     </div>
+
 
     <script src="musicplayer.js"></script>
 
