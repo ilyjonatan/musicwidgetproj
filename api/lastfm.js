@@ -4,9 +4,6 @@ export default async function handler(req, res) {
         'https://cloud.pogly.gg';
 
 
-    /*
-     * Allow Pogly to call this API.
-     */
     res.setHeader(
         'Access-Control-Allow-Origin',
         allowedOrigin
@@ -28,9 +25,6 @@ export default async function handler(req, res) {
     );
 
 
-    /*
-     * Handle browser preflight requests.
-     */
     if (req.method === 'OPTIONS') {
 
         return res.status(204).end();
@@ -128,7 +122,8 @@ export default async function handler(req, res) {
 
     const timeout =
         setTimeout(
-            () => controller.abort(),
+            () =>
+                controller.abort(),
             5000
         );
 
@@ -178,9 +173,13 @@ export default async function handler(req, res) {
         }
 
 
+        /*
+         * Keep now-playing data fresh.
+         */
+
         res.setHeader(
             'Cache-Control',
-            'public, s-maxage=10, stale-while-revalidate=20'
+            'public, s-maxage=2'
         );
 
 
