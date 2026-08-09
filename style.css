@@ -11,6 +11,7 @@ body {
     height: 100%;
 
     overflow: hidden;
+
     background: transparent;
 
     font-family:
@@ -35,6 +36,7 @@ body {
     align-items: center;
 
     gap: 16px;
+
     padding: 12px;
 
     background:
@@ -85,11 +87,13 @@ body {
         translateY(3px);
 }
 
+
 #track-info {
     transition:
         opacity 0.22s ease,
         transform 0.22s ease;
 }
+
 
 #widget.track-transition #track-info {
     opacity: 0;
@@ -116,12 +120,14 @@ body {
         transform 0.25s ease;
 }
 
+
 #widget.track-transition #album-container {
     opacity: 0;
 
     transform:
         scale(0.94);
 }
+
 
 #album-art {
     width: 86px;
@@ -166,7 +172,7 @@ body {
 
 
 /* =========================
-   STATUS
+   NOW PLAYING
 ========================= */
 
 #status {
@@ -179,6 +185,7 @@ body {
     font-weight: 600;
 
     text-transform: uppercase;
+
     letter-spacing: 1.2px;
 
     color:
@@ -187,6 +194,7 @@ body {
             #ffffff
         );
 }
+
 
 #status-dot {
     width: 6px;
@@ -198,6 +206,7 @@ body {
 
     background: #8d8d99;
 }
+
 
 #status.playing #status-dot {
     background:
@@ -319,6 +328,7 @@ body {
     transition:
         opacity 0.25s ease;
 }
+
 
 #widget.track-transition #watermark {
     opacity: 0.24;

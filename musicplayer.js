@@ -60,7 +60,9 @@ const TRANSITION_TIME = 220;
 ========================================= */
 
 const widget =
-    document.getElementById('widget');
+    document.getElementById(
+        'widget'
+    );
 
 const albumContainer =
     document.getElementById(
@@ -195,17 +197,21 @@ function getTrackKey(track) {
     const title =
         track.name || '';
 
+
     const artist =
         track.artist &&
         track.artist['#text']
             ? track.artist['#text']
             : '';
 
+
     const mbid =
         track.mbid || '';
 
 
-    return `${artist}|${title}|${mbid}`;
+    return (
+        `${artist}|${title}|${mbid}`
+    );
 }
 
 
@@ -222,7 +228,7 @@ function wait(ms) {
 
 
 /* =========================================
-   CUSTOMIZATION
+   APPEARANCE
 ========================================= */
 
 function applyAppearance() {
@@ -491,7 +497,7 @@ async function transitionToTrack(
 
 
 /* =========================================
-   APPLY TRACK
+   APPLY TRACK DATA
 ========================================= */
 
 function applyTrackData(track) {
@@ -510,6 +516,10 @@ function applyTrackData(track) {
 
     consecutiveFailures = 0;
 
+
+    /*
+     * Clear previous artwork immediately.
+     */
 
     currentArtworkURL = '';
 
@@ -571,6 +581,11 @@ function applyTrackData(track) {
 
     image.onload =
         function () {
+
+            /*
+             * Ignore artwork if the song
+             * already changed again.
+             */
 
             if (
                 artworkTrackKey !==
@@ -634,6 +649,11 @@ function showPlaying(track) {
     const trackKey =
         getTrackKey(track);
 
+
+    /*
+     * Don't animate again if the same
+     * song comes back from the API.
+     */
 
     if (
         trackKey ===
@@ -789,6 +809,11 @@ function handleFailure(error) {
         error
     );
 
+
+    /*
+     * Keep existing track visible during
+     * brief API/network hiccups.
+     */
 
     if (
         hasReceivedValidData &&
