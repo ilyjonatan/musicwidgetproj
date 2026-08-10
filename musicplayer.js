@@ -1,25 +1,18 @@
-/* =========================================
-   URL SETTINGS
-========================================= */
-
-const params =
-    new URLSearchParams(
-        window.location.search
-    );
-
+const params = new URLSearchParams(window.location.search);
 
 const LASTFM_USERNAME =
     params.get('user') ||
     params.get('username');
 
-
 let settings = {
-
     showArt:
         params.get('art') !== '0',
 
     showStatus:
         params.get('status') !== '0',
+
+    showCredit:
+        params.get('credit') !== '0',
 
     opacity:
         clamp(
@@ -33,105 +26,58 @@ let settings = {
     backgroundColor:
         normalizeHex(
             params.get('bg'),
-            '14141c'
+            '071a2b'
         ),
 
     accentColor:
         normalizeHex(
             params.get('accent'),
-            'ffffff'
+            '69c5ff'
         )
 };
 
-
-/* =========================================
-   SETTINGS
-========================================= */
-
 const UPDATE_INTERVAL = 3000;
-
 const MAX_FAILURES = 3;
-
 const TRANSITION_TIME = 220;
 
-
-/* =========================================
-   ELEMENTS
-========================================= */
-
 const widget =
-    document.getElementById(
-        'widget'
-    );
+    document.getElementById('widget');
 
 const albumContainer =
-    document.getElementById(
-        'album-container'
-    );
+    document.getElementById('album-container');
 
 const albumArt =
-    document.getElementById(
-        'album-art'
-    );
+    document.getElementById('album-art');
 
 const songTitle =
-    document.getElementById(
-        'song-title'
-    );
+    document.getElementById('song-title');
 
 const artistName =
-    document.getElementById(
-        'artist-name'
-    );
+    document.getElementById('artist-name');
 
 const status =
-    document.getElementById(
-        'status'
-    );
+    document.getElementById('status');
 
 const statusText =
-    document.getElementById(
-        'status-text'
-    );
+    document.getElementById('status-text');
 
-
-/* =========================================
-   STATE
-========================================= */
+const watermark =
+    document.getElementById('watermark');
 
 let currentlyPlaying = false;
-
 let currentArtworkURL = '';
-
 let currentTrackKey = '';
-
 let consecutiveFailures = 0;
-
 let hasReceivedValidData = false;
-
 let requestInProgress = false;
-
 let transitionGeneration = 0;
 
-
-/* =========================================
-   HELPERS
-========================================= */
-
-function clamp(
-    value,
-    min,
-    max
-) {
-
-    const number =
-        Number(value);
-
+function clamp(value, min, max) {
+    const number = Number(value);
 
     if (!Number.isFinite(number)) {
         return min;
     }
-
 
     return Math.min(
         max,
@@ -142,35 +88,26 @@ function clamp(
     );
 }
 
-
 function validHex(value) {
-
     return /^[0-9a-fA-F]{6}$/.test(
         String(value)
     );
 }
 
-
 function normalizeHex(
     value,
     fallback
 ) {
-
     if (validHex(value)) {
-
         return String(value)
             .toLowerCase();
     }
 
-
     return fallback;
 }
 
-
 function hexToRgb(hex) {
-
     return {
-
         r:
             parseInt(
                 hex.slice(0, 2),
@@ -191,12 +128,9 @@ function hexToRgb(hex) {
     };
 }
 
-
 function getTrackKey(track) {
-
     const title =
         track.name || '';
-
 
     const artist =
         track.artist &&
@@ -204,19 +138,13 @@ function getTrackKey(track) {
             ? track.artist['#text']
             : '';
 
-
     const mbid =
         track.mbid || '';
 
-
-    return (
-        `${artist}|${title}|${mbid}`
-    );
+    return `${artist}|${title}|${mbid}`;
 }
 
-
 function wait(ms) {
-
     return new Promise(
         resolve =>
             setTimeout(
@@ -226,30 +154,20 @@ function wait(ms) {
     );
 }
 
-
-/* =========================================
-   APPEARANCE
-========================================= */
-
 function applyAppearance() {
-
     const rgb =
         hexToRgb(
             settings.backgroundColor
         );
 
-
     const opacity =
         settings.opacity / 100;
-
 
     widget.style.background =
         `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${opacity})`;
 
-
     const accent =
         `#${settings.accentColor}`;
-
 
     document.documentElement.style
         .setProperty(
@@ -257,33 +175,30 @@ function applyAppearance() {
             accent
         );
 
-
     status.style.display =
         settings.showStatus
             ? 'flex'
             : 'none';
 
+    if (watermark) {
+        watermark.style.display =
+            settings.showCredit
+                ? 'block'
+                : 'none';
+    }
 
     if (
         settings.showArt &&
         currentlyPlaying &&
         currentArtworkURL
     ) {
-
         albumContainer.style.display =
             'block';
-
     } else {
-
         albumContainer.style.display =
             'none';
     }
 }
-
-
-/* =========================================
-   LIVE PREVIEW SETTINGS
-========================================= */
 
 window.addEventListener(
     'message',
@@ -293,49 +208,47 @@ window.addEventListener(
             event.origin !==
             window.location.origin
         ) {
-
             return;
         }
-
 
         if (
             !event.data ||
             event.data.type !==
                 'widget-settings'
         ) {
-
             return;
         }
 
-
         const incoming =
             event.data.settings;
-
 
         if (!incoming) {
             return;
         }
 
-
         if (
             typeof incoming.art ===
             'boolean'
         ) {
-
             settings.showArt =
                 incoming.art;
         }
-
 
         if (
             typeof incoming.status ===
             'boolean'
         ) {
-
             settings.showStatus =
                 incoming.status;
         }
 
+        if (
+            typeof incoming.credit ===
+            'boolean'
+        ) {
+            settings.showCredit =
+                incoming.credit;
+        }
 
         if (
             Number.isFinite(
@@ -344,7 +257,6 @@ window.addEventListener(
                 )
             )
         ) {
-
             settings.opacity =
                 clamp(
                     Number(
@@ -355,54 +267,41 @@ window.addEventListener(
                 );
         }
 
-
         if (
             validHex(
                 incoming.bg
             )
         ) {
-
             settings.backgroundColor =
                 String(
                     incoming.bg
                 ).toLowerCase();
         }
 
-
         if (
             validHex(
                 incoming.accent
             )
         ) {
-
             settings.accentColor =
                 String(
                     incoming.accent
                 ).toLowerCase();
         }
 
-
         applyAppearance();
     }
 );
 
-
-/* =========================================
-   ARTWORK
-========================================= */
-
 function findArtwork(track) {
-
     if (
         !track.image ||
         !Array.isArray(
             track.image
         )
     ) {
-
         return '';
     }
-
 
     const sizes = [
         'extralarge',
@@ -411,65 +310,48 @@ function findArtwork(track) {
         'small'
     ];
 
-
     for (const size of sizes) {
-
         const image =
             track.image.find(
                 item =>
                     item.size === size
             );
 
-
         if (
             image &&
             image['#text']
         ) {
-
             return image['#text'];
         }
     }
 
-
     return '';
 }
-
-
-/* =========================================
-   TRACK TRANSITION
-========================================= */
 
 async function transitionToTrack(
     track
 ) {
-
     const transitionID =
         ++transitionGeneration;
-
 
     widget.classList.add(
         'track-transition'
     );
 
-
     await wait(
         TRANSITION_TIME
     );
-
 
     if (
         transitionID !==
         transitionGeneration
     ) {
-
         return;
     }
-
 
     applyTrackData(
         track
     );
-
 
     requestAnimationFrame(
         function () {
@@ -481,10 +363,8 @@ async function transitionToTrack(
                         transitionID !==
                         transitionGeneration
                     ) {
-
                         return;
                     }
-
 
                     widget.classList.remove(
                         'track-transition'
@@ -495,48 +375,29 @@ async function transitionToTrack(
     );
 }
 
-
-/* =========================================
-   APPLY TRACK DATA
-========================================= */
-
 function applyTrackData(track) {
-
     const trackKey =
         getTrackKey(track);
-
 
     currentTrackKey =
         trackKey;
 
-
     currentlyPlaying = true;
-
     hasReceivedValidData = true;
-
     consecutiveFailures = 0;
 
-
-    /*
-     * Clear previous artwork immediately.
-     */
-
     currentArtworkURL = '';
-
 
     albumArt.removeAttribute(
         'src'
     );
 
-
     albumContainer.style.display =
         'none';
-
 
     songTitle.textContent =
         track.name ||
         'Unknown Track';
-
 
     artistName.textContent =
         track.artist &&
@@ -544,69 +405,49 @@ function applyTrackData(track) {
             ? track.artist['#text']
             : 'Unknown Artist';
 
-
     widget.classList.remove(
         'idle'
     );
-
 
     status.classList.add(
         'playing'
     );
 
-
     statusText.textContent =
         'NOW PLAYING';
-
 
     const artworkURL =
         findArtwork(track);
 
-
     if (!artworkURL) {
-
         applyAppearance();
-
         return;
     }
-
 
     const artworkTrackKey =
         trackKey;
 
-
     const image =
         new Image();
 
-
     image.onload =
         function () {
-
-            /*
-             * Ignore artwork if the song
-             * already changed again.
-             */
 
             if (
                 artworkTrackKey !==
                 currentTrackKey
             ) {
-
                 return;
             }
-
 
             currentArtworkURL =
                 artworkURL;
 
-
             albumArt.src =
                 artworkURL;
 
-
             applyAppearance();
         };
-
 
     image.onerror =
         function () {
@@ -615,236 +456,152 @@ function applyTrackData(track) {
                 artworkTrackKey !==
                 currentTrackKey
             ) {
-
                 return;
             }
 
-
             currentArtworkURL = '';
-
 
             albumArt.removeAttribute(
                 'src'
             );
 
-
             applyAppearance();
         };
-
 
     image.src =
         artworkURL;
 
-
     applyAppearance();
 }
 
-
-/* =========================================
-   PLAYING
-========================================= */
-
 function showPlaying(track) {
-
     const trackKey =
         getTrackKey(track);
-
-
-    /*
-     * Don't animate again if the same
-     * song comes back from the API.
-     */
 
     if (
         trackKey ===
         currentTrackKey
     ) {
-
         currentlyPlaying = true;
-
         consecutiveFailures = 0;
-
         hasReceivedValidData = true;
 
         applyAppearance();
-
         return;
     }
-
 
     transitionToTrack(
         track
     );
 }
 
-
-/* =========================================
-   NOTHING PLAYING
-========================================= */
-
 function showNothingPlaying() {
-
     transitionGeneration++;
-
 
     widget.classList.remove(
         'track-transition'
     );
 
-
     currentlyPlaying = false;
-
     currentTrackKey = '';
-
     currentArtworkURL = '';
-
     hasReceivedValidData = true;
-
     consecutiveFailures = 0;
-
 
     songTitle.textContent =
         'Nothing Playing';
 
-
     artistName.textContent =
         'No active Last.fm scrobble';
-
 
     albumArt.removeAttribute(
         'src'
     );
 
-
     albumContainer.style.display =
         'none';
-
 
     widget.classList.add(
         'idle'
     );
 
-
     status.classList.remove(
         'playing'
     );
 
-
     statusText.textContent =
         'NOT PLAYING';
-
 
     applyAppearance();
 }
 
-
-/* =========================================
-   ERROR
-========================================= */
-
 function showError(message) {
-
     transitionGeneration++;
-
 
     widget.classList.remove(
         'track-transition'
     );
 
-
     currentlyPlaying = false;
-
     currentTrackKey = '';
-
     currentArtworkURL = '';
-
 
     songTitle.textContent =
         'Last.fm Error';
-
 
     artistName.textContent =
         message ||
         'Unable to load music';
 
-
     albumArt.removeAttribute(
         'src'
     );
 
-
     albumContainer.style.display =
         'none';
-
 
     widget.classList.add(
         'idle'
     );
 
-
     status.classList.remove(
         'playing'
     );
 
-
     statusText.textContent =
         'ERROR';
-
 
     applyAppearance();
 }
 
-
-/* =========================================
-   FAILURE HANDLING
-========================================= */
-
 function handleFailure(error) {
-
     consecutiveFailures++;
-
 
     console.error(
         'Last.fm request failed:',
         error
     );
 
-
-    /*
-     * Keep existing track visible during
-     * brief API/network hiccups.
-     */
-
     if (
         hasReceivedValidData &&
         consecutiveFailures <
         MAX_FAILURES
     ) {
-
         return;
     }
-
 
     if (
         consecutiveFailures >=
         MAX_FAILURES
     ) {
-
         showError(
             'Unable to reach Last.fm'
         );
     }
 }
 
-
-/* =========================================
-   LAST.FM REQUEST
-========================================= */
-
 async function queryLastFM() {
-
     if (!LASTFM_USERNAME) {
-
         showError(
             'No Last.fm username provided'
         );
@@ -852,9 +609,7 @@ async function queryLastFM() {
         return;
     }
 
-
     try {
-
         const response =
             await fetch(
                 `/api/lastfm?username=${encodeURIComponent(
@@ -865,28 +620,20 @@ async function queryLastFM() {
                 }
             );
 
-
         let data;
 
-
         try {
-
             data =
                 await response.json();
-
         } catch (error) {
-
             handleFailure(error);
-
             return;
         }
-
 
         if (
             !response.ok ||
             data.error
         ) {
-
             handleFailure(
                 data.message ||
                 data.error
@@ -895,36 +642,26 @@ async function queryLastFM() {
             return;
         }
 
-
         consecutiveFailures = 0;
-
 
         const tracks =
             data.recenttracks &&
             data.recenttracks.track;
 
-
         if (!tracks) {
-
             showNothingPlaying();
-
             return;
         }
-
 
         const track =
             Array.isArray(tracks)
                 ? tracks[0]
                 : tracks;
 
-
         if (!track) {
-
             showNothingPlaying();
-
             return;
         }
-
 
         const isPlaying =
             track['@attr'] &&
@@ -932,57 +669,33 @@ async function queryLastFM() {
                 .nowplaying ===
                 'true';
 
-
         if (isPlaying) {
-
             showPlaying(track);
-
         } else {
-
             showNothingPlaying();
         }
 
-
     } catch (error) {
-
         handleFailure(error);
     }
 }
 
-
-/* =========================================
-   POLLING
-========================================= */
-
 async function pollLastFM() {
-
     if (requestInProgress) {
         return;
     }
 
-
     requestInProgress = true;
 
-
     try {
-
         await queryLastFM();
-
     } finally {
-
         requestInProgress = false;
     }
 }
 
-
-/* =========================================
-   START
-========================================= */
-
 applyAppearance();
-
 pollLastFM();
-
 
 setInterval(
     pollLastFM,

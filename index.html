@@ -18,7 +18,6 @@
             box-sizing: border-box;
         }
 
-
         :root {
             --bg: #061724;
             --bg-deep: #04111b;
@@ -39,19 +38,14 @@
             --yellow: #f2cf68;
         }
 
-
         html {
             min-height: 100%;
         }
 
-
         body {
             margin: 0;
-
             min-height: 100vh;
-
             padding: 42px 24px;
-
             color: var(--text);
 
             font-family:
@@ -60,33 +54,27 @@
                 Helvetica,
                 sans-serif;
 
-            background-color:
-                var(--bg-deep);
+            background-color: var(--bg-deep);
 
             background-image:
-
                 linear-gradient(
                     var(--line-faint) 1px,
                     transparent 1px
                 ),
-
                 linear-gradient(
                     90deg,
                     var(--line-faint) 1px,
                     transparent 1px
                 ),
-
                 linear-gradient(
                     rgba(105, 197, 255, 0.035) 1px,
                     transparent 1px
                 ),
-
                 linear-gradient(
                     90deg,
                     rgba(105, 197, 255, 0.035) 1px,
                     transparent 1px
                 ),
-
                 radial-gradient(
                     circle at top center,
                     rgba(85, 186, 255, 0.10),
@@ -101,13 +89,11 @@
                 auto;
         }
 
-
         body::before {
             content:
                 "♫    ZS-MK1    ZERO SIGNAL SYSTEM    ♪    REV 1.0";
 
             position: fixed;
-
             top: 14px;
             left: 18px;
 
@@ -131,13 +117,11 @@
             pointer-events: none;
         }
 
-
         body::after {
             content:
                 "ZERO SIGNAL // LAST.FM DATA LINK // SYSTEM ONLINE";
 
             position: fixed;
-
             right: 18px;
             bottom: 14px;
 
@@ -161,10 +145,8 @@
             pointer-events: none;
         }
 
-
         .page {
             position: relative;
-
             z-index: 1;
 
             width: 100%;
@@ -173,12 +155,10 @@
             margin: 0 auto;
         }
 
-
         .card {
             position: relative;
 
             padding: 30px;
-
             margin-bottom: 26px;
 
             overflow: hidden;
@@ -198,29 +178,14 @@
             border-radius: 4px;
 
             box-shadow:
-                0 22px 60px
-                rgba(
-                    0,
-                    0,
-                    0,
-                    0.28
-                ),
-
-                inset 0 0 35px
-                rgba(
-                    85,
-                    186,
-                    255,
-                    0.025
-                );
+                0 22px 60px rgba(0, 0, 0, 0.28),
+                inset 0 0 35px rgba(85, 186, 255, 0.025);
         }
-
 
         .card::before {
             content: "";
 
             position: absolute;
-
             top: 12px;
             left: 12px;
 
@@ -236,12 +201,10 @@
                 var(--line);
         }
 
-
         .card::after {
             content: "";
 
             position: absolute;
-
             right: 12px;
             bottom: 12px;
 
@@ -256,7 +219,6 @@
                 1px solid
                 var(--line);
         }
-
 
         .system-label {
             margin-bottom: 10px;
@@ -275,11 +237,9 @@
             text-transform: uppercase;
         }
 
-
         .system-label::before {
             content: "// ";
         }
-
 
         h1 {
             margin: 0 0 8px;
@@ -292,13 +252,11 @@
             color: var(--text);
         }
 
-
         h2 {
             margin: 0 0 8px;
 
             font-size: 22px;
         }
-
 
         h3 {
             margin-top: 30px;
@@ -318,25 +276,20 @@
             color: #b7dcf3;
         }
 
-
         h3::before {
             content: "[ ";
             color: var(--accent);
         }
-
 
         h3::after {
             content: " ]";
             color: var(--accent);
         }
 
-
         p {
             color: var(--muted);
-
             line-height: 1.55;
         }
-
 
         label {
             display: block;
@@ -344,10 +297,8 @@
             margin-bottom: 8px;
 
             color: #d9effd;
-
             font-weight: 600;
         }
-
 
         input[type="text"],
         input[type="number"] {
@@ -372,7 +323,6 @@
             color: var(--text);
 
             font-size: 16px;
-
             outline: none;
 
             transition:
@@ -380,7 +330,6 @@
                 box-shadow 0.15s ease,
                 background 0.15s ease;
         }
-
 
         input[type="text"]:focus,
         input[type="number"]:focus {
@@ -403,7 +352,6 @@
                     0.9
                 );
         }
-
 
         button,
         .button {
@@ -445,7 +393,6 @@
             letter-spacing: 0.7px;
 
             text-decoration: none;
-
             text-transform: uppercase;
 
             cursor: pointer;
@@ -456,7 +403,6 @@
                 box-shadow 0.15s ease,
                 transform 0.15s ease;
         }
-
 
         button:hover,
         .button:hover {
@@ -484,28 +430,21 @@
                 translateY(-1px);
         }
 
-
         button:active,
         .button:active {
             transform: none;
         }
 
-
         button:disabled {
             opacity: 0.55;
-
             cursor: not-allowed;
-
             transform: none;
         }
 
-
         .option-group {
             display: grid;
-
             gap: 10px;
         }
-
 
         .option-row {
             position: relative;
@@ -538,7 +477,6 @@
             border-radius: 2px;
         }
 
-
         .option-row::after {
             content: "";
 
@@ -561,20 +499,15 @@
                 );
         }
 
-
         .option-row > label {
             margin: 0;
         }
 
-
         .color-control {
             display: flex;
-
             align-items: center;
-
             gap: 10px;
         }
-
 
         input[type="color"] {
             width: 46px;
@@ -593,7 +526,6 @@
             cursor: pointer;
         }
 
-
         .hex-input {
             width: 120px !important;
 
@@ -602,22 +534,16 @@
                 monospace;
         }
 
-
         .range-control {
             display: flex;
-
             align-items: center;
-
             gap: 10px;
         }
 
-
         input[type="range"] {
             width: 190px;
-
             accent-color: var(--accent);
         }
-
 
         .opacity-input {
             width: 76px !important;
@@ -629,7 +555,6 @@
                 monospace;
         }
 
-
         input[type="checkbox"] {
             width: 18px;
             height: 18px;
@@ -639,11 +564,9 @@
             cursor: pointer;
         }
 
-
         .actions {
             margin-top: 24px;
         }
-
 
         .output {
             display: none;
@@ -651,19 +574,14 @@
             margin-top: 30px;
         }
 
-
         .url-row {
             display: flex;
-
             align-items: stretch;
-
             gap: 10px;
         }
 
-
         .url-row input {
             flex: 1;
-
             min-width: 0;
 
             font-family:
@@ -673,16 +591,13 @@
             font-size: 13px;
         }
 
-
         .preview-wrapper {
             position: relative;
 
             width: 100%;
-
             min-height: 190px;
 
             margin-top: 20px;
-
             padding: 34px;
 
             display: flex;
@@ -695,18 +610,15 @@
             background-color: #071a2b;
 
             background-image:
-
                 linear-gradient(
                     rgba(105, 197, 255, 0.055) 1px,
                     transparent 1px
                 ),
-
                 linear-gradient(
                     90deg,
                     rgba(105, 197, 255, 0.055) 1px,
                     transparent 1px
                 ),
-
                 radial-gradient(
                     circle,
                     rgba(
@@ -729,7 +641,6 @@
 
             border-radius: 3px;
         }
-
 
         .preview-wrapper::before {
             content:
@@ -756,7 +667,6 @@
                 );
         }
 
-
         .preview-wrapper::after {
             content:
                 "♫   ♪   ∿   SIGNAL ACTIVE";
@@ -782,7 +692,6 @@
                 );
         }
 
-
         iframe {
             display: block;
 
@@ -800,16 +709,13 @@
             background: transparent;
         }
 
-
         .download-card {
             text-align: center;
         }
 
-
         .download-card .system-label {
             text-align: left;
         }
-
 
         .download-card .button {
             margin-top: 10px;
@@ -817,10 +723,8 @@
             padding: 14px 22px;
         }
 
-
         .steps {
             margin-top: 28px;
-
             padding-top: 20px;
 
             text-align: left;
@@ -834,7 +738,6 @@
                 var(--line-soft);
         }
 
-
         .steps strong {
             color: var(--text);
 
@@ -845,11 +748,9 @@
             letter-spacing: 0.7px;
         }
 
-
         .steps li::marker {
             color: var(--accent);
         }
-
 
         .credit {
             margin-top: 20px;
@@ -873,17 +774,13 @@
                 );
         }
 
-
         .technical-strip {
             display: flex;
-
             align-items: center;
-
             gap: 8px;
 
             margin-bottom: 14px;
         }
-
 
         .technical-strip span {
             display: block;
@@ -893,11 +790,9 @@
             background: var(--line);
         }
 
-
         .technical-strip .a {
             width: 40px;
         }
-
 
         .technical-strip .b {
             width: 18px;
@@ -905,13 +800,11 @@
             background: var(--danger);
         }
 
-
         .technical-strip .c {
             width: 10px;
 
             background: var(--yellow);
         }
-
 
         @media (
             max-width: 600px
@@ -922,11 +815,9 @@
                     30px 14px;
             }
 
-
             .card {
                 padding: 22px;
             }
-
 
             .option-row {
                 align-items:
@@ -936,28 +827,23 @@
                     column;
             }
 
-
             .color-control,
             .range-control {
                 width: 100%;
             }
 
-
             .hex-input {
                 flex: 1;
             }
-
 
             input[type="range"] {
                 flex: 1;
             }
 
-
             .url-row {
                 flex-direction:
                     column;
             }
-
 
             .preview-wrapper {
                 min-height: 160px;
@@ -976,40 +862,30 @@
 
     <main class="page">
 
-
         <section class="card">
 
             <div class="technical-strip">
-
                 <span class="a"></span>
-
                 <span class="b"></span>
-
                 <span class="c"></span>
-
             </div>
-
 
             <div class="system-label">
                 ZS-MK1 // Audio Visual System
             </div>
 
-
             <h1>
                 ZERO SIGNAL MK-I
             </h1>
-
 
             <p>
                 Last.fm now-playing display system
                 engineered for stream overlays.
             </p>
 
-
             <label for="username">
                 Last.fm Username
             </label>
-
 
             <input
                 id="username"
@@ -1018,14 +894,11 @@
                 autocomplete="off"
             >
 
-
             <h3>
                 Appearance Parameters
             </h3>
 
-
             <div class="option-group">
-
 
                 <div class="option-row">
 
@@ -1033,28 +906,25 @@
                         Background Color
                     </label>
 
-
                     <div class="color-control">
 
                         <input
                             id="background-color"
                             type="color"
-                            value="#14141c"
+                            value="#071a2b"
                         >
-
 
                         <input
                             id="background-color-text"
                             class="hex-input"
                             type="text"
-                            value="#14141c"
+                            value="#071a2b"
                             maxlength="7"
                         >
 
                     </div>
 
                 </div>
-
 
                 <div class="option-row">
 
@@ -1062,21 +932,19 @@
                         Accent Color
                     </label>
 
-
                     <div class="color-control">
 
                         <input
                             id="accent-color"
                             type="color"
-                            value="#ffffff"
+                            value="#69c5ff"
                         >
-
 
                         <input
                             id="accent-color-text"
                             class="hex-input"
                             type="text"
-                            value="#ffffff"
+                            value="#69c5ff"
                             maxlength="7"
                         >
 
@@ -1084,13 +952,11 @@
 
                 </div>
 
-
                 <div class="option-row">
 
                     <label>
                         Background Opacity
                     </label>
-
 
                     <div class="range-control">
 
@@ -1102,7 +968,6 @@
                             value="92"
                         >
 
-
                         <input
                             id="opacity-text"
                             class="opacity-input"
@@ -1112,7 +977,6 @@
                             value="92"
                         >
 
-
                         <span>
                             %
                         </span>
@@ -1121,13 +985,11 @@
 
                 </div>
 
-
                 <div class="option-row">
 
                     <label>
                         Show Album Artwork
                     </label>
-
 
                     <input
                         id="show-art"
@@ -1137,13 +999,11 @@
 
                 </div>
 
-
                 <div class="option-row">
 
                     <label>
                         Show "NOW PLAYING"
                     </label>
-
 
                     <input
                         id="show-status"
@@ -1153,8 +1013,21 @@
 
                 </div>
 
-            </div>
+                <div class="option-row">
 
+                    <label>
+                        Show Creator Credit
+                    </label>
+
+                    <input
+                        id="show-credit"
+                        type="checkbox"
+                        checked
+                    >
+
+                </div>
+
+            </div>
 
             <div class="actions">
 
@@ -1163,7 +1036,6 @@
                 </button>
 
             </div>
-
 
             <div
                 class="output"
@@ -1174,7 +1046,6 @@
                     Widget URL
                 </label>
 
-
                 <div class="url-row">
 
                     <input
@@ -1183,13 +1054,11 @@
                         readonly
                     >
 
-
                     <button id="copy">
                         Copy
                     </button>
 
                 </div>
-
 
                 <div class="preview-wrapper">
 
@@ -1204,38 +1073,29 @@
 
         </section>
 
-
         <section
             class="card download-card"
         >
 
             <div class="technical-strip">
-
                 <span class="a"></span>
-
                 <span class="b"></span>
-
                 <span class="c"></span>
-
             </div>
-
 
             <div class="system-label">
                 ZS-MK1 // Pogly Deployment Package
             </div>
 
-
             <h2>
                 ZERO SIGNAL for Pogly
             </h2>
-
 
             <p>
                 Download ZERO SIGNAL MK-I
                 and import it into
                 Pogly's Widget Creator.
             </p>
-
 
             <a
                 class="button"
@@ -1245,13 +1105,11 @@
                 Download ZERO SIGNAL MK-I
             </a>
 
-
             <div class="steps">
 
                 <strong>
                     INSTALLATION SEQUENCE
                 </strong>
-
 
                 <ol>
 
@@ -1259,42 +1117,35 @@
                         Download the widget file.
                     </li>
 
-
                     <li>
                         Open the JSON file and
                         copy all of its contents.
                     </li>
-
 
                     <li>
                         Open Pogly's
                         Widget Creator.
                     </li>
 
-
                     <li>
                         Choose Import.
                     </li>
-
 
                     <li>
                         Paste the widget JSON
                         and load it.
                     </li>
 
-
                     <li>
                         Enter the streamer's
                         Last.fm username.
                     </li>
 
-
                     <li>
                         Customize colors,
-                        opacity, artwork and
-                        status options.
+                        opacity, artwork,
+                        status and creator credit.
                     </li>
-
 
                     <li>
                         Save the widget.
@@ -1303,7 +1154,6 @@
                 </ol>
 
             </div>
-
 
             <div class="credit">
                 by ilyjonatan
@@ -1321,84 +1171,75 @@
                 'username'
             );
 
-
         const generateButton =
             document.getElementById(
                 'generate'
             );
-
 
         const output =
             document.getElementById(
                 'output'
             );
 
-
         const widgetURLInput =
             document.getElementById(
                 'widget-url'
             );
-
 
         const preview =
             document.getElementById(
                 'preview'
             );
 
-
         const copyButton =
             document.getElementById(
                 'copy'
             );
-
 
         const backgroundColorInput =
             document.getElementById(
                 'background-color'
             );
 
-
         const backgroundColorText =
             document.getElementById(
                 'background-color-text'
             );
-
 
         const accentColorInput =
             document.getElementById(
                 'accent-color'
             );
 
-
         const accentColorText =
             document.getElementById(
                 'accent-color-text'
             );
-
 
         const opacityInput =
             document.getElementById(
                 'opacity'
             );
 
-
         const opacityText =
             document.getElementById(
                 'opacity-text'
             );
-
 
         const showArtInput =
             document.getElementById(
                 'show-art'
             );
 
-
         const showStatusInput =
             document.getElementById(
                 'show-status'
             );
 
+        const showCreditInput =
+            document.getElementById(
+                'show-credit'
+            );
 
         let previewLoaded = false;
 
@@ -1408,22 +1249,16 @@
             const clean =
                 value
                     .trim()
-                    .replace(
-                        '#',
-                        ''
-                    )
+                    .replace('#', '')
                     .toLowerCase();
-
 
             if (
                 /^[0-9a-f]{6}$/.test(
                     clean
                 )
             ) {
-
                 return `#${clean}`;
             }
-
 
             return null;
         }
@@ -1432,10 +1267,7 @@
         function cleanHex(value) {
 
             return value
-                .replace(
-                    '#',
-                    ''
-                )
+                .replace('#', '')
                 .toLowerCase();
         }
 
@@ -1445,16 +1277,13 @@
             const number =
                 Number(value);
 
-
             if (
                 !Number.isFinite(
                     number
                 )
             ) {
-
                 return 92;
             }
-
 
             return Math.min(
                 100,
@@ -1477,6 +1306,9 @@
 
                 status:
                     showStatusInput.checked,
+
+                credit:
+                    showCreditInput.checked,
 
                 opacity:
                     Number(
@@ -1505,16 +1337,13 @@
             const settings =
                 getSettings();
 
-
             const params =
                 new URLSearchParams();
-
 
             params.set(
                 'user',
                 username
             );
-
 
             params.set(
                 'art',
@@ -1523,7 +1352,6 @@
                     : '0'
             );
 
-
             params.set(
                 'status',
                 settings.status
@@ -1531,24 +1359,27 @@
                     : '0'
             );
 
+            params.set(
+                'credit',
+                settings.credit
+                    ? '1'
+                    : '0'
+            );
 
             params.set(
                 'opacity',
                 settings.opacity
             );
 
-
             params.set(
                 'bg',
                 settings.bg
             );
 
-
             params.set(
                 'accent',
                 settings.accent
             );
-
 
             return (
                 `${window.location.origin}` +
@@ -1563,10 +1394,8 @@
                 !previewLoaded ||
                 !preview.contentWindow
             ) {
-
                 return;
             }
-
 
             preview.contentWindow
                 .postMessage(
@@ -1589,11 +1418,9 @@
                 usernameInput.value
                     .trim();
 
-
             if (!username) {
                 return;
             }
-
 
             widgetURLInput.value =
                 buildWidgetURL(
@@ -1610,7 +1437,6 @@
             ) {
 
                 updateURL();
-
                 sendSettings();
             }
         }
@@ -1625,7 +1451,6 @@
                         .value =
                         backgroundColorInput
                             .value;
-
 
                     updateCustomization();
                 }
@@ -1643,21 +1468,17 @@
                                 .value
                         );
 
-
                     if (!color) {
                         return;
                     }
-
 
                     backgroundColorInput
                         .value =
                         color;
 
-
                     backgroundColorText
                         .value =
                         color;
-
 
                     updateCustomization();
                 }
@@ -1671,7 +1492,6 @@
 
                     accentColorText.value =
                         accentColorInput.value;
-
 
                     updateCustomization();
                 }
@@ -1689,19 +1509,15 @@
                                 .value
                         );
 
-
                     if (!color) {
                         return;
                     }
 
-
                     accentColorInput.value =
                         color;
 
-
                     accentColorText.value =
                         color;
-
 
                     updateCustomization();
                 }
@@ -1715,7 +1531,6 @@
 
                     opacityText.value =
                         opacityInput.value;
-
 
                     updateCustomization();
                 }
@@ -1732,14 +1547,11 @@
                             opacityText.value
                         );
 
-
                     opacityText.value =
                         value;
 
-
                     opacityInput.value =
                         value;
-
 
                     updateCustomization();
                 }
@@ -1760,12 +1572,18 @@
             );
 
 
+        showCreditInput
+            .addEventListener(
+                'change',
+                updateCustomization
+            );
+
+
         async function generateWidget() {
 
             const username =
                 usernameInput.value
                     .trim();
-
 
             if (!username) {
 
@@ -1776,14 +1594,11 @@
                 return;
             }
 
-
             generateButton.disabled =
                 true;
 
-
             generateButton.textContent =
                 'Checking...';
-
 
             try {
 
@@ -1794,10 +1609,8 @@
                         )}&_=${Date.now()}`
                     );
 
-
                 const data =
                     await response.json();
-
 
                 if (
                     !response.ok ||
@@ -1812,28 +1625,22 @@
                     return;
                 }
 
-
                 const widgetURL =
                     buildWidgetURL(
                         username
                     );
 
-
                 widgetURLInput.value =
                     widgetURL;
-
 
                 previewLoaded =
                     false;
 
-
                 preview.src =
                     widgetURL;
 
-
                 output.style.display =
                     'block';
-
 
             } catch (error) {
 
@@ -1841,17 +1648,14 @@
                     error
                 );
 
-
                 alert(
                     'Unable to check Last.fm right now.'
                 );
-
 
             } finally {
 
                 generateButton.disabled =
                     false;
-
 
                 generateButton.textContent =
                     'Generate Widget';
@@ -1865,7 +1669,6 @@
 
                 previewLoaded =
                     true;
-
 
                 sendSettings();
             }
@@ -1888,7 +1691,6 @@
                         event.key ===
                         'Enter'
                     ) {
-
                         generateWidget();
                     }
                 }
@@ -1903,11 +1705,9 @@
                     const widgetURL =
                         widgetURLInput.value;
 
-
                     if (!widgetURL) {
                         return;
                     }
-
 
                     try {
 
@@ -1917,11 +1717,9 @@
                                 widgetURL
                             );
 
-
                         copyButton
                             .textContent =
                             'Copied!';
-
 
                         setTimeout(
                             function () {
@@ -1934,12 +1732,10 @@
                             1500
                         );
 
-
                     } catch (error) {
 
                         widgetURLInput
                             .select();
-
 
                         document.execCommand(
                             'copy'
