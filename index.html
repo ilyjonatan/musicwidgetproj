@@ -12,12 +12,12 @@
 
     <title>MusicWidget</title>
 
-
     <style>
 
         * {
             box-sizing: border-box;
         }
+
 
         body {
             margin: 0;
@@ -37,13 +37,14 @@
                 sans-serif;
         }
 
+
         .page {
             width: 100%;
-
             max-width: 760px;
 
             margin: 0 auto;
         }
+
 
         .card {
             padding: 28px;
@@ -58,17 +59,18 @@
                     255,
                     255,
                     255,
-                    0.1
+                    0.10
                 );
 
             border-radius: 18px;
         }
 
+
         h1 {
             margin-top: 0;
-
             margin-bottom: 8px;
         }
+
 
         h2 {
             margin-top: 0;
@@ -76,13 +78,14 @@
             font-size: 20px;
         }
 
+
         h3 {
             margin-top: 28px;
-
             margin-bottom: 14px;
 
             font-size: 16px;
         }
+
 
         p {
             color:
@@ -96,6 +99,7 @@
             line-height: 1.5;
         }
 
+
         label {
             display: block;
 
@@ -103,6 +107,7 @@
 
             font-weight: 600;
         }
+
 
         input[type="text"],
         input[type="number"] {
@@ -128,6 +133,7 @@
             font-size: 16px;
         }
 
+
         button,
         .button {
             display: inline-flex;
@@ -138,7 +144,6 @@
             padding: 12px 16px;
 
             border: 0;
-
             border-radius: 10px;
 
             background: white;
@@ -146,34 +151,59 @@
             color: #111118;
 
             font-family: inherit;
-
             font-size: 14px;
             font-weight: 700;
 
             text-decoration: none;
 
             cursor: pointer;
+
+            transition:
+                transform 0.15s ease,
+                opacity 0.15s ease;
         }
+
+
+        button:hover,
+        .button:hover {
+            transform:
+                translateY(-1px);
+        }
+
+
+        button:active,
+        .button:active {
+            transform:
+                translateY(0);
+        }
+
 
         button:disabled {
             opacity: 0.6;
 
             cursor: not-allowed;
+
+            transform: none;
         }
+
+
+        /* =========================
+           CUSTOMIZATION
+        ========================= */
+
 
         .option-group {
             display: grid;
 
-            gap: 18px;
+            gap: 12px;
         }
+
 
         .option-row {
             display: flex;
 
             align-items: center;
-
-            justify-content:
-                space-between;
+            justify-content: space-between;
 
             gap: 18px;
 
@@ -193,9 +223,11 @@
             border-radius: 12px;
         }
 
+
         .option-row > label {
             margin: 0;
         }
+
 
         .color-control {
             display: flex;
@@ -204,6 +236,7 @@
 
             gap: 10px;
         }
+
 
         input[type="color"] {
             width: 46px;
@@ -227,9 +260,11 @@
             cursor: pointer;
         }
 
+
         .hex-input {
             width: 120px !important;
         }
+
 
         .range-control {
             display: flex;
@@ -239,15 +274,18 @@
             gap: 10px;
         }
 
+
         input[type="range"] {
             width: 190px;
         }
+
 
         .opacity-input {
             width: 76px !important;
 
             text-align: center;
         }
+
 
         input[type="checkbox"] {
             width: 18px;
@@ -256,9 +294,16 @@
             cursor: pointer;
         }
 
+
         .actions {
             margin-top: 24px;
         }
+
+
+        /* =========================
+           GENERATED OUTPUT
+        ========================= */
+
 
         .output {
             display: none;
@@ -266,11 +311,15 @@
             margin-top: 28px;
         }
 
+
         .url-row {
             display: flex;
 
+            align-items: stretch;
+
             gap: 10px;
         }
+
 
         .url-row input {
             flex: 1;
@@ -278,71 +327,100 @@
             min-width: 0;
         }
 
+
+        /*
+         * CLEAN PREVIEW AREA
+         *
+         * The iframe/widget is centered
+         * horizontally and vertically.
+         */
+
         .preview-wrapper {
-            margin-top: 24px;
+            width: 100%;
 
-            padding: 18px;
+            min-height: 180px;
 
-            overflow: auto;
+            margin-top: 20px;
 
-            background:
-                linear-gradient(
-                    45deg,
-                    #222 25%,
-                    transparent 25%
-                ),
-                linear-gradient(
-                    -45deg,
-                    #222 25%,
-                    transparent 25%
-                ),
-                linear-gradient(
-                    45deg,
-                    transparent 75%,
-                    #222 75%
-                ),
-                linear-gradient(
-                    -45deg,
-                    transparent 75%,
-                    #222 75%
+            padding: 30px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            overflow: hidden;
+
+            background-color: #15151d;
+
+            /*
+             * Minimal spaced-dot pattern.
+             */
+
+            background-image:
+                radial-gradient(
+                    circle,
+                    rgba(
+                        255,
+                        255,
+                        255,
+                        0.10
+                    ) 1px,
+                    transparent 1.2px
                 );
 
             background-size:
-                20px 20px;
+                28px 28px;
 
-            background-position:
-                0 0,
-                0 10px,
-                10px -10px,
-                -10px 0px;
+            border:
+                1px solid
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.06
+                );
 
             border-radius: 14px;
         }
 
+
         iframe {
-            width: 440px;
+            display: block;
+
+            width: 420px;
+            height: 110px;
 
             max-width: 100%;
 
-            height: 140px;
+            flex-shrink: 0;
+
+            margin: 0;
 
             border: 0;
 
             background: transparent;
         }
 
+
+        /* =========================
+           POGLY DOWNLOAD
+        ========================= */
+
+
         .download-card {
             text-align: center;
         }
 
+
         .download-card .button {
             margin-top: 10px;
 
-            padding:
-                14px 22px;
+            padding: 14px 22px;
 
             font-size: 15px;
         }
+
 
         .steps {
             margin-top: 24px;
@@ -360,6 +438,12 @@
             line-height: 1.7;
         }
 
+
+        .steps strong {
+            color: white;
+        }
+
+
         .credit {
             margin-top: 18px;
 
@@ -368,22 +452,40 @@
                 "Times New Roman",
                 serif;
 
+            font-size: 13px;
             font-style: italic;
 
-            letter-spacing: 1px;
+            letter-spacing: 1.2px;
 
             color:
                 rgba(
                     255,
                     255,
                     255,
-                    0.4
+                    0.46
                 );
         }
+
+
+        /* =========================
+           MOBILE
+        ========================= */
+
 
         @media (
             max-width: 600px
         ) {
+
+            body {
+                padding:
+                    24px 14px;
+            }
+
+
+            .card {
+                padding: 20px;
+            }
+
 
             .option-row {
                 align-items:
@@ -393,23 +495,35 @@
                     column;
             }
 
+
             .color-control,
             .range-control {
                 width: 100%;
             }
 
+
             .hex-input {
                 flex: 1;
             }
+
 
             input[type="range"] {
                 flex: 1;
             }
 
+
             .url-row {
                 flex-direction:
                     column;
             }
+
+
+            .preview-wrapper {
+                min-height: 160px;
+
+                padding: 20px 10px;
+            }
+
         }
 
     </style>
@@ -422,11 +536,17 @@
     <main class="page">
 
 
+        <!-- =========================
+             WIDGET GENERATOR
+        ========================== -->
+
+
         <section class="card">
 
             <h1>
                 MusicWidget
             </h1>
+
 
             <p>
                 Create a customizable
@@ -438,6 +558,7 @@
             <label for="username">
                 Last.fm Username
             </label>
+
 
             <input
                 id="username"
@@ -455,11 +576,15 @@
             <div class="option-group">
 
 
+                <!-- BACKGROUND COLOR -->
+
+
                 <div class="option-row">
 
                     <label>
                         Background Color
                     </label>
+
 
                     <div class="color-control">
 
@@ -468,6 +593,7 @@
                             type="color"
                             value="#14141c"
                         >
+
 
                         <input
                             id="background-color-text"
@@ -482,11 +608,15 @@
                 </div>
 
 
+                <!-- ACCENT COLOR -->
+
+
                 <div class="option-row">
 
                     <label>
                         Accent Color
                     </label>
+
 
                     <div class="color-control">
 
@@ -495,6 +625,7 @@
                             type="color"
                             value="#ffffff"
                         >
+
 
                         <input
                             id="accent-color-text"
@@ -509,11 +640,15 @@
                 </div>
 
 
+                <!-- OPACITY -->
+
+
                 <div class="option-row">
 
                     <label>
                         Background Opacity
                     </label>
+
 
                     <div class="range-control">
 
@@ -525,6 +660,7 @@
                             value="92"
                         >
 
+
                         <input
                             id="opacity-text"
                             class="opacity-input"
@@ -533,6 +669,7 @@
                             max="100"
                             value="92"
                         >
+
 
                         <span>
                             %
@@ -543,11 +680,15 @@
                 </div>
 
 
+                <!-- ALBUM ART -->
+
+
                 <div class="option-row">
 
                     <label>
                         Show Album Artwork
                     </label>
+
 
                     <input
                         id="show-art"
@@ -558,11 +699,15 @@
                 </div>
 
 
+                <!-- STATUS -->
+
+
                 <div class="option-row">
 
                     <label>
                         Show "NOW PLAYING"
                     </label>
+
 
                     <input
                         id="show-status"
@@ -584,6 +729,11 @@
             </div>
 
 
+            <!-- =========================
+                 GENERATED WIDGET
+            ========================== -->
+
+
             <div
                 class="output"
                 id="output"
@@ -601,6 +751,7 @@
                         type="text"
                         readonly
                     >
+
 
                     <button id="copy">
                         Copy
@@ -623,6 +774,11 @@
         </section>
 
 
+        <!-- =========================
+             POGLY DOWNLOAD
+        ========================== -->
+
+
         <section
             class="card download-card"
         >
@@ -630,6 +786,7 @@
             <h2>
                 Download for Pogly
             </h2>
+
 
             <p>
                 Download the Pogly version
@@ -641,7 +798,7 @@
             <a
                 class="button"
                 href="/musicwidget-pogly-v1.json"
-                download
+                download="musicwidget-pogly-v1.json"
             >
                 Download MusicWidget v1
             </a>
@@ -653,41 +810,49 @@
                     How to install:
                 </strong>
 
+
                 <ol>
 
                     <li>
                         Download the widget file.
                     </li>
 
+
                     <li>
                         Open the JSON file and
                         copy all of its contents.
                     </li>
+
 
                     <li>
                         Open Pogly's
                         Widget Creator.
                     </li>
 
+
                     <li>
                         Choose Import.
                     </li>
+
 
                     <li>
                         Paste the widget JSON
                         and load it.
                     </li>
 
+
                     <li>
                         Enter the streamer's
                         Last.fm username.
                     </li>
+
 
                     <li>
                         Customize the colors,
                         opacity, artwork and
                         status options.
                     </li>
+
 
                     <li>
                         Save the widget.
@@ -709,30 +874,40 @@
 
     <script>
 
+        /* =========================
+           ELEMENTS
+        ========================== */
+
+
         const usernameInput =
             document.getElementById(
                 'username'
             );
+
 
         const generateButton =
             document.getElementById(
                 'generate'
             );
 
+
         const output =
             document.getElementById(
                 'output'
             );
+
 
         const widgetURLInput =
             document.getElementById(
                 'widget-url'
             );
 
+
         const preview =
             document.getElementById(
                 'preview'
             );
+
 
         const copyButton =
             document.getElementById(
@@ -745,35 +920,42 @@
                 'background-color'
             );
 
+
         const backgroundColorText =
             document.getElementById(
                 'background-color-text'
             );
+
 
         const accentColorInput =
             document.getElementById(
                 'accent-color'
             );
 
+
         const accentColorText =
             document.getElementById(
                 'accent-color-text'
             );
+
 
         const opacityInput =
             document.getElementById(
                 'opacity'
             );
 
+
         const opacityText =
             document.getElementById(
                 'opacity-text'
             );
 
+
         const showArtInput =
             document.getElementById(
                 'show-art'
             );
+
 
         const showStatusInput =
             document.getElementById(
@@ -784,12 +966,20 @@
         let previewLoaded = false;
 
 
+        /* =========================
+           HELPERS
+        ========================== */
+
+
         function normalizeHex(value) {
 
             const clean =
                 value
                     .trim()
-                    .replace('#', '')
+                    .replace(
+                        '#',
+                        ''
+                    )
                     .toLowerCase();
 
 
@@ -810,7 +1000,10 @@
         function cleanHex(value) {
 
             return value
-                .replace('#', '')
+                .replace(
+                    '#',
+                    ''
+                )
                 .toLowerCase();
         }
 
@@ -822,7 +1015,9 @@
 
 
             if (
-                !Number.isFinite(number)
+                !Number.isFinite(
+                    number
+                )
             ) {
 
                 return 92;
@@ -833,7 +1028,9 @@
                 100,
                 Math.max(
                     0,
-                    Math.round(number)
+                    Math.round(
+                        number
+                    )
                 )
             );
         }
@@ -869,6 +1066,11 @@
         }
 
 
+        /* =========================
+           BUILD WIDGET URL
+        ========================== */
+
+
         function buildWidgetURL(
             username
         ) {
@@ -886,12 +1088,14 @@
                 username
             );
 
+
             params.set(
                 'art',
                 settings.art
                     ? '1'
                     : '0'
             );
+
 
             params.set(
                 'status',
@@ -900,15 +1104,18 @@
                     : '0'
             );
 
+
             params.set(
                 'opacity',
                 settings.opacity
             );
 
+
             params.set(
                 'bg',
                 settings.bg
             );
+
 
             params.set(
                 'accent',
@@ -921,6 +1128,11 @@
                 `/widget.html?${params.toString()}`
             );
         }
+
+
+        /* =========================
+           PREVIEW UPDATES
+        ========================== */
 
 
         function sendSettings() {
@@ -943,6 +1155,7 @@
                         settings:
                             getSettings()
                     },
+
                     window.location.origin
                 );
         }
@@ -981,6 +1194,11 @@
         }
 
 
+        /* =========================
+           COLOR CONTROLS
+        ========================== */
+
+
         backgroundColorInput
             .addEventListener(
                 'input',
@@ -990,6 +1208,7 @@
                         .value =
                         backgroundColorInput
                             .value;
+
 
                     updateCustomization();
                 }
@@ -1036,6 +1255,7 @@
                     accentColorText.value =
                         accentColorInput.value;
 
+
                     updateCustomization();
                 }
             );
@@ -1071,6 +1291,11 @@
             );
 
 
+        /* =========================
+           OPACITY
+        ========================== */
+
+
         opacityInput
             .addEventListener(
                 'input',
@@ -1078,6 +1303,7 @@
 
                     opacityText.value =
                         opacityInput.value;
+
 
                     updateCustomization();
                 }
@@ -1108,6 +1334,11 @@
             );
 
 
+        /* =========================
+           TOGGLES
+        ========================== */
+
+
         showArtInput
             .addEventListener(
                 'change',
@@ -1120,6 +1351,11 @@
                 'change',
                 updateCustomization
             );
+
+
+        /* =========================
+           GENERATE
+        ========================== */
 
 
         async function generateWidget() {
@@ -1151,7 +1387,9 @@
 
                 const response =
                     await fetch(
-                        `/api/lastfm?username=${encodeURIComponent(username)}&_=${Date.now()}`
+                        `/api/lastfm?username=${encodeURIComponent(
+                            username
+                        )}&_=${Date.now()}`
                     );
 
 
@@ -1183,7 +1421,8 @@
                     widgetURL;
 
 
-                previewLoaded = false;
+                previewLoaded =
+                    false;
 
 
                 preview.src =
@@ -1196,7 +1435,9 @@
 
             } catch (error) {
 
-                console.error(error);
+                console.error(
+                    error
+                );
 
 
                 alert(
@@ -1220,7 +1461,9 @@
             'load',
             function () {
 
-                previewLoaded = true;
+                previewLoaded =
+                    true;
+
 
                 sendSettings();
             }
@@ -1248,6 +1491,11 @@
                     }
                 }
             );
+
+
+        /* =========================
+           COPY URL
+        ========================== */
 
 
         copyButton
@@ -1285,6 +1533,7 @@
                                     .textContent =
                                     'Copy';
                             },
+
                             1500
                         );
 
