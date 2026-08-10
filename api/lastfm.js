@@ -1,37 +1,15 @@
 export default async function handler(req, res) {
 
-    const allowedOrigin =
-        'https://cloud.pogly.gg';
-
-
-    res.setHeader(
-        'Access-Control-Allow-Origin',
-        allowedOrigin
-    );
-
-    res.setHeader(
-        'Vary',
-        'Origin'
-    );
-
-    res.setHeader(
-        'Access-Control-Allow-Methods',
-        'GET, OPTIONS'
-    );
-
-    res.setHeader(
-        'Access-Control-Allow-Headers',
-        'Content-Type'
-    );
-
-
-    if (req.method === 'OPTIONS') {
-
-        return res.status(204).end();
-    }
-
+    /* =========================================
+       METHOD CHECK
+    ========================================= */
 
     if (req.method !== 'GET') {
+
+        res.setHeader(
+            'Allow',
+            'GET'
+        );
 
         return res.status(405).json({
             error: 'Method not allowed'
@@ -39,32 +17,9 @@ export default async function handler(req, res) {
     }
 
 
-    const username =
-        typeof req.query.username === 'string'
-            ? req.query.username.trim()
-            : '';
-
-
-    if (!username) {
-
-        return res.status(400).json({
-            error: 'Missing username',
-            message: 'A Last.fm username is required'
-        });
-    }
-
-
-    if (
-        username.length > 50 ||
-        !/^[A-Za-z0-9_-]+$/.test(username)
-    ) {
-
-        return res.status(400).json({
-            error: 'Invalid username',
-            message: 'Invalid Last.fm username'
-        });
-    }
-
+    /* =========================================
+       API KEY
+    ========================================= */
 
     const apiKey =
         process.env.LASTFM_API_KEY;
@@ -73,47 +28,121 @@ export default async function handler(req, res) {
     if (!apiKey) {
 
         console.error(
-            'LASTFM_API_KEY is missing'
+            'LASTFM_API_KEY is not configured.'
         );
 
-
         return res.status(500).json({
-            error: 'Server error',
-            message: 'Widget service is unavailable'
+            error: 'Server configuration error'
         });
     }
 
 
-    const lastFMURL =
-        new URL(
-            'https://ws.audioscrobbler.com/2.0/'
-        );
+    /* =========================================
+       USERNAME VALIDATION
+    ========================================= */
+
+    const rawUsername =
+        Array.isArray(req.query.username)
+            ? req.query.username[0]
+            : req.query.username;
 
 
-    lastFMURL.searchParams.set(
-        'method',
-        'user.getrecenttracks'
+    const username =
+        String(
+            rawUsername || ''
+        ).trim();
+
+
+    if (
+        !username ||
+        username.length > 64
+    ) {
+
+        return res.status(400).json({
+            error: 'Invalid Last.fm username'
+        });
+    }
+
+
+    /*
+     * Reject control characters.
+     * The username is still encoded before
+     * being sent to Last.fm.
+     */
+
+    if (
+        /[\u0000-\u001F\u007F]/.test(
+            username
+        )
+    ) {
+
+        return res.status(400).json({
+            error: 'Invalid Last.fm username'
+        });
+    }
+
+
+    /* =========================================
+       RESPONSE HEADERS
+    ========================================= */
+
+    /*
+     * Pogly/OBS may request this endpoint
+     * from another origin, so we allow CORS.
+     *
+     * This is NOT where the security comes
+     * from — the endpoint itself is narrowly
+     * restricted below.
+     */
+
+    res.setHeader(
+        'Access-Control-Allow-Origin',
+        '*'
     );
 
-    lastFMURL.searchParams.set(
-        'user',
-        username
+
+    res.setHeader(
+        'Content-Type',
+        'application/json; charset=utf-8'
     );
 
-    lastFMURL.searchParams.set(
-        'api_key',
-        apiKey
+
+    /*
+     * Cache briefly at Vercel's edge.
+     * ZERO SIGNAL polls every few seconds,
+     * so this reduces duplicate Last.fm calls.
+     */
+
+    res.setHeader(
+        'Cache-Control',
+        'public, s-maxage=2, stale-while-revalidate=5'
     );
 
-    lastFMURL.searchParams.set(
-        'format',
-        'json'
-    );
 
-    lastFMURL.searchParams.set(
-        'limit',
-        '1'
-    );
+    /* =========================================
+       LAST.FM REQUEST
+    ========================================= */
+
+    const params =
+        new URLSearchParams({
+            method:
+                'user.getrecenttracks',
+
+            user:
+                username,
+
+            api_key:
+                apiKey,
+
+            format:
+                'json',
+
+            limit:
+                '1',
+
+            extended:
+                '0'
+        });
 
 
     const controller =
@@ -122,8 +151,7 @@ export default async function handler(req, res) {
 
     const timeout =
         setTimeout(
-            () =>
-                controller.abort(),
+            () => controller.abort(),
             5000
         );
 
@@ -132,15 +160,24 @@ export default async function handler(req, res) {
 
         const response =
             await fetch(
-                lastFMURL.toString(),
+                `https://ws.audioscrobbler.com/2.0/?${params.toString()}`,
                 {
+                    method: 'GET',
+
                     signal:
-                        controller.signal
+                        controller.signal,
+
+                    headers: {
+                        'User-Agent':
+                            'ZERO-SIGNAL-MK1/1.0'
+                    }
                 }
             );
 
 
-        clearTimeout(timeout);
+        clearTimeout(
+            timeout
+        );
 
 
         if (!response.ok) {
@@ -152,8 +189,8 @@ export default async function handler(req, res) {
 
 
             return res.status(502).json({
-                error: 'Upstream error',
-                message: 'Unable to contact Last.fm'
+                error:
+                    'Unable to reach Last.fm'
             });
         }
 
@@ -162,62 +199,159 @@ export default async function handler(req, res) {
             await response.json();
 
 
+        /* =========================================
+           LAST.FM ERROR
+        ========================================= */
+
         if (data.error) {
 
-            return res.status(400).json({
-                error: 'Last.fm error',
-                message:
-                    data.message ||
-                    'Unable to retrieve that user'
+            /*
+             * Don't expose unnecessary
+             * upstream debugging details.
+             */
+
+            if (
+                data.error === 6
+            ) {
+
+                return res.status(404).json({
+                    error:
+                        'Last.fm user not found'
+                });
+            }
+
+
+            console.error(
+                'Last.fm API error:',
+                data.error
+            );
+
+
+            return res.status(502).json({
+                error:
+                    'Last.fm request failed'
             });
         }
 
 
+        /* =========================================
+           SAFE RESPONSE
+        ========================================= */
+
+        const tracks =
+            data.recenttracks &&
+            data.recenttracks.track;
+
+
+        if (
+            !tracks ||
+            !Array.isArray(tracks) ||
+            tracks.length === 0
+        ) {
+
+            return res.status(200).json({
+                recenttracks: {
+                    track: []
+                }
+            });
+        }
+
+
+        const track =
+            tracks[0];
+
+
         /*
-         * Keep now-playing data fresh.
+         * Return only fields ZERO SIGNAL
+         * actually needs.
          */
 
-        res.setHeader(
-            'Cache-Control',
-            'public, s-maxage=2'
-        );
+        const safeTrack = {
+
+            name:
+                track.name || '',
+
+            mbid:
+                track.mbid || '',
+
+            artist: {
+                '#text':
+                    track.artist &&
+                    track.artist['#text']
+                        ? track.artist['#text']
+                        : ''
+            },
+
+            image:
+                Array.isArray(track.image)
+                    ? track.image.map(
+                        image => ({
+                            size:
+                                image.size || '',
+
+                            '#text':
+                                image['#text'] || ''
+                        })
+                    )
+                    : [],
+
+            '@attr':
+                track['@attr'] &&
+                track['@attr'].nowplaying
+                    ? {
+                        nowplaying:
+                            String(
+                                track['@attr']
+                                    .nowplaying
+                            )
+                    }
+                    : {}
+        };
 
 
-        res.setHeader(
-            'X-Content-Type-Options',
-            'nosniff'
-        );
-
-
-        return res.status(200).json(data);
+        return res.status(200).json({
+            recenttracks: {
+                track: [
+                    safeTrack
+                ]
+            }
+        });
 
 
     } catch (error) {
 
-        clearTimeout(timeout);
+        clearTimeout(
+            timeout
+        );
 
 
         if (
             error &&
-            error.name === 'AbortError'
+            error.name ===
+                'AbortError'
         ) {
 
+            console.error(
+                'Last.fm request timed out.'
+            );
+
+
             return res.status(504).json({
-                error: 'Timeout',
-                message: 'Last.fm took too long to respond'
+                error:
+                    'Last.fm request timed out'
             });
         }
 
 
         console.error(
-            'Last.fm API request failed:',
+            'Last.fm proxy error:',
             error
         );
 
 
         return res.status(500).json({
-            error: 'Server error',
-            message: 'Unable to retrieve Last.fm data'
+            error:
+                'Unable to load Last.fm data'
         });
     }
 }
