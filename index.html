@@ -19,6 +19,25 @@
         }
 
 
+        :root {
+            --page-bg: #0a0d11;
+            --panel-bg: #14181d;
+            --panel-bg-2: #101419;
+
+            --border: #2a3139;
+            --border-soft: #20262d;
+
+            --text: #f3f5f7;
+            --muted: #9ba3ad;
+
+            --button-bg: #e7eaee;
+            --button-text: #0e1115;
+
+            --blue: #5e7fd9;
+            --red: #d45b5b;
+        }
+
+
         body {
             margin: 0;
 
@@ -26,9 +45,15 @@
 
             padding: 40px 24px;
 
-            background: #111118;
+            background:
+                radial-gradient(
+                    circle at top,
+                    rgba(94, 127, 217, 0.05),
+                    transparent 34%
+                ),
+                var(--page-bg);
 
-            color: white;
+            color: var(--text);
 
             font-family:
                 "Segoe UI",
@@ -47,28 +72,59 @@
 
 
         .card {
+            position: relative;
+
             padding: 28px;
 
             margin-bottom: 24px;
 
-            background: #1c1c26;
+            background:
+                linear-gradient(
+                    180deg,
+                    rgba(255, 255, 255, 0.015),
+                    transparent
+                ),
+                var(--panel-bg);
 
             border:
                 1px solid
-                rgba(
-                    255,
-                    255,
-                    255,
-                    0.10
-                );
+                var(--border);
 
-            border-radius: 18px;
+            border-radius: 16px;
+
+            box-shadow:
+                0 18px 50px
+                rgba(0, 0, 0, 0.25);
+        }
+
+
+        .card::before {
+            content: "";
+
+            position: absolute;
+
+            top: 0;
+            left: 20px;
+            right: 20px;
+
+            height: 1px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    transparent,
+                    rgba(255, 255, 255, 0.14),
+                    transparent
+                );
         }
 
 
         h1 {
             margin-top: 0;
             margin-bottom: 8px;
+
+            font-size: 30px;
+            letter-spacing: -0.8px;
         }
 
 
@@ -83,18 +139,17 @@
             margin-top: 28px;
             margin-bottom: 14px;
 
-            font-size: 16px;
+            font-size: 15px;
+
+            color: #dfe3e8;
+
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
 
         p {
-            color:
-                rgba(
-                    255,
-                    255,
-                    255,
-                    0.65
-                );
+            color: var(--muted);
 
             line-height: 1.5;
         }
@@ -106,6 +161,8 @@
             margin-bottom: 8px;
 
             font-weight: 600;
+
+            color: #e4e7eb;
         }
 
 
@@ -117,20 +174,34 @@
 
             border:
                 1px solid
-                rgba(
-                    255,
-                    255,
-                    255,
-                    0.15
-                );
+                var(--border);
 
-            border-radius: 10px;
+            border-radius: 9px;
 
-            background: #121219;
+            background: #0d1116;
 
-            color: white;
+            color: var(--text);
 
             font-size: 16px;
+
+            outline: none;
+
+            transition:
+                border-color 0.15s ease,
+                box-shadow 0.15s ease,
+                background 0.15s ease;
+        }
+
+
+        input[type="text"]:focus,
+        input[type="number"]:focus {
+            border-color: #64758a;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(94, 127, 217, 0.10);
+
+            background: #0f141a;
         }
 
 
@@ -143,12 +214,15 @@
 
             padding: 12px 16px;
 
-            border: 0;
-            border-radius: 10px;
+            border:
+                1px solid
+                rgba(255, 255, 255, 0.1);
 
-            background: white;
+            border-radius: 9px;
 
-            color: #111118;
+            background: var(--button-bg);
+
+            color: var(--button-text);
 
             font-family: inherit;
             font-size: 14px;
@@ -158,9 +232,14 @@
 
             cursor: pointer;
 
+            box-shadow:
+                0 6px 18px
+                rgba(0, 0, 0, 0.18);
+
             transition:
                 transform 0.15s ease,
-                opacity 0.15s ease;
+                background 0.15s ease,
+                box-shadow 0.15s ease;
         }
 
 
@@ -168,6 +247,12 @@
         .button:hover {
             transform:
                 translateY(-1px);
+
+            background: #ffffff;
+
+            box-shadow:
+                0 8px 24px
+                rgba(0, 0, 0, 0.24);
         }
 
 
@@ -187,11 +272,6 @@
         }
 
 
-        /* =========================
-           CUSTOMIZATION
-        ========================= */
-
-
         .option-group {
             display: grid;
 
@@ -209,18 +289,24 @@
 
             padding: 14px;
 
-            background: #15151d;
+            background: var(--panel-bg-2);
 
             border:
                 1px solid
-                rgba(
-                    255,
-                    255,
-                    255,
-                    0.08
-                );
+                var(--border-soft);
 
-            border-radius: 12px;
+            border-radius: 10px;
+
+            transition:
+                border-color 0.15s ease,
+                background 0.15s ease;
+        }
+
+
+        .option-row:hover {
+            border-color: #323a44;
+
+            background: #12171d;
         }
 
 
@@ -246,16 +332,11 @@
 
             border:
                 1px solid
-                rgba(
-                    255,
-                    255,
-                    255,
-                    0.15
-                );
+                var(--border);
 
             border-radius: 8px;
 
-            background: #121219;
+            background: #0d1116;
 
             cursor: pointer;
         }
@@ -277,6 +358,8 @@
 
         input[type="range"] {
             width: 190px;
+
+            accent-color: var(--blue);
         }
 
 
@@ -291,6 +374,8 @@
             width: 18px;
             height: 18px;
 
+            accent-color: var(--blue);
+
             cursor: pointer;
         }
 
@@ -298,11 +383,6 @@
         .actions {
             margin-top: 24px;
         }
-
-
-        /* =========================
-           GENERATED OUTPUT
-        ========================= */
 
 
         .output {
@@ -328,13 +408,6 @@
         }
 
 
-        /*
-         * CLEAN PREVIEW AREA
-         *
-         * The iframe/widget is centered
-         * horizontally and vertically.
-         */
-
         .preview-wrapper {
             width: 100%;
 
@@ -351,37 +424,32 @@
 
             overflow: hidden;
 
-            background-color: #15151d;
-
-            /*
-             * Minimal spaced-dot pattern.
-             */
+            background-color: #0e1217;
 
             background-image:
                 radial-gradient(
                     circle,
                     rgba(
-                        255,
-                        255,
-                        255,
-                        0.10
+                        190,
+                        198,
+                        208,
+                        0.12
                     ) 1px,
                     transparent 1.2px
                 );
 
             background-size:
-                28px 28px;
+                30px 30px;
 
             border:
                 1px solid
-                rgba(
-                    255,
-                    255,
-                    255,
-                    0.06
-                );
+                #242b33;
 
-            border-radius: 14px;
+            border-radius: 12px;
+
+            box-shadow:
+                inset 0 0 40px
+                rgba(0, 0, 0, 0.20);
         }
 
 
@@ -403,13 +471,29 @@
         }
 
 
-        /* =========================
-           POGLY DOWNLOAD
-        ========================= */
-
-
         .download-card {
             text-align: center;
+        }
+
+
+        .download-card::after {
+            content: "";
+
+            position: absolute;
+
+            top: 18px;
+            right: 18px;
+
+            width: 7px;
+            height: 7px;
+
+            border-radius: 50%;
+
+            background: var(--red);
+
+            box-shadow:
+                0 0 10px
+                rgba(212, 91, 91, 0.45);
         }
 
 
@@ -425,22 +509,27 @@
         .steps {
             margin-top: 24px;
 
+            padding-top: 20px;
+
             text-align: left;
 
-            color:
-                rgba(
-                    255,
-                    255,
-                    255,
-                    0.72
-                );
+            color: #adb4bd;
 
             line-height: 1.7;
+
+            border-top:
+                1px solid
+                var(--border-soft);
         }
 
 
         .steps strong {
-            color: white;
+            color: var(--text);
+        }
+
+
+        .steps li::marker {
+            color: #7f8c9d;
         }
 
 
@@ -459,17 +548,12 @@
 
             color:
                 rgba(
-                    255,
-                    255,
-                    255,
-                    0.46
+                    230,
+                    233,
+                    237,
+                    0.45
                 );
         }
-
-
-        /* =========================
-           MOBILE
-        ========================= */
 
 
         @media (
@@ -536,11 +620,6 @@
     <main class="page">
 
 
-        <!-- =========================
-             WIDGET GENERATOR
-        ========================== -->
-
-
         <section class="card">
 
             <h1>
@@ -576,9 +655,6 @@
             <div class="option-group">
 
 
-                <!-- BACKGROUND COLOR -->
-
-
                 <div class="option-row">
 
                     <label>
@@ -608,9 +684,6 @@
                 </div>
 
 
-                <!-- ACCENT COLOR -->
-
-
                 <div class="option-row">
 
                     <label>
@@ -638,9 +711,6 @@
                     </div>
 
                 </div>
-
-
-                <!-- OPACITY -->
 
 
                 <div class="option-row">
@@ -680,9 +750,6 @@
                 </div>
 
 
-                <!-- ALBUM ART -->
-
-
                 <div class="option-row">
 
                     <label>
@@ -697,9 +764,6 @@
                     >
 
                 </div>
-
-
-                <!-- STATUS -->
 
 
                 <div class="option-row">
@@ -727,11 +791,6 @@
                 </button>
 
             </div>
-
-
-            <!-- =========================
-                 GENERATED WIDGET
-            ========================== -->
 
 
             <div
@@ -772,11 +831,6 @@
             </div>
 
         </section>
-
-
-        <!-- =========================
-             POGLY DOWNLOAD
-        ========================== -->
 
 
         <section
@@ -874,11 +928,6 @@
 
     <script>
 
-        /* =========================
-           ELEMENTS
-        ========================== */
-
-
         const usernameInput =
             document.getElementById(
                 'username'
@@ -964,11 +1013,6 @@
 
 
         let previewLoaded = false;
-
-
-        /* =========================
-           HELPERS
-        ========================== */
 
 
         function normalizeHex(value) {
@@ -1066,11 +1110,6 @@
         }
 
 
-        /* =========================
-           BUILD WIDGET URL
-        ========================== */
-
-
         function buildWidgetURL(
             username
         ) {
@@ -1130,11 +1169,6 @@
         }
 
 
-        /* =========================
-           PREVIEW UPDATES
-        ========================== */
-
-
         function sendSettings() {
 
             if (
@@ -1192,11 +1226,6 @@
                 sendSettings();
             }
         }
-
-
-        /* =========================
-           COLOR CONTROLS
-        ========================== */
 
 
         backgroundColorInput
@@ -1291,11 +1320,6 @@
             );
 
 
-        /* =========================
-           OPACITY
-        ========================== */
-
-
         opacityInput
             .addEventListener(
                 'input',
@@ -1334,11 +1358,6 @@
             );
 
 
-        /* =========================
-           TOGGLES
-        ========================== */
-
-
         showArtInput
             .addEventListener(
                 'change',
@@ -1351,11 +1370,6 @@
                 'change',
                 updateCustomization
             );
-
-
-        /* =========================
-           GENERATE
-        ========================== */
 
 
         async function generateWidget() {
@@ -1491,11 +1505,6 @@
                     }
                 }
             );
-
-
-        /* =========================
-           COPY URL
-        ========================== */
 
 
         copyButton
