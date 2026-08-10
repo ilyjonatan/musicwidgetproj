@@ -20,28 +20,29 @@
 
 
         :root {
-            --bg: #0d1520;
+            --bg: #061724;
+            --bg-deep: #04111b;
 
-            --panel: #f2f4f7;
-            --panel-dark: #182433;
+            --panel: rgba(8, 32, 52, 0.88);
+            --panel-soft: rgba(10, 40, 64, 0.72);
 
-            --text-dark: #111820;
-            --text-light: #f7f9fb;
+            --line: #69c5ff;
+            --line-soft: rgba(105, 197, 255, 0.20);
+            --line-faint: rgba(105, 197, 255, 0.09);
 
-            --muted-dark: #6f7883;
-            --muted-light: #aeb7c2;
+            --text: #e8f6ff;
+            --muted: #8fb6cf;
 
-            --border-light: #cbd2da;
-            --border-dark: #2b3949;
+            --accent: #55baff;
+            --accent-soft: rgba(85, 186, 255, 0.18);
 
-            --blue: #2f63c7;
-            --blue-dark: #244d9d;
+            --danger: #ff6b6b;
+            --yellow: #f2cf68;
+        }
 
-            --red: #d84343;
 
-            --yellow: #e5b93f;
-
-            --input-bg: #ffffff;
+        html {
+            min-height: 100%;
         }
 
 
@@ -52,32 +53,123 @@
 
             padding: 42px 24px;
 
-            background:
-                radial-gradient(
-                    circle at top,
-                    rgba(47, 99, 199, 0.10),
-                    transparent 34%
-                ),
-                linear-gradient(
-                    180deg,
-                    #101b29 0%,
-                    var(--bg) 60%
-                );
-
-            color: var(--text-light);
+            color: var(--text);
 
             font-family:
                 "Segoe UI",
                 Arial,
                 Helvetica,
                 sans-serif;
+
+            background-color:
+                var(--bg-deep);
+
+            background-image:
+
+                linear-gradient(
+                    var(--line-faint) 1px,
+                    transparent 1px
+                ),
+
+                linear-gradient(
+                    90deg,
+                    var(--line-faint) 1px,
+                    transparent 1px
+                ),
+
+                linear-gradient(
+                    rgba(105, 197, 255, 0.035) 1px,
+                    transparent 1px
+                ),
+
+                linear-gradient(
+                    90deg,
+                    rgba(105, 197, 255, 0.035) 1px,
+                    transparent 1px
+                ),
+
+                radial-gradient(
+                    circle at top center,
+                    rgba(85, 186, 255, 0.10),
+                    transparent 38%
+                );
+
+            background-size:
+                80px 80px,
+                80px 80px,
+                20px 20px,
+                20px 20px,
+                auto;
+        }
+
+
+        body::before {
+            content:
+                "♫    MW-001    AUDIO VISUAL SYSTEM    ♪    REV 1.0";
+
+            position: fixed;
+
+            top: 14px;
+            left: 18px;
+
+            z-index: 0;
+
+            font-family:
+                "Courier New",
+                monospace;
+
+            font-size: 10px;
+            letter-spacing: 1.8px;
+
+            color:
+                rgba(
+                    105,
+                    197,
+                    255,
+                    0.30
+                );
+
+            pointer-events: none;
+        }
+
+
+        body::after {
+            content:
+                "LAST.FM DATA LINK // MUSIC OVERLAY INTERFACE";
+
+            position: fixed;
+
+            right: 18px;
+            bottom: 14px;
+
+            z-index: 0;
+
+            font-family:
+                "Courier New",
+                monospace;
+
+            font-size: 9px;
+            letter-spacing: 1.5px;
+
+            color:
+                rgba(
+                    105,
+                    197,
+                    255,
+                    0.22
+                );
+
+            pointer-events: none;
         }
 
 
         .page {
-            width: 100%;
+            position: relative;
 
-            max-width: 780px;
+            z-index: 1;
+
+            width: 100%;
+            max-width: 820px;
 
             margin: 0 auto;
         }
@@ -88,33 +180,40 @@
 
             padding: 30px;
 
-            margin-bottom: 24px;
+            margin-bottom: 26px;
+
+            overflow: hidden;
 
             background:
                 linear-gradient(
                     180deg,
-                    #f8f9fb,
-                    var(--panel)
-                );
-
-            color: var(--text-dark);
+                    rgba(255,255,255,0.01),
+                    transparent
+                ),
+                var(--panel);
 
             border:
                 1px solid
-                var(--border-light);
+                var(--line-soft);
 
-            border-radius: 16px;
+            border-radius: 4px;
 
             box-shadow:
-                0 18px 50px
+                0 22px 60px
                 rgba(
                     0,
                     0,
                     0,
                     0.28
-                );
+                ),
 
-            overflow: hidden;
+                inset 0 0 35px
+                rgba(
+                    85,
+                    186,
+                    255,
+                    0.025
+                );
         }
 
 
@@ -123,64 +222,118 @@
 
             position: absolute;
 
-            top: 0;
-            left: 0;
+            top: 12px;
+            left: 12px;
 
-            width: 100%;
-            height: 4px;
+            width: 34px;
+            height: 14px;
 
-            background:
-                linear-gradient(
-                    90deg,
-                    var(--blue) 0%,
-                    var(--blue) 62%,
-                    var(--red) 62%,
-                    var(--red) 83%,
-                    var(--yellow) 83%,
-                    var(--yellow) 100%
-                );
+            border-top:
+                1px solid
+                var(--line);
+
+            border-left:
+                1px solid
+                var(--line);
+        }
+
+
+        .card::after {
+            content: "";
+
+            position: absolute;
+
+            right: 12px;
+            bottom: 12px;
+
+            width: 34px;
+            height: 14px;
+
+            border-right:
+                1px solid
+                var(--line);
+
+            border-bottom:
+                1px solid
+                var(--line);
+        }
+
+
+        .system-label {
+            margin-bottom: 10px;
+
+            font-family:
+                "Courier New",
+                monospace;
+
+            font-size: 10px;
+            font-weight: 700;
+
+            letter-spacing: 1.8px;
+
+            color: var(--accent);
+
+            text-transform: uppercase;
+        }
+
+
+        .system-label::before {
+            content: "// ";
         }
 
 
         h1 {
-            margin-top: 0;
-            margin-bottom: 8px;
+            margin: 0 0 8px;
 
-            font-size: 31px;
-            font-weight: 750;
+            font-size: 32px;
+            font-weight: 700;
 
-            letter-spacing: -0.9px;
+            letter-spacing: -0.8px;
 
-            color: #111923;
+            color: var(--text);
         }
 
 
         h2 {
-            margin-top: 0;
-            margin-bottom: 8px;
+            margin: 0 0 8px;
 
-            font-size: 21px;
-
-            color: #111923;
+            font-size: 22px;
         }
 
 
         h3 {
-            margin-top: 28px;
+            margin-top: 30px;
             margin-bottom: 14px;
 
-            font-size: 14px;
+            font-family:
+                "Courier New",
+                monospace;
+
+            font-size: 12px;
+            font-weight: 700;
+
+            letter-spacing: 1.5px;
 
             text-transform: uppercase;
 
-            letter-spacing: 1.2px;
+            color: #b7dcf3;
+        }
 
-            color: #405066;
+
+        h3::before {
+            content: "[ ";
+            color: var(--accent);
+        }
+
+
+        h3::after {
+            content: " ]";
+            color: var(--accent);
         }
 
 
         p {
-            color: var(--muted-dark);
+            color: var(--muted);
 
             line-height: 1.55;
         }
@@ -191,9 +344,9 @@
 
             margin-bottom: 8px;
 
-            font-weight: 650;
+            color: #d9effd;
 
-            color: #1b2530;
+            font-weight: 600;
         }
 
 
@@ -205,13 +358,19 @@
 
             border:
                 1px solid
-                var(--border-light);
+                var(--line-soft);
 
-            border-radius: 9px;
+            border-radius: 3px;
 
-            background: var(--input-bg);
+            background:
+                rgba(
+                    2,
+                    15,
+                    25,
+                    0.72
+                );
 
-            color: #111820;
+            color: var(--text);
 
             font-size: 16px;
 
@@ -219,21 +378,30 @@
 
             transition:
                 border-color 0.15s ease,
-                box-shadow 0.15s ease;
+                box-shadow 0.15s ease,
+                background 0.15s ease;
         }
 
 
         input[type="text"]:focus,
         input[type="number"]:focus {
-            border-color: var(--blue);
+            border-color: var(--accent);
 
             box-shadow:
                 0 0 0 3px
                 rgba(
-                    47,
-                    99,
-                    199,
-                    0.12
+                    85,
+                    186,
+                    255,
+                    0.10
+                );
+
+            background:
+                rgba(
+                    3,
+                    22,
+                    35,
+                    0.9
                 );
         }
 
@@ -247,70 +415,80 @@
 
             padding: 12px 17px;
 
-            border: 0;
-
-            border-radius: 9px;
-
-            background:
-                linear-gradient(
-                    180deg,
-                    #376dd2,
-                    var(--blue)
+            border:
+                1px solid
+                rgba(
+                    85,
+                    186,
+                    255,
+                    0.55
                 );
 
-            color: white;
+            border-radius: 3px;
 
-            font-family: inherit;
-            font-size: 14px;
-            font-weight: 750;
+            background:
+                rgba(
+                    18,
+                    92,
+                    138,
+                    0.38
+                );
+
+            color: var(--text);
+
+            font-family:
+                "Courier New",
+                monospace;
+
+            font-size: 13px;
+            font-weight: 700;
+
+            letter-spacing: 0.7px;
 
             text-decoration: none;
 
+            text-transform: uppercase;
+
             cursor: pointer;
 
-            box-shadow:
-                0 8px 18px
-                rgba(
-                    47,
-                    99,
-                    199,
-                    0.22
-                );
-
             transition:
-                transform 0.15s ease,
                 background 0.15s ease,
-                box-shadow 0.15s ease;
+                border-color 0.15s ease,
+                box-shadow 0.15s ease,
+                transform 0.15s ease;
         }
 
 
         button:hover,
         .button:hover {
-            transform:
-                translateY(-1px);
-
             background:
-                linear-gradient(
-                    180deg,
-                    #4277dc,
-                    #3268cf
+                rgba(
+                    38,
+                    139,
+                    201,
+                    0.50
                 );
+
+            border-color:
+                var(--accent);
 
             box-shadow:
-                0 10px 24px
+                0 0 18px
                 rgba(
-                    47,
-                    99,
-                    199,
-                    0.30
+                    85,
+                    186,
+                    255,
+                    0.14
                 );
+
+            transform:
+                translateY(-1px);
         }
 
 
         button:active,
         .button:active {
-            transform:
-                translateY(0);
+            transform: none;
         }
 
 
@@ -326,11 +504,13 @@
         .option-group {
             display: grid;
 
-            gap: 12px;
+            gap: 10px;
         }
 
 
         .option-row {
+            position: relative;
+
             display: flex;
 
             align-items: center;
@@ -338,26 +518,48 @@
 
             gap: 18px;
 
-            padding: 14px;
+            padding: 14px 16px;
 
-            background: #e8ecf1;
+            background:
+                var(--panel-soft);
 
             border:
                 1px solid
-                #d0d6de;
+                var(--line-faint);
 
-            border-radius: 10px;
+            border-left:
+                2px solid
+                rgba(
+                    85,
+                    186,
+                    255,
+                    0.40
+                );
 
-            transition:
-                background 0.15s ease,
-                border-color 0.15s ease;
+            border-radius: 2px;
         }
 
 
-        .option-row:hover {
-            background: #eef1f5;
+        .option-row::after {
+            content: "";
 
-            border-color: #bbc4cf;
+            position: absolute;
+
+            top: 6px;
+            right: 7px;
+
+            width: 4px;
+            height: 4px;
+
+            border-radius: 50%;
+
+            background:
+                rgba(
+                    85,
+                    186,
+                    255,
+                    0.50
+                );
         }
 
 
@@ -383,11 +585,11 @@
 
             border:
                 1px solid
-                #bcc4ce;
+                var(--line-soft);
 
-            border-radius: 8px;
+            border-radius: 2px;
 
-            background: white;
+            background: #061724;
 
             cursor: pointer;
         }
@@ -395,6 +597,10 @@
 
         .hex-input {
             width: 120px !important;
+
+            font-family:
+                "Courier New",
+                monospace;
         }
 
 
@@ -410,7 +616,7 @@
         input[type="range"] {
             width: 190px;
 
-            accent-color: var(--blue);
+            accent-color: var(--accent);
         }
 
 
@@ -418,6 +624,10 @@
             width: 76px !important;
 
             text-align: center;
+
+            font-family:
+                "Courier New",
+                monospace;
         }
 
 
@@ -425,7 +635,7 @@
             width: 18px;
             height: 18px;
 
-            accent-color: var(--blue);
+            accent-color: var(--accent);
 
             cursor: pointer;
         }
@@ -439,7 +649,7 @@
         .output {
             display: none;
 
-            margin-top: 28px;
+            margin-top: 30px;
         }
 
 
@@ -456,17 +666,25 @@
             flex: 1;
 
             min-width: 0;
+
+            font-family:
+                "Courier New",
+                monospace;
+
+            font-size: 13px;
         }
 
 
         .preview-wrapper {
+            position: relative;
+
             width: 100%;
 
-            min-height: 180px;
+            min-height: 190px;
 
             margin-top: 20px;
 
-            padding: 30px;
+            padding: 34px;
 
             display: flex;
 
@@ -475,36 +693,93 @@
 
             overflow: hidden;
 
-            background-color: #152130;
+            background-color: #071a2b;
 
             background-image:
+
+                linear-gradient(
+                    rgba(105, 197, 255, 0.055) 1px,
+                    transparent 1px
+                ),
+
+                linear-gradient(
+                    90deg,
+                    rgba(105, 197, 255, 0.055) 1px,
+                    transparent 1px
+                ),
+
                 radial-gradient(
                     circle,
                     rgba(
-                        220,
-                        228,
-                        238,
-                        0.14
+                        105,
+                        197,
+                        255,
+                        0.16
                     ) 1px,
-                    transparent 1.2px
+                    transparent 1.3px
                 );
 
             background-size:
-                30px 30px;
+                36px 36px,
+                36px 36px,
+                18px 18px;
 
             border:
                 1px solid
-                #26364a;
+                var(--line-soft);
 
-            border-radius: 12px;
+            border-radius: 3px;
+        }
 
-            box-shadow:
-                inset 0 0 40px
+
+        .preview-wrapper::before {
+            content:
+                "PREVIEW // LIVE OUTPUT";
+
+            position: absolute;
+
+            top: 10px;
+            left: 12px;
+
+            font-family:
+                "Courier New",
+                monospace;
+
+            font-size: 9px;
+            letter-spacing: 1.3px;
+
+            color:
                 rgba(
-                    0,
-                    0,
-                    0,
-                    0.24
+                    105,
+                    197,
+                    255,
+                    0.48
+                );
+        }
+
+
+        .preview-wrapper::after {
+            content:
+                "♫   ♪   ∿   AUDIO LINK";
+
+            position: absolute;
+
+            right: 12px;
+            bottom: 9px;
+
+            font-family:
+                "Courier New",
+                monospace;
+
+            font-size: 9px;
+            letter-spacing: 1.6px;
+
+            color:
+                rgba(
+                    105,
+                    197,
+                    255,
+                    0.34
                 );
         }
 
@@ -532,29 +807,8 @@
         }
 
 
-        .download-card::after {
-            content: "";
-
-            position: absolute;
-
-            top: 18px;
-            right: 18px;
-
-            width: 9px;
-            height: 9px;
-
-            border-radius: 50%;
-
-            background: var(--red);
-
-            box-shadow:
-                0 0 12px
-                rgba(
-                    216,
-                    67,
-                    67,
-                    0.48
-                );
+        .download-card .system-label {
+            text-align: left;
         }
 
 
@@ -562,35 +816,39 @@
             margin-top: 10px;
 
             padding: 14px 22px;
-
-            font-size: 15px;
         }
 
 
         .steps {
-            margin-top: 26px;
+            margin-top: 28px;
 
             padding-top: 20px;
 
             text-align: left;
 
-            color: #5e6875;
+            color: var(--muted);
 
-            line-height: 1.7;
+            line-height: 1.75;
 
             border-top:
-                1px solid
-                #d3d8df;
+                1px dashed
+                var(--line-soft);
         }
 
 
         .steps strong {
-            color: #19222c;
+            color: var(--text);
+
+            font-family:
+                "Courier New",
+                monospace;
+
+            letter-spacing: 0.7px;
         }
 
 
         .steps li::marker {
-            color: var(--blue);
+            color: var(--accent);
         }
 
 
@@ -609,49 +867,48 @@
 
             color:
                 rgba(
-                    17,
-                    24,
-                    32,
-                    0.48
+                    232,
+                    246,
+                    255,
+                    0.46
                 );
         }
 
 
-        .gundam-mark {
+        .technical-strip {
             display: flex;
 
             align-items: center;
 
-            gap: 7px;
+            gap: 8px;
 
-            margin-bottom: 12px;
+            margin-bottom: 14px;
         }
 
 
-        .gundam-mark span {
+        .technical-strip span {
             display: block;
 
-            width: 22px;
-            height: 4px;
+            height: 3px;
 
-            border-radius: 999px;
+            background: var(--line);
         }
 
 
-        .gundam-mark .blue {
-            background: var(--blue);
+        .technical-strip .a {
+            width: 40px;
         }
 
 
-        .gundam-mark .red {
-            width: 12px;
+        .technical-strip .b {
+            width: 18px;
 
-            background: var(--red);
+            background: var(--danger);
         }
 
 
-        .gundam-mark .yellow {
-            width: 8px;
+        .technical-strip .c {
+            width: 10px;
 
             background: var(--yellow);
         }
@@ -663,12 +920,12 @@
 
             body {
                 padding:
-                    24px 14px;
+                    30px 14px;
             }
 
 
             .card {
-                padding: 20px;
+                padding: 22px;
             }
 
 
@@ -706,7 +963,7 @@
             .preview-wrapper {
                 min-height: 160px;
 
-                padding: 20px 10px;
+                padding: 28px 10px;
             }
 
         }
@@ -723,15 +980,19 @@
 
         <section class="card">
 
+            <div class="technical-strip">
 
-            <div class="gundam-mark">
+                <span class="a"></span>
 
-                <span class="blue"></span>
+                <span class="b"></span>
 
-                <span class="red"></span>
+                <span class="c"></span>
 
-                <span class="yellow"></span>
+            </div>
 
+
+            <div class="system-label">
+                Music Overlay Interface
             </div>
 
 
@@ -761,7 +1022,7 @@
 
 
             <h3>
-                Appearance
+                Appearance Parameters
             </h3>
 
 
@@ -950,15 +1211,19 @@
             class="card download-card"
         >
 
+            <div class="technical-strip">
 
-            <div class="gundam-mark">
+                <span class="a"></span>
 
-                <span class="blue"></span>
+                <span class="b"></span>
 
-                <span class="red"></span>
+                <span class="c"></span>
 
-                <span class="yellow"></span>
+            </div>
 
+
+            <div class="system-label">
+                Pogly Package Deployment
             </div>
 
 
@@ -986,7 +1251,7 @@
             <div class="steps">
 
                 <strong>
-                    How to install:
+                    INSTALLATION SEQUENCE
                 </strong>
 
 
@@ -1027,7 +1292,7 @@
 
 
                     <li>
-                        Customize the colors,
+                        Customize colors,
                         opacity, artwork and
                         status options.
                     </li>
