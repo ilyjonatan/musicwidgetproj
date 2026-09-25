@@ -21,11 +21,6 @@ body {
         sans-serif;
 }
 
-
-/* =========================
-   WIDGET
-========================= */
-
 #widget {
     position: relative;
 
@@ -36,36 +31,19 @@ body {
     align-items: center;
 
     gap: 16px;
-
     padding: 12px;
 
-    background:
-        rgba(
-            20,
-            20,
-            28,
-            0.92
-        );
+    background: rgba(20, 20, 28, 0.92);
 
     border:
         1px solid
-        rgba(
-            255,
-            255,
-            255,
-            0.10
-        );
+        rgba(255, 255, 255, 0.10);
 
     border-radius: 18px;
 
     box-shadow:
         0 10px 35px
-        rgba(
-            0,
-            0,
-            0,
-            0.35
-        );
+        rgba(0, 0, 0, 0.35);
 
     color: white;
 
@@ -75,37 +53,10 @@ body {
         transform 0.25s ease;
 }
 
-
-/* =========================
-   SONG TRANSITION
-========================= */
-
 #widget.track-transition {
     opacity: 0.58;
-
-    transform:
-        translateY(3px);
+    transform: translateY(3px);
 }
-
-
-#track-info {
-    transition:
-        opacity 0.22s ease,
-        transform 0.22s ease;
-}
-
-
-#widget.track-transition #track-info {
-    opacity: 0;
-
-    transform:
-        translateY(4px);
-}
-
-
-/* =========================
-   ALBUM ART
-========================= */
 
 #album-container {
     position: relative;
@@ -120,14 +71,10 @@ body {
         transform 0.25s ease;
 }
 
-
 #widget.track-transition #album-container {
     opacity: 0;
-
-    transform:
-        scale(0.94);
+    transform: scale(0.94);
 }
-
 
 #album-art {
     width: 86px;
@@ -143,23 +90,24 @@ body {
 
     box-shadow:
         0 5px 18px
-        rgba(
-            0,
-            0,
-            0,
-            0.35
-        );
+        rgba(0, 0, 0, 0.35);
+
+    transition:
+        opacity 0.25s ease,
+        transform 0.25s ease;
 }
 
-
-/* =========================
-   TRACK INFORMATION
-========================= */
+#music-indicator {
+    display: none !important;
+}
 
 #track-info {
-    flex: 1;
+    position: relative;
 
+    flex: 1;
     min-width: 0;
+
+    height: 86px;
 
     display: flex;
     flex-direction: column;
@@ -167,13 +115,26 @@ body {
 
     gap: 5px;
 
-    padding-bottom: 5px;
+    padding:
+        12px 18px;
+
+    background: transparent;
+
+    border: none;
+    border-radius: 18px;
+
+    box-shadow: none;
+
+    transition:
+        background 0.25s ease,
+        opacity 0.22s ease,
+        transform 0.22s ease;
 }
 
-
-/* =========================
-   NOW PLAYING
-========================= */
+#widget.track-transition #track-info {
+    opacity: 0;
+    transform: translateY(4px);
+}
 
 #status {
     display: flex;
@@ -195,7 +156,6 @@ body {
         );
 }
 
-
 #status-dot {
     width: 6px;
     height: 6px;
@@ -206,7 +166,6 @@ body {
 
     background: #8d8d99;
 }
-
 
 #status.playing #status-dot {
     background:
@@ -224,11 +183,6 @@ body {
             0.7
         );
 }
-
-
-/* =========================
-   SONG TITLE
-========================= */
 
 #song-title {
     display: block;
@@ -250,11 +204,6 @@ body {
             #ffffff
         );
 }
-
-
-/* =========================
-   ARTIST
-========================= */
 
 #artist-name {
     display: block;
@@ -279,25 +228,15 @@ body {
     opacity: 0.62;
 }
 
-
-/* =========================
-   IDLE
-========================= */
-
 #widget.idle #album-container {
     display: none;
 }
 
-
-/* =========================
-   WATERMARK
-========================= */
-
 #watermark {
     position: absolute;
 
-    right: 10px;
-    bottom: 6px;
+    right: 14px;
+    bottom: 8px;
 
     font-family:
         "Baskerville",
@@ -329,7 +268,96 @@ body {
         opacity 0.25s ease;
 }
 
-
 #widget.track-transition #watermark {
     opacity: 0.24;
+}
+
+
+/* DUAL PANEL */
+
+#widget.dual-panel,
+#widget.circle,
+#widget.spinning-circle {
+    background: transparent;
+
+    border: none;
+
+    box-shadow: none;
+}
+
+#widget.dual-panel #track-info,
+#widget.circle #track-info,
+#widget.spinning-circle #track-info {
+    background:
+        rgba(
+            var(
+                --bg-r,
+                20
+            ),
+            var(
+                --bg-g,
+                20
+            ),
+            var(
+                --bg-b,
+                28
+            ),
+            var(
+                --bg-opacity,
+                0.92
+            )
+        );
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.10
+        );
+
+    border-radius: 18px;
+
+    box-shadow:
+        0 10px 35px
+        rgba(
+            0,
+            0,
+            0,
+            0.30
+        );
+}
+
+
+/* CIRCLE */
+
+#widget.circle #album-art,
+#widget.spinning-circle #album-art {
+    border-radius: 50%;
+}
+
+
+/* SPINNING CIRCLE */
+
+#widget.spinning-circle #album-art {
+    animation:
+        zero-signal-spin
+        8s linear infinite;
+}
+
+#widget.spinning-circle.idle #album-art {
+    animation-play-state: paused;
+}
+
+@keyframes zero-signal-spin {
+    from {
+        transform:
+            rotate(0deg);
+    }
+
+    to {
+        transform:
+            rotate(360deg);
+    }
 }

@@ -1,4 +1,7 @@
-const params = new URLSearchParams(window.location.search);
+const params =
+    new URLSearchParams(
+        window.location.search
+    );
 
 const LASTFM_USERNAME =
     params.get('user') ||
@@ -33,7 +36,11 @@ let settings = {
         normalizeHex(
             params.get('accent'),
             '69c5ff'
-        )
+        ),
+
+    layout:
+        params.get('layout') ||
+        'Standard'
 };
 
 const UPDATE_INTERVAL = 3000;
@@ -41,28 +48,49 @@ const MAX_FAILURES = 3;
 const TRANSITION_TIME = 220;
 
 const widget =
-    document.getElementById('widget');
+    document.getElementById(
+        'widget'
+    );
+
+const trackInfo =
+    document.getElementById(
+        'track-info'
+    );
 
 const albumContainer =
-    document.getElementById('album-container');
+    document.getElementById(
+        'album-container'
+    );
 
 const albumArt =
-    document.getElementById('album-art');
+    document.getElementById(
+        'album-art'
+    );
 
 const songTitle =
-    document.getElementById('song-title');
+    document.getElementById(
+        'song-title'
+    );
 
 const artistName =
-    document.getElementById('artist-name');
+    document.getElementById(
+        'artist-name'
+    );
 
 const status =
-    document.getElementById('status');
+    document.getElementById(
+        'status'
+    );
 
 const statusText =
-    document.getElementById('status-text');
+    document.getElementById(
+        'status-text'
+    );
 
 const watermark =
-    document.getElementById('watermark');
+    document.getElementById(
+        'watermark'
+    );
 
 let currentlyPlaying = false;
 let currentArtworkURL = '';
@@ -72,10 +100,20 @@ let hasReceivedValidData = false;
 let requestInProgress = false;
 let transitionGeneration = 0;
 
-function clamp(value, min, max) {
-    const number = Number(value);
 
-    if (!Number.isFinite(number)) {
+function clamp(
+    value,
+    min,
+    max
+) {
+    const number =
+        Number(value);
+
+    if (
+        !Number.isFinite(
+            number
+        )
+    ) {
         return min;
     }
 
@@ -88,47 +126,96 @@ function clamp(value, min, max) {
     );
 }
 
+
 function validHex(value) {
     return /^[0-9a-fA-F]{6}$/.test(
         String(value)
     );
 }
 
+
 function normalizeHex(
     value,
     fallback
 ) {
-    if (validHex(value)) {
-        return String(value)
-            .toLowerCase();
+    const clean =
+        String(value || '')
+            .replace('#', '')
+            .trim();
+
+    if (
+        /^[0-9a-fA-F]{6}$/.test(
+            clean
+        )
+    ) {
+        return clean.toLowerCase();
     }
 
     return fallback;
 }
 
+
+function normalizeLayout(value) {
+    const layout =
+        String(value || 'Standard')
+            .trim()
+            .toLowerCase();
+
+    if (
+        layout ===
+        'dual panel'
+    ) {
+        return 'dual-panel';
+    }
+
+    if (
+        layout ===
+        'circle'
+    ) {
+        return 'circle';
+    }
+
+    if (
+        layout ===
+        'spinning circle'
+    ) {
+        return 'spinning-circle';
+    }
+
+    return 'standard';
+}
+
+
 function hexToRgb(hex) {
+    const clean =
+        String(hex)
+            .replace('#', '');
+
     return {
         r:
             parseInt(
-                hex.slice(0, 2),
+                clean.slice(0, 2),
                 16
             ),
 
         g:
             parseInt(
-                hex.slice(2, 4),
+                clean.slice(2, 4),
                 16
             ),
 
         b:
             parseInt(
-                hex.slice(4, 6),
+                clean.slice(4, 6),
                 16
             )
     };
 }
 
-function getTrackKey(track) {
+
+function getTrackKey(
+    track
+) {
     const title =
         track.name || '';
 
@@ -144,6 +231,7 @@ function getTrackKey(track) {
     return `${artist}|${title}|${mbid}`;
 }
 
+
 function wait(ms) {
     return new Promise(
         resolve =>
@@ -154,26 +242,144 @@ function wait(ms) {
     );
 }
 
-function applyAppearance() {
-    const rgb =
-        hexToRgb(
-            settings.backgroundColor
+
+function applyLayout() {
+    const layout =
+        normalizeLayout(
+            settings.layout
         );
 
+    widget.classList.remove(
+        'dual-panel',
+        'circle',
+        'spinning-circle'
+    );
+
+    if (
+        layout ===
+        'dual-panel'
+    ) {
+        widget.classList.add(
+            'dual-panel'
+        );
+    }
+
+    if (
+        layout ===
+        'circle'
+    ) {
+        widget.classList.add(
+            'circle'
+        );
+    }
+
+    if (
+        layout ===
+        'spinning-circle'
+    ) {
+        widget.classList.add(
+            'spinning-circle'
+        );
+    }
+}
+
+
+function applyAppearance() {
+    let background =
+        settings.backgroundColor;
+
+    if (
+        !validHex(
+            `#${background}`
+        )
+    ) {
+        background =
+            '071a2b';
+    }
+
+    let accent =
+        settings.accentColor;
+
+    if (
+        !validHex(
+            `#${accent}`
+        )
+    ) {
+        accent =
+            '69c5ff';
+    }
+
     const opacity =
-        settings.opacity / 100;
+        clamp(
+            settings.opacity,
+            0,
+            100
+        ) / 100;
 
-    widget.style.background =
-        `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${opacity})`;
-
-    const accent =
-        `#${settings.accentColor}`;
+    const rgb =
+        hexToRgb(
+            background
+        );
 
     document.documentElement.style
         .setProperty(
             '--accent-color',
-            accent
+            `#${accent}`
         );
+
+    document.documentElement.style
+        .setProperty(
+            '--bg-r',
+            rgb.r
+        );
+
+    document.documentElement.style
+        .setProperty(
+            '--bg-g',
+            rgb.g
+        );
+
+    document.documentElement.style
+        .setProperty(
+            '--bg-b',
+            rgb.b
+        );
+
+    document.documentElement.style
+        .setProperty(
+            '--bg-opacity',
+            opacity
+        );
+
+    applyLayout();
+
+    if (
+        normalizeLayout(
+            settings.layout
+        ) ===
+        'standard'
+    ) {
+        widget.style.background =
+            `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${opacity})`;
+
+        trackInfo.style.background =
+            'transparent';
+    } else {
+        widget.style.background =
+            'transparent';
+
+        trackInfo.style.background =
+            `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${opacity})`;
+    }
+
+    songTitle.style.color =
+        `#${accent}`;
+
+    artistName.style.color =
+        `#${accent}`;
+
+    status.style.color =
+        `#${accent}`;
 
     status.style.display =
         settings.showStatus
@@ -200,9 +406,10 @@ function applyAppearance() {
     }
 }
 
+
 window.addEventListener(
     'message',
-    function (event) {
+    function(event) {
 
         if (
             event.origin !==
@@ -251,6 +458,14 @@ window.addEventListener(
         }
 
         if (
+            typeof incoming.layout ===
+            'string'
+        ) {
+            settings.layout =
+                incoming.layout;
+        }
+
+        if (
             Number.isFinite(
                 Number(
                     incoming.opacity
@@ -275,7 +490,9 @@ window.addEventListener(
             settings.backgroundColor =
                 String(
                     incoming.bg
-                ).toLowerCase();
+                )
+                    .replace('#', '')
+                    .toLowerCase();
         }
 
         if (
@@ -286,14 +503,19 @@ window.addEventListener(
             settings.accentColor =
                 String(
                     incoming.accent
-                ).toLowerCase();
+                )
+                    .replace('#', '')
+                    .toLowerCase();
         }
 
         applyAppearance();
     }
 );
 
-function findArtwork(track) {
+
+function findArtwork(
+    track
+) {
     if (
         !track.image ||
         !Array.isArray(
@@ -310,11 +532,15 @@ function findArtwork(track) {
         'small'
     ];
 
-    for (const size of sizes) {
+    for (
+        const size of sizes
+    ) {
+
         const image =
             track.image.find(
                 item =>
-                    item.size === size
+                    item.size ===
+                    size
             );
 
         if (
@@ -327,6 +553,7 @@ function findArtwork(track) {
 
     return '';
 }
+
 
 async function transitionToTrack(
     track
@@ -354,10 +581,10 @@ async function transitionToTrack(
     );
 
     requestAnimationFrame(
-        function () {
+        () => {
 
             requestAnimationFrame(
-                function () {
+                () => {
 
                     if (
                         transitionID !==
@@ -375,18 +602,29 @@ async function transitionToTrack(
     );
 }
 
-function applyTrackData(track) {
+
+function applyTrackData(
+    track
+) {
     const trackKey =
-        getTrackKey(track);
+        getTrackKey(
+            track
+        );
 
     currentTrackKey =
         trackKey;
 
-    currentlyPlaying = true;
-    hasReceivedValidData = true;
-    consecutiveFailures = 0;
+    currentlyPlaying =
+        true;
 
-    currentArtworkURL = '';
+    hasReceivedValidData =
+        true;
+
+    consecutiveFailures =
+        0;
+
+    currentArtworkURL =
+        '';
 
     albumArt.removeAttribute(
         'src'
@@ -417,7 +655,9 @@ function applyTrackData(track) {
         'NOW PLAYING';
 
     const artworkURL =
-        findArtwork(track);
+        findArtwork(
+            track
+        );
 
     if (!artworkURL) {
         applyAppearance();
@@ -431,7 +671,7 @@ function applyTrackData(track) {
         new Image();
 
     image.onload =
-        function () {
+        function() {
 
             if (
                 artworkTrackKey !==
@@ -450,7 +690,7 @@ function applyTrackData(track) {
         };
 
     image.onerror =
-        function () {
+        function() {
 
             if (
                 artworkTrackKey !==
@@ -459,7 +699,8 @@ function applyTrackData(track) {
                 return;
             }
 
-            currentArtworkURL = '';
+            currentArtworkURL =
+                '';
 
             albumArt.removeAttribute(
                 'src'
@@ -474,19 +715,31 @@ function applyTrackData(track) {
     applyAppearance();
 }
 
-function showPlaying(track) {
+
+function showPlaying(
+    track
+) {
     const trackKey =
-        getTrackKey(track);
+        getTrackKey(
+            track
+        );
 
     if (
         trackKey ===
         currentTrackKey
     ) {
-        currentlyPlaying = true;
-        consecutiveFailures = 0;
-        hasReceivedValidData = true;
+
+        currentlyPlaying =
+            true;
+
+        consecutiveFailures =
+            0;
+
+        hasReceivedValidData =
+            true;
 
         applyAppearance();
+
         return;
     }
 
@@ -495,6 +748,7 @@ function showPlaying(track) {
     );
 }
 
+
 function showNothingPlaying() {
     transitionGeneration++;
 
@@ -502,11 +756,20 @@ function showNothingPlaying() {
         'track-transition'
     );
 
-    currentlyPlaying = false;
-    currentTrackKey = '';
-    currentArtworkURL = '';
-    hasReceivedValidData = true;
-    consecutiveFailures = 0;
+    currentlyPlaying =
+        false;
+
+    currentTrackKey =
+        '';
+
+    currentArtworkURL =
+        '';
+
+    hasReceivedValidData =
+        true;
+
+    consecutiveFailures =
+        0;
 
     songTitle.textContent =
         'Nothing Playing';
@@ -535,16 +798,24 @@ function showNothingPlaying() {
     applyAppearance();
 }
 
-function showError(message) {
+
+function showError(
+    message
+) {
     transitionGeneration++;
 
     widget.classList.remove(
         'track-transition'
     );
 
-    currentlyPlaying = false;
-    currentTrackKey = '';
-    currentArtworkURL = '';
+    currentlyPlaying =
+        false;
+
+    currentTrackKey =
+        '';
+
+    currentArtworkURL =
+        '';
 
     songTitle.textContent =
         'Last.fm Error';
@@ -574,18 +845,23 @@ function showError(message) {
     applyAppearance();
 }
 
-function handleFailure(error) {
+
+function handleFailure(
+    error
+) {
     consecutiveFailures++;
 
-    console.error(
-        'Last.fm request failed:',
-        error
-    );
+    if (error) {
+        console.error(
+            'Last.fm request failed:',
+            error
+        );
+    }
 
     if (
         hasReceivedValidData &&
         consecutiveFailures <
-        MAX_FAILURES
+            MAX_FAILURES
     ) {
         return;
     }
@@ -599,6 +875,7 @@ function handleFailure(error) {
         );
     }
 }
+
 
 async function queryLastFM() {
     if (!LASTFM_USERNAME) {
@@ -616,7 +893,8 @@ async function queryLastFM() {
                     LASTFM_USERNAME
                 )}&_=${Date.now()}`,
                 {
-                    cache: 'no-store'
+                    cache:
+                        'no-store'
                 }
             );
 
@@ -625,8 +903,12 @@ async function queryLastFM() {
         try {
             data =
                 await response.json();
+
         } catch (error) {
-            handleFailure(error);
+            handleFailure(
+                error
+            );
+
             return;
         }
 
@@ -642,7 +924,8 @@ async function queryLastFM() {
             return;
         }
 
-        consecutiveFailures = 0;
+        consecutiveFailures =
+            0;
 
         const tracks =
             data.recenttracks &&
@@ -650,6 +933,7 @@ async function queryLastFM() {
 
         if (!tracks) {
             showNothingPlaying();
+
             return;
         }
 
@@ -660,6 +944,7 @@ async function queryLastFM() {
 
         if (!track) {
             showNothingPlaying();
+
             return;
         }
 
@@ -670,29 +955,38 @@ async function queryLastFM() {
                 'true';
 
         if (isPlaying) {
-            showPlaying(track);
+            showPlaying(
+                track
+            );
         } else {
             showNothingPlaying();
         }
 
     } catch (error) {
-        handleFailure(error);
+        handleFailure(
+            error
+        );
     }
 }
+
 
 async function pollLastFM() {
     if (requestInProgress) {
         return;
     }
 
-    requestInProgress = true;
+    requestInProgress =
+        true;
 
     try {
         await queryLastFM();
+
     } finally {
-        requestInProgress = false;
+        requestInProgress =
+            false;
     }
 }
+
 
 applyAppearance();
 pollLastFM();

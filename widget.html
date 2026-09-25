@@ -9,7 +9,7 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>MusicWidget</title>
+    <title>ZERO SIGNAL MK-I</title>
 
     <link
         rel="stylesheet"
@@ -31,8 +31,14 @@
                 alt="Album Art"
             >
 
-        </div>
+            <div
+                id="music-indicator"
+                class="idle"
+            >
+                ♪
+            </div>
 
+        </div>
 
         <div id="track-info">
 
@@ -46,25 +52,21 @@
 
             </div>
 
-
             <span id="song-title">
                 Loading...
             </span>
-
 
             <span id="artist-name">
                 Connecting to Last.fm
             </span>
 
-        </div>
+            <div id="watermark">
+                by ilyjonatan
+            </div>
 
-
-        <div id="watermark">
-            by ilyjonatan
         </div>
 
     </div>
-
 
     <script src="musicplayer.js"></script>
 

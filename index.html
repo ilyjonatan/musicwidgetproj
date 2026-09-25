@@ -26,8 +26,19 @@
             --panel-soft: rgba(10, 40, 64, 0.72);
 
             --line: #69c5ff;
-            --line-soft: rgba(105, 197, 255, 0.20);
-            --line-faint: rgba(105, 197, 255, 0.09);
+            --line-soft: rgba(
+                105,
+                197,
+                255,
+                0.20
+            );
+
+            --line-faint: rgba(
+                105,
+                197,
+                255,
+                0.09
+            );
 
             --text: #e8f6ff;
             --muted: #8fb6cf;
@@ -45,7 +56,10 @@
         body {
             margin: 0;
             min-height: 100vh;
-            padding: 42px 24px;
+
+            padding:
+                42px 24px;
+
             color: var(--text);
 
             font-family:
@@ -54,7 +68,8 @@
                 Helvetica,
                 sans-serif;
 
-            background-color: var(--bg-deep);
+            background-color:
+                var(--bg-deep);
 
             background-image:
                 linear-gradient(
@@ -67,17 +82,32 @@
                     transparent 1px
                 ),
                 linear-gradient(
-                    rgba(105, 197, 255, 0.035) 1px,
+                    rgba(
+                        105,
+                        197,
+                        255,
+                        0.035
+                    ) 1px,
                     transparent 1px
                 ),
                 linear-gradient(
                     90deg,
-                    rgba(105, 197, 255, 0.035) 1px,
+                    rgba(
+                        105,
+                        197,
+                        255,
+                        0.035
+                    ) 1px,
                     transparent 1px
                 ),
                 radial-gradient(
                     circle at top center,
-                    rgba(85, 186, 255, 0.10),
+                    rgba(
+                        85,
+                        186,
+                        255,
+                        0.10
+                    ),
                     transparent 38%
                 );
 
@@ -94,16 +124,16 @@
                 "♫    ZS-MK1    ZERO SIGNAL SYSTEM    ♪    REV 1.0";
 
             position: fixed;
+
             top: 14px;
             left: 18px;
-
-            z-index: 0;
 
             font-family:
                 "Courier New",
                 monospace;
 
             font-size: 10px;
+
             letter-spacing: 1.8px;
 
             color:
@@ -122,16 +152,16 @@
                 "ZERO SIGNAL // LAST.FM DATA LINK // SYSTEM ONLINE";
 
             position: fixed;
+
             right: 18px;
             bottom: 14px;
-
-            z-index: 0;
 
             font-family:
                 "Courier New",
                 monospace;
 
             font-size: 9px;
+
             letter-spacing: 1.5px;
 
             color:
@@ -159,6 +189,7 @@
             position: relative;
 
             padding: 30px;
+
             margin-bottom: 26px;
 
             overflow: hidden;
@@ -166,7 +197,12 @@
             background:
                 linear-gradient(
                     180deg,
-                    rgba(255,255,255,0.01),
+                    rgba(
+                        255,
+                        255,
+                        255,
+                        0.01
+                    ),
                     transparent
                 ),
                 var(--panel);
@@ -178,14 +214,27 @@
             border-radius: 4px;
 
             box-shadow:
-                0 22px 60px rgba(0, 0, 0, 0.28),
-                inset 0 0 35px rgba(85, 186, 255, 0.025);
+                0 22px 60px
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.28
+                ),
+                inset 0 0 35px
+                rgba(
+                    85,
+                    186,
+                    255,
+                    0.025
+                );
         }
 
         .card::before {
             content: "";
 
             position: absolute;
+
             top: 12px;
             left: 12px;
 
@@ -205,6 +254,7 @@
             content: "";
 
             position: absolute;
+
             right: 12px;
             bottom: 12px;
 
@@ -228,11 +278,13 @@
                 monospace;
 
             font-size: 10px;
+
             font-weight: 700;
 
             letter-spacing: 1.8px;
 
-            color: var(--accent);
+            color:
+                var(--accent);
 
             text-transform: uppercase;
         }
@@ -245,11 +297,14 @@
             margin: 0 0 8px;
 
             font-size: 32px;
+
             font-weight: 700;
 
-            letter-spacing: -0.8px;
+            letter-spacing:
+                -0.8px;
 
-            color: var(--text);
+            color:
+                var(--text);
         }
 
         h2 {
@@ -267,27 +322,35 @@
                 monospace;
 
             font-size: 12px;
+
             font-weight: 700;
 
             letter-spacing: 1.5px;
 
             text-transform: uppercase;
 
-            color: #b7dcf3;
+            color:
+                #b7dcf3;
         }
 
         h3::before {
             content: "[ ";
-            color: var(--accent);
+
+            color:
+                var(--accent);
         }
 
         h3::after {
             content: " ]";
-            color: var(--accent);
+
+            color:
+                var(--accent);
         }
 
         p {
-            color: var(--muted);
+            color:
+                var(--muted);
+
             line-height: 1.55;
         }
 
@@ -296,12 +359,15 @@
 
             margin-bottom: 8px;
 
-            color: #d9effd;
+            color:
+                #d9effd;
+
             font-weight: 600;
         }
 
         input[type="text"],
-        input[type="number"] {
+        input[type="number"],
+        select {
             width: 100%;
 
             padding: 12px 14px;
@@ -320,20 +386,35 @@
                     0.72
                 );
 
-            color: var(--text);
+            color:
+                var(--text);
 
             font-size: 16px;
+
             outline: none;
 
             transition:
-                border-color 0.15s ease,
-                box-shadow 0.15s ease,
-                background 0.15s ease;
+                border-color
+                0.15s ease,
+                box-shadow
+                0.15s ease,
+                background
+                0.15s ease;
+        }
+
+        select {
+            width: 180px;
+
+            cursor: pointer;
+
+            font-size: 14px;
         }
 
         input[type="text"]:focus,
-        input[type="number"]:focus {
-            border-color: var(--accent);
+        input[type="number"]:focus,
+        select:focus {
+            border-color:
+                var(--accent);
 
             box-shadow:
                 0 0 0 3px
@@ -381,27 +462,34 @@
                     0.38
                 );
 
-            color: var(--text);
+            color:
+                var(--text);
 
             font-family:
                 "Courier New",
                 monospace;
 
             font-size: 13px;
+
             font-weight: 700;
 
             letter-spacing: 0.7px;
 
             text-decoration: none;
+
             text-transform: uppercase;
 
             cursor: pointer;
 
             transition:
-                background 0.15s ease,
-                border-color 0.15s ease,
-                box-shadow 0.15s ease,
-                transform 0.15s ease;
+                background
+                0.15s ease,
+                border-color
+                0.15s ease,
+                box-shadow
+                0.15s ease,
+                transform
+                0.15s ease;
         }
 
         button:hover,
@@ -437,12 +525,15 @@
 
         button:disabled {
             opacity: 0.55;
+
             cursor: not-allowed;
+
             transform: none;
         }
 
         .option-group {
             display: grid;
+
             gap: 10px;
         }
 
@@ -452,11 +543,14 @@
             display: flex;
 
             align-items: center;
-            justify-content: space-between;
+
+            justify-content:
+                space-between;
 
             gap: 18px;
 
-            padding: 14px 16px;
+            padding:
+                14px 16px;
 
             background:
                 var(--panel-soft);
@@ -505,7 +599,9 @@
 
         .color-control {
             display: flex;
+
             align-items: center;
+
             gap: 10px;
         }
 
@@ -521,13 +617,15 @@
 
             border-radius: 2px;
 
-            background: #061724;
+            background:
+                #061724;
 
             cursor: pointer;
         }
 
         .hex-input {
-            width: 120px !important;
+            width: 120px
+                !important;
 
             font-family:
                 "Courier New",
@@ -536,17 +634,22 @@
 
         .range-control {
             display: flex;
+
             align-items: center;
+
             gap: 10px;
         }
 
         input[type="range"] {
             width: 190px;
-            accent-color: var(--accent);
+
+            accent-color:
+                var(--accent);
         }
 
         .opacity-input {
-            width: 76px !important;
+            width: 76px
+                !important;
 
             text-align: center;
 
@@ -559,7 +662,8 @@
             width: 18px;
             height: 18px;
 
-            accent-color: var(--accent);
+            accent-color:
+                var(--accent);
 
             cursor: pointer;
         }
@@ -576,12 +680,16 @@
 
         .url-row {
             display: flex;
-            align-items: stretch;
+
+            align-items:
+                stretch;
+
             gap: 10px;
         }
 
         .url-row input {
             flex: 1;
+
             min-width: 0;
 
             font-family:
@@ -595,9 +703,11 @@
             position: relative;
 
             width: 100%;
+
             min-height: 190px;
 
             margin-top: 20px;
+
             padding: 34px;
 
             display: flex;
@@ -607,16 +717,27 @@
 
             overflow: hidden;
 
-            background-color: #071a2b;
+            background-color:
+                #071a2b;
 
             background-image:
                 linear-gradient(
-                    rgba(105, 197, 255, 0.055) 1px,
+                    rgba(
+                        105,
+                        197,
+                        255,
+                        0.055
+                    ) 1px,
                     transparent 1px
                 ),
                 linear-gradient(
                     90deg,
-                    rgba(105, 197, 255, 0.055) 1px,
+                    rgba(
+                        105,
+                        197,
+                        255,
+                        0.055
+                    ) 1px,
                     transparent 1px
                 ),
                 radial-gradient(
@@ -656,6 +777,7 @@
                 monospace;
 
             font-size: 9px;
+
             letter-spacing: 1.3px;
 
             color:
@@ -681,6 +803,7 @@
                 monospace;
 
             font-size: 9px;
+
             letter-spacing: 1.6px;
 
             color:
@@ -696,6 +819,7 @@
             display: block;
 
             width: 420px;
+
             height: 110px;
 
             max-width: 100%;
@@ -706,30 +830,36 @@
 
             border: 0;
 
-            background: transparent;
+            background:
+                transparent;
         }
 
         .download-card {
             text-align: center;
         }
 
-        .download-card .system-label {
+        .download-card
+        .system-label {
             text-align: left;
         }
 
-        .download-card .button {
+        .download-card
+        .button {
             margin-top: 10px;
 
-            padding: 14px 22px;
+            padding:
+                14px 22px;
         }
 
         .steps {
             margin-top: 28px;
+
             padding-top: 20px;
 
             text-align: left;
 
-            color: var(--muted);
+            color:
+                var(--muted);
 
             line-height: 1.75;
 
@@ -739,7 +869,8 @@
         }
 
         .steps strong {
-            color: var(--text);
+            color:
+                var(--text);
 
             font-family:
                 "Courier New",
@@ -749,7 +880,8 @@
         }
 
         .steps li::marker {
-            color: var(--accent);
+            color:
+                var(--accent);
         }
 
         .credit {
@@ -761,6 +893,7 @@
                 serif;
 
             font-size: 13px;
+
             font-style: italic;
 
             letter-spacing: 1.2px;
@@ -776,7 +909,9 @@
 
         .technical-strip {
             display: flex;
+
             align-items: center;
+
             gap: 8px;
 
             margin-bottom: 14px;
@@ -787,7 +922,8 @@
 
             height: 3px;
 
-            background: var(--line);
+            background:
+                var(--line);
         }
 
         .technical-strip .a {
@@ -797,13 +933,15 @@
         .technical-strip .b {
             width: 18px;
 
-            background: var(--danger);
+            background:
+                var(--danger);
         }
 
         .technical-strip .c {
             width: 10px;
 
-            background: var(--yellow);
+            background:
+                var(--yellow);
         }
 
         @media (
@@ -832,6 +970,10 @@
                 width: 100%;
             }
 
+            select {
+                width: 100%;
+            }
+
             .hex-input {
                 flex: 1;
             }
@@ -846,17 +988,17 @@
             }
 
             .preview-wrapper {
-                min-height: 160px;
+                min-height:
+                    160px;
 
-                padding: 28px 10px;
+                padding:
+                    28px 10px;
             }
-
         }
 
     </style>
 
 </head>
-
 
 <body>
 
@@ -899,6 +1041,34 @@
             </h3>
 
             <div class="option-group">
+
+                <div class="option-row">
+
+                    <label for="layout">
+                        Layout
+                    </label>
+
+                    <select id="layout">
+
+                        <option value="Standard">
+                            Standard
+                        </option>
+
+                        <option value="Dual Panel">
+                            Dual Panel
+                        </option>
+
+                        <option value="Circle">
+                            Circle
+                        </option>
+
+                        <option value="Spinning Circle">
+                            Spinning Circle
+                        </option>
+
+                    </select>
+
+                </div>
 
                 <div class="option-row">
 
@@ -977,9 +1147,7 @@
                             value="92"
                         >
 
-                        <span>
-                            %
-                        </span>
+                        <span>%</span>
 
                     </div>
 
@@ -1093,8 +1261,8 @@
 
             <p>
                 Download ZERO SIGNAL MK-I
-                and import it into
-                Pogly's Widget Creator.
+                and import it into Pogly's
+                Widget Creator.
             </p>
 
             <a
@@ -1123,8 +1291,7 @@
                     </li>
 
                     <li>
-                        Open Pogly's
-                        Widget Creator.
+                        Open Pogly's Widget Creator.
                     </li>
 
                     <li>
@@ -1162,7 +1329,6 @@
         </section>
 
     </main>
-
 
     <script>
 
@@ -1241,7 +1407,13 @@
                 'show-credit'
             );
 
-        let previewLoaded = false;
+        const layoutInput =
+            document.getElementById(
+                'layout'
+            );
+
+        let previewLoaded =
+            false;
 
 
         function normalizeHex(value) {
@@ -1310,6 +1482,9 @@
                 credit:
                     showCreditInput.checked,
 
+                layout:
+                    layoutInput.value,
+
                 opacity:
                     Number(
                         opacityInput.value
@@ -1317,14 +1492,12 @@
 
                 bg:
                     cleanHex(
-                        backgroundColorInput
-                            .value
+                        backgroundColorInput.value
                     ),
 
                 accent:
                     cleanHex(
-                        accentColorInput
-                            .value
+                        accentColorInput.value
                     )
             };
         }
@@ -1367,6 +1540,11 @@
             );
 
             params.set(
+                'layout',
+                settings.layout
+            );
+
+            params.set(
                 'opacity',
                 settings.opacity
             );
@@ -1397,18 +1575,17 @@
                 return;
             }
 
-            preview.contentWindow
-                .postMessage(
-                    {
-                        type:
-                            'widget-settings',
+            preview.contentWindow.postMessage(
+                {
+                    type:
+                        'widget-settings',
 
-                        settings:
-                            getSettings()
-                    },
+                    settings:
+                        getSettings()
+                },
 
-                    window.location.origin
-                );
+                window.location.origin
+            );
         }
 
 
@@ -1437,6 +1614,7 @@
             ) {
 
                 updateURL();
+
                 sendSettings();
             }
         }
@@ -1445,12 +1623,10 @@
         backgroundColorInput
             .addEventListener(
                 'input',
-                function () {
+                function() {
 
-                    backgroundColorText
-                        .value =
-                        backgroundColorInput
-                            .value;
+                    backgroundColorText.value =
+                        backgroundColorInput.value;
 
                     updateCustomization();
                 }
@@ -1460,7 +1636,7 @@
         backgroundColorText
             .addEventListener(
                 'input',
-                function () {
+                function() {
 
                     const color =
                         normalizeHex(
@@ -1472,12 +1648,7 @@
                         return;
                     }
 
-                    backgroundColorInput
-                        .value =
-                        color;
-
-                    backgroundColorText
-                        .value =
+                    backgroundColorInput.value =
                         color;
 
                     updateCustomization();
@@ -1488,7 +1659,7 @@
         accentColorInput
             .addEventListener(
                 'input',
-                function () {
+                function() {
 
                     accentColorText.value =
                         accentColorInput.value;
@@ -1501,7 +1672,7 @@
         accentColorText
             .addEventListener(
                 'input',
-                function () {
+                function() {
 
                     const color =
                         normalizeHex(
@@ -1516,9 +1687,6 @@
                     accentColorInput.value =
                         color;
 
-                    accentColorText.value =
-                        color;
-
                     updateCustomization();
                 }
             );
@@ -1527,7 +1695,7 @@
         opacityInput
             .addEventListener(
                 'input',
-                function () {
+                function() {
 
                     opacityText.value =
                         opacityInput.value;
@@ -1540,7 +1708,7 @@
         opacityText
             .addEventListener(
                 'input',
-                function () {
+                function() {
 
                     const value =
                         clampOpacity(
@@ -1555,6 +1723,13 @@
 
                     updateCustomization();
                 }
+            );
+
+
+        layoutInput
+            .addEventListener(
+                'change',
+                updateCustomization
             );
 
 
@@ -1665,7 +1840,7 @@
 
         preview.addEventListener(
             'load',
-            function () {
+            function() {
 
                 previewLoaded =
                     true;
@@ -1685,7 +1860,7 @@
         usernameInput
             .addEventListener(
                 'keydown',
-                function (event) {
+                function(event) {
 
                     if (
                         event.key ===
@@ -1700,7 +1875,7 @@
         copyButton
             .addEventListener(
                 'click',
-                async function () {
+                async function() {
 
                     const widgetURL =
                         widgetURLInput.value;
@@ -1717,25 +1892,22 @@
                                 widgetURL
                             );
 
-                        copyButton
-                            .textContent =
+                        copyButton.textContent =
                             'Copied!';
 
                         setTimeout(
-                            function () {
+                            function() {
 
-                                copyButton
-                                    .textContent =
+                                copyButton.textContent =
                                     'Copy';
-                            },
 
+                            },
                             1500
                         );
 
                     } catch (error) {
 
-                        widgetURLInput
-                            .select();
+                        widgetURLInput.select();
 
                         document.execCommand(
                             'copy'
