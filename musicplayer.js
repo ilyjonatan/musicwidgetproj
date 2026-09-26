@@ -17,10 +17,14 @@ let settings = {
     showCredit:
         params.get('credit') !== '0',
 
+    layout:
+        params.get('layout') ||
+        'Standard',
+
     opacity:
         clamp(
             Number(
-                params.get('opacity') || 92
+                params.get('opacity') || 94
             ),
             0,
             100
@@ -29,18 +33,14 @@ let settings = {
     backgroundColor:
         normalizeHex(
             params.get('bg'),
-            '071a2b'
+            '8f1018'
         ),
 
     accentColor:
         normalizeHex(
             params.get('accent'),
-            '69c5ff'
-        ),
-
-    layout:
-        params.get('layout') ||
-        'Standard'
+            'ffc928'
+        )
 };
 
 const UPDATE_INTERVAL = 3000;
@@ -48,49 +48,31 @@ const MAX_FAILURES = 3;
 const TRANSITION_TIME = 220;
 
 const widget =
-    document.getElementById(
-        'widget'
-    );
+    document.getElementById('widget');
 
 const trackInfo =
-    document.getElementById(
-        'track-info'
-    );
+    document.getElementById('track-info');
 
 const albumContainer =
-    document.getElementById(
-        'album-container'
-    );
+    document.getElementById('album-container');
 
 const albumArt =
-    document.getElementById(
-        'album-art'
-    );
+    document.getElementById('album-art');
 
 const songTitle =
-    document.getElementById(
-        'song-title'
-    );
+    document.getElementById('song-title');
 
 const artistName =
-    document.getElementById(
-        'artist-name'
-    );
+    document.getElementById('artist-name');
 
 const status =
-    document.getElementById(
-        'status'
-    );
+    document.getElementById('status');
 
 const statusText =
-    document.getElementById(
-        'status-text'
-    );
+    document.getElementById('status-text');
 
 const watermark =
-    document.getElementById(
-        'watermark'
-    );
+    document.getElementById('watermark');
 
 let currentlyPlaying = false;
 let currentArtworkURL = '';
@@ -101,19 +83,10 @@ let requestInProgress = false;
 let transitionGeneration = 0;
 
 
-function clamp(
-    value,
-    min,
-    max
-) {
-    const number =
-        Number(value);
+function clamp(value, min, max) {
+    const number = Number(value);
 
-    if (
-        !Number.isFinite(
-            number
-        )
-    ) {
+    if (!Number.isFinite(number)) {
         return min;
     }
 
@@ -130,54 +103,63 @@ function clamp(
 function validHex(value) {
     return /^[0-9a-fA-F]{6}$/.test(
         String(value)
+            .replace('#', '')
     );
 }
 
 
-function normalizeHex(
-    value,
-    fallback
-) {
+function normalizeHex(value, fallback) {
     const clean =
         String(value || '')
             .replace('#', '')
-            .trim();
+            .trim()
+            .toLowerCase();
 
     if (
         /^[0-9a-fA-F]{6}$/.test(
             clean
         )
     ) {
-        return clean.toLowerCase();
+        return clean;
     }
 
     return fallback;
 }
 
 
+function normalizeBoolean(value) {
+    if (typeof value === 'boolean') {
+        return value;
+    }
+
+    return String(value).toLowerCase() === 'true';
+}
+
+
 function normalizeLayout(value) {
     const layout =
-        String(value || 'Standard')
+        String(
+            value || 'Standard'
+        )
             .trim()
             .toLowerCase();
 
     if (
-        layout ===
-        'dual panel'
+        layout === 'dual panel' ||
+        layout === 'dual-panel'
     ) {
         return 'dual-panel';
     }
 
     if (
-        layout ===
-        'circle'
+        layout === 'circle'
     ) {
         return 'circle';
     }
 
     if (
-        layout ===
-        'spinning circle'
+        layout === 'spinning circle' ||
+        layout === 'spinning-circle'
     ) {
         return 'spinning-circle';
     }
@@ -213,9 +195,7 @@ function hexToRgb(hex) {
 }
 
 
-function getTrackKey(
-    track
-) {
+function getTrackKey(track) {
     const title =
         track.name || '';
 
@@ -256,8 +236,7 @@ function applyLayout() {
     );
 
     if (
-        layout ===
-        'dual-panel'
+        layout === 'dual-panel'
     ) {
         widget.classList.add(
             'dual-panel'
@@ -265,8 +244,7 @@ function applyLayout() {
     }
 
     if (
-        layout ===
-        'circle'
+        layout === 'circle'
     ) {
         widget.classList.add(
             'circle'
@@ -274,8 +252,7 @@ function applyLayout() {
     }
 
     if (
-        layout ===
-        'spinning-circle'
+        layout === 'spinning-circle'
     ) {
         widget.classList.add(
             'spinning-circle'
@@ -285,29 +262,17 @@ function applyLayout() {
 
 
 function applyAppearance() {
-    let background =
-        settings.backgroundColor;
+    const background =
+        normalizeHex(
+            settings.backgroundColor,
+            '8f1018'
+        );
 
-    if (
-        !validHex(
-            `#${background}`
-        )
-    ) {
-        background =
-            '071a2b';
-    }
-
-    let accent =
-        settings.accentColor;
-
-    if (
-        !validHex(
-            `#${accent}`
-        )
-    ) {
-        accent =
-            '69c5ff';
-    }
+    const accent =
+        normalizeHex(
+            settings.accentColor,
+            'ffc928'
+        );
 
     const opacity =
         clamp(
@@ -321,46 +286,46 @@ function applyAppearance() {
             background
         );
 
-    document.documentElement.style
-        .setProperty(
-            '--accent-color',
-            `#${accent}`
-        );
+    const backgroundValue =
+        `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${opacity})`;
 
-    document.documentElement.style
-        .setProperty(
-            '--bg-r',
-            rgb.r
-        );
+    document.documentElement.style.setProperty(
+        '--accent-color',
+        `#${accent}`
+    );
 
-    document.documentElement.style
-        .setProperty(
-            '--bg-g',
-            rgb.g
-        );
+    document.documentElement.style.setProperty(
+        '--bg-r',
+        rgb.r
+    );
 
-    document.documentElement.style
-        .setProperty(
-            '--bg-b',
-            rgb.b
-        );
+    document.documentElement.style.setProperty(
+        '--bg-g',
+        rgb.g
+    );
 
-    document.documentElement.style
-        .setProperty(
-            '--bg-opacity',
-            opacity
-        );
+    document.documentElement.style.setProperty(
+        '--bg-b',
+        rgb.b
+    );
+
+    document.documentElement.style.setProperty(
+        '--bg-opacity',
+        opacity
+    );
 
     applyLayout();
 
-    if (
+    const layout =
         normalizeLayout(
             settings.layout
-        ) ===
-        'standard'
+        );
+
+    if (
+        layout === 'standard'
     ) {
         widget.style.background =
-            `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${opacity})`;
+            backgroundValue;
 
         trackInfo.style.background =
             'transparent';
@@ -369,7 +334,7 @@ function applyAppearance() {
             'transparent';
 
         trackInfo.style.background =
-            `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${opacity})`;
+            backgroundValue;
     }
 
     songTitle.style.color =
@@ -381,17 +346,20 @@ function applyAppearance() {
     status.style.color =
         `#${accent}`;
 
-    status.style.display =
-        settings.showStatus
-            ? 'flex'
-            : 'none';
-
     if (watermark) {
+        watermark.style.color =
+            `#${accent}`;
+
         watermark.style.display =
             settings.showCredit
                 ? 'block'
                 : 'none';
     }
+
+    status.style.display =
+        settings.showStatus
+            ? 'flex'
+            : 'none';
 
     if (
         settings.showArt &&
@@ -483,6 +451,7 @@ window.addEventListener(
         }
 
         if (
+            incoming.bg &&
             validHex(
                 incoming.bg
             )
@@ -496,6 +465,7 @@ window.addEventListener(
         }
 
         if (
+            incoming.accent &&
             validHex(
                 incoming.accent
             )
@@ -513,9 +483,7 @@ window.addEventListener(
 );
 
 
-function findArtwork(
-    track
-) {
+function findArtwork(track) {
     if (
         !track.image ||
         !Array.isArray(
@@ -535,7 +503,6 @@ function findArtwork(
     for (
         const size of sizes
     ) {
-
         const image =
             track.image.find(
                 item =>
@@ -581,10 +548,10 @@ async function transitionToTrack(
     );
 
     requestAnimationFrame(
-        () => {
+        function() {
 
             requestAnimationFrame(
-                () => {
+                function() {
 
                     if (
                         transitionID !==
@@ -603,9 +570,7 @@ async function transitionToTrack(
 }
 
 
-function applyTrackData(
-    track
-) {
+function applyTrackData(track) {
     const trackKey =
         getTrackKey(
             track
@@ -716,9 +681,7 @@ function applyTrackData(
 }
 
 
-function showPlaying(
-    track
-) {
+function showPlaying(track) {
     const trackKey =
         getTrackKey(
             track
@@ -728,7 +691,6 @@ function showPlaying(
         trackKey ===
         currentTrackKey
     ) {
-
         currentlyPlaying =
             true;
 
@@ -799,9 +761,7 @@ function showNothingPlaying() {
 }
 
 
-function showError(
-    message
-) {
+function showError(message) {
     transitionGeneration++;
 
     widget.classList.remove(
@@ -846,9 +806,7 @@ function showError(
 }
 
 
-function handleFailure(
-    error
-) {
+function handleFailure(error) {
     consecutiveFailures++;
 
     if (error) {
@@ -933,7 +891,6 @@ async function queryLastFM() {
 
         if (!tracks) {
             showNothingPlaying();
-
             return;
         }
 
@@ -944,7 +901,6 @@ async function queryLastFM() {
 
         if (!track) {
             showNothingPlaying();
-
             return;
         }
 
@@ -989,6 +945,7 @@ async function pollLastFM() {
 
 
 applyAppearance();
+
 pollLastFM();
 
 setInterval(
