@@ -283,6 +283,7 @@
 
         p {
             color: var(--muted);
+
             line-height: 1.55;
         }
 
@@ -340,11 +341,13 @@
 
         select {
             width: 220px;
+
             cursor: pointer;
         }
 
         .option-group {
             display: grid;
+
             gap: 9px;
         }
 
@@ -502,6 +505,7 @@
             letter-spacing: 0.8px;
 
             text-decoration: none;
+
             text-transform: uppercase;
 
             cursor: pointer;
@@ -536,6 +540,7 @@
 
         button:disabled {
             opacity: 0.55;
+
             cursor: not-allowed;
         }
 
@@ -610,8 +615,7 @@
         }
 
         .preview-wrapper::before {
-            content:
-                "LIVE PREVIEW";
+            content: "LIVE PREVIEW";
 
             position: absolute;
 
@@ -631,8 +635,7 @@
         }
 
         .preview-wrapper::after {
-            content:
-                "● SIGNAL ACTIVE";
+            content: "● SIGNAL ACTIVE";
 
             position: absolute;
 
@@ -899,14 +902,14 @@
                         <input
                             id="background-color"
                             type="color"
-                            value="#8f1018"
+                            value="#291a3d"
                         >
 
                         <input
                             id="background-color-text"
                             class="hex-input"
                             type="text"
-                            value="#8f1018"
+                            value="#291a3d"
                             maxlength="7"
                         >
 
@@ -926,14 +929,14 @@
                         <input
                             id="accent-color"
                             type="color"
-                            value="#ffc928"
+                            value="#ff9d3d"
                         >
 
                         <input
                             id="accent-color-text"
                             class="hex-input"
                             type="text"
-                            value="#ffc928"
+                            value="#ff9d3d"
                             maxlength="7"
                         >
 
@@ -1217,7 +1220,8 @@
                 'layout'
             );
 
-        let previewLoaded = false;
+        let previewLoaded =
+            false;
 
 
         function normalizeHex(value) {
@@ -1423,142 +1427,132 @@
         }
 
 
-        backgroundColorInput
-            .addEventListener(
-                'input',
-                function() {
+        backgroundColorInput.addEventListener(
+            'input',
+            function() {
 
-                    backgroundColorText.value =
-                        backgroundColorInput.value;
+                backgroundColorText.value =
+                    backgroundColorInput.value;
 
-                    updateCustomization();
+                updateCustomization();
+            }
+        );
+
+
+        backgroundColorText.addEventListener(
+            'input',
+            function() {
+
+                const color =
+                    normalizeHex(
+                        backgroundColorText.value
+                    );
+
+                if (!color) {
+                    return;
                 }
-            );
+
+                backgroundColorInput.value =
+                    color;
+
+                backgroundColorText.value =
+                    color;
+
+                updateCustomization();
+            }
+        );
 
 
-        backgroundColorText
-            .addEventListener(
-                'input',
-                function() {
+        accentColorInput.addEventListener(
+            'input',
+            function() {
 
-                    const color =
-                        normalizeHex(
-                            backgroundColorText.value
-                        );
+                accentColorText.value =
+                    accentColorInput.value;
 
-                    if (!color) {
-                        return;
-                    }
+                updateCustomization();
+            }
+        );
 
-                    backgroundColorInput.value =
-                        color;
 
-                    backgroundColorText.value =
-                        color;
+        accentColorText.addEventListener(
+            'input',
+            function() {
 
-                    updateCustomization();
+                const color =
+                    normalizeHex(
+                        accentColorText.value
+                    );
+
+                if (!color) {
+                    return;
                 }
-            );
+
+                accentColorInput.value =
+                    color;
+
+                accentColorText.value =
+                    color;
+
+                updateCustomization();
+            }
+        );
 
 
-        accentColorInput
-            .addEventListener(
-                'input',
-                function() {
+        opacityInput.addEventListener(
+            'input',
+            function() {
 
-                    accentColorText.value =
-                        accentColorInput.value;
+                opacityText.value =
+                    opacityInput.value;
 
-                    updateCustomization();
-                }
-            );
-
-
-        accentColorText
-            .addEventListener(
-                'input',
-                function() {
-
-                    const color =
-                        normalizeHex(
-                            accentColorText.value
-                        );
-
-                    if (!color) {
-                        return;
-                    }
-
-                    accentColorInput.value =
-                        color;
-
-                    accentColorText.value =
-                        color;
-
-                    updateCustomization();
-                }
-            );
+                updateCustomization();
+            }
+        );
 
 
-        opacityInput
-            .addEventListener(
-                'input',
-                function() {
+        opacityText.addEventListener(
+            'input',
+            function() {
 
-                    opacityText.value =
-                        opacityInput.value;
+                const value =
+                    clampOpacity(
+                        opacityText.value
+                    );
 
-                    updateCustomization();
-                }
-            );
+                opacityText.value =
+                    value;
 
+                opacityInput.value =
+                    value;
 
-        opacityText
-            .addEventListener(
-                'input',
-                function() {
-
-                    const value =
-                        clampOpacity(
-                            opacityText.value
-                        );
-
-                    opacityText.value =
-                        value;
-
-                    opacityInput.value =
-                        value;
-
-                    updateCustomization();
-                }
-            );
+                updateCustomization();
+            }
+        );
 
 
-        layoutInput
-            .addEventListener(
-                'change',
-                updateCustomization
-            );
+        layoutInput.addEventListener(
+            'change',
+            updateCustomization
+        );
 
 
-        showArtInput
-            .addEventListener(
-                'change',
-                updateCustomization
-            );
+        showArtInput.addEventListener(
+            'change',
+            updateCustomization
+        );
 
 
-        showStatusInput
-            .addEventListener(
-                'change',
-                updateCustomization
-            );
+        showStatusInput.addEventListener(
+            'change',
+            updateCustomization
+        );
 
 
-        showCreditInput
-            .addEventListener(
-                'change',
-                updateCustomization
-            );
+        showCreditInput.addEventListener(
+            'change',
+            updateCustomization
+        );
 
 
         async function generateWidget() {
@@ -1668,8 +1662,7 @@
             function(event) {
 
                 if (
-                    event.key ===
-                    'Enter'
+                    event.key === 'Enter'
                 ) {
                     generateWidget();
                 }
