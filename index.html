@@ -2,7 +2,6 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
 
     <meta
@@ -13,7 +12,6 @@
     <title>ZERO SIGNAL</title>
 
     <style>
-
         * {
             box-sizing: border-box;
         }
@@ -76,7 +74,6 @@
             content: "ZERO SIGNAL";
 
             position: fixed;
-
             top: 16px;
             left: 20px;
 
@@ -89,8 +86,7 @@
 
             letter-spacing: 2.4px;
 
-            color:
-                rgba(146, 88, 199, 0.34);
+            color: rgba(146, 88, 199, 0.34);
 
             pointer-events: none;
         }
@@ -99,7 +95,6 @@
             content: "SYSTEM // ONLINE";
 
             position: fixed;
-
             right: 20px;
             bottom: 16px;
 
@@ -111,15 +106,13 @@
 
             letter-spacing: 1.8px;
 
-            color:
-                rgba(155, 220, 40, 0.28);
+            color: rgba(155, 220, 40, 0.28);
 
             pointer-events: none;
         }
 
         .page {
             position: relative;
-
             z-index: 1;
 
             width: 100%;
@@ -217,7 +210,6 @@
             content: "";
 
             position: absolute;
-
             top: 0;
             left: 0;
 
@@ -328,8 +320,7 @@
         input[type="text"]:focus,
         input[type="number"]:focus,
         select:focus {
-            border-color:
-                var(--purple-bright);
+            border-color: var(--purple-bright);
 
             background:
                 rgba(10, 7, 14, 0.92);
@@ -358,15 +349,13 @@
 
             align-items: center;
 
-            justify-content:
-                space-between;
+            justify-content: space-between;
 
             gap: 16px;
 
             padding: 12px 14px;
 
-            background:
-                var(--panel-soft);
+            background: var(--panel-soft);
 
             border:
                 1px solid
@@ -392,8 +381,7 @@
 
             border-radius: 50%;
 
-            background:
-                var(--green);
+            background: var(--green);
         }
 
         .option-row > label {
@@ -420,15 +408,13 @@
 
             border-radius: 5px;
 
-            background:
-                var(--bg-deep);
+            background: var(--bg-deep);
 
             cursor: pointer;
         }
 
         .hex-input {
-            width:
-                115px !important;
+            width: 115px !important;
 
             font-family:
                 "Courier New",
@@ -446,13 +432,11 @@
         input[type="range"] {
             width: 180px;
 
-            accent-color:
-                var(--green);
+            accent-color: var(--green);
         }
 
         .opacity-input {
-            width:
-                70px !important;
+            width: 70px !important;
 
             text-align: center;
 
@@ -465,8 +449,7 @@
             width: 18px;
             height: 18px;
 
-            accent-color:
-                var(--green);
+            accent-color: var(--green);
 
             cursor: pointer;
         }
@@ -505,7 +488,6 @@
             letter-spacing: 0.8px;
 
             text-decoration: none;
-
             text-transform: uppercase;
 
             cursor: pointer;
@@ -522,8 +504,7 @@
             background:
                 rgba(111, 63, 163, 0.46);
 
-            border-color:
-                var(--green);
+            border-color: var(--green);
 
             box-shadow:
                 0 0 18px
@@ -575,6 +556,11 @@
             font-size: 12px;
         }
 
+
+        /* =========================
+           PREVIEW
+        ========================= */
+
         .preview-wrapper {
             position: relative;
 
@@ -590,22 +576,25 @@
 
             overflow: hidden;
 
-            background:
-                #0b0910;
+            background-color: #0b0910;
 
             background-image:
-                linear-gradient(
-                    rgba(146, 88, 199, 0.045) 1px,
-                    transparent 1px
-                ),
-                linear-gradient(
-                    90deg,
-                    rgba(146, 88, 199, 0.045) 1px,
-                    transparent 1px
+                radial-gradient(
+                    circle,
+                    rgba(
+                        146,
+                        88,
+                        199,
+                        0.18
+                    ) 1px,
+                    transparent 1.25px
                 );
 
             background-size:
-                36px 36px;
+                18px 18px;
+
+            background-position:
+                9px 9px;
 
             border:
                 1px solid
@@ -622,6 +611,8 @@
             top: 9px;
             left: 11px;
 
+            z-index: 2;
+
             font-family:
                 "Courier New",
                 monospace;
@@ -631,7 +622,12 @@
             letter-spacing: 1.4px;
 
             color:
-                rgba(146, 88, 199, 0.48);
+                rgba(
+                    146,
+                    88,
+                    199,
+                    0.55
+                );
         }
 
         .preview-wrapper::after {
@@ -642,6 +638,8 @@
             right: 11px;
             bottom: 8px;
 
+            z-index: 2;
+
             font-family:
                 "Courier New",
                 monospace;
@@ -651,7 +649,12 @@
             letter-spacing: 1.2px;
 
             color:
-                rgba(155, 220, 40, 0.40);
+                rgba(
+                    166,
+                    226,
+                    46,
+                    0.55
+                );
         }
 
         iframe {
@@ -664,9 +667,13 @@
 
             border: 0;
 
-            background:
-                transparent;
+            background: transparent;
         }
+
+
+        /* =========================
+           DOWNLOAD
+        ========================= */
 
         .download-card {
             text-align: left;
@@ -679,22 +686,29 @@
         .download-button {
             margin-top: 7px;
 
-            border-color:
-                var(--green);
+            border-color: var(--green);
 
             background:
-                rgba(155, 220, 40, 0.10);
+                rgba(
+                    155,
+                    220,
+                    40,
+                    0.10
+                );
 
-            color:
-                var(--green-bright);
+            color: var(--green-bright);
         }
 
         .download-button:hover {
             background:
-                rgba(155, 220, 40, 0.20);
+                rgba(
+                    155,
+                    220,
+                    40,
+                    0.20
+                );
 
-            border-color:
-                var(--green-bright);
+            border-color: var(--green-bright);
 
             box-shadow:
                 0 0 20px
@@ -743,13 +757,17 @@
             letter-spacing: 1.4px;
 
             color:
-                rgba(169, 155, 181, 0.45);
+                rgba(
+                    169,
+                    155,
+                    181,
+                    0.45
+                );
         }
 
         @media (
             max-width: 600px
         ) {
-
             body {
                 padding:
                     30px 14px;
@@ -760,11 +778,9 @@
             }
 
             .option-row {
-                align-items:
-                    flex-start;
+                align-items: flex-start;
 
-                flex-direction:
-                    column;
+                flex-direction: column;
             }
 
             select {
@@ -797,6 +813,7 @@
     </style>
 
 </head>
+
 
 <body>
 
@@ -902,14 +919,14 @@
                         <input
                             id="background-color"
                             type="color"
-                            value="#291a3d"
+                            value="#21152f"
                         >
 
                         <input
                             id="background-color-text"
                             class="hex-input"
                             type="text"
-                            value="#291a3d"
+                            value="#21152f"
                             maxlength="7"
                         >
 
@@ -929,14 +946,14 @@
                         <input
                             id="accent-color"
                             type="color"
-                            value="#ff9d3d"
+                            value="#a6e22e"
                         >
 
                         <input
                             id="accent-color-text"
                             class="hex-input"
                             type="text"
-                            value="#ff9d3d"
+                            value="#a6e22e"
                             maxlength="7"
                         >
 
@@ -1220,12 +1237,10 @@
                 'layout'
             );
 
-        let previewLoaded =
-            false;
+        let previewLoaded = false;
 
 
         function normalizeHex(value) {
-
             const clean =
                 value
                     .trim()
@@ -1245,7 +1260,6 @@
 
 
         function cleanHex(value) {
-
             return value
                 .replace('#', '')
                 .toLowerCase();
@@ -1253,7 +1267,6 @@
 
 
         function clampOpacity(value) {
-
             const number =
                 Number(value);
 
@@ -1278,9 +1291,7 @@
 
 
         function getSettings() {
-
             return {
-
                 art:
                     showArtInput.checked,
 
@@ -1314,7 +1325,6 @@
         function buildWidgetURL(
             username
         ) {
-
             const settings =
                 getSettings();
 
@@ -1375,7 +1385,6 @@
 
 
         function sendSettings() {
-
             if (
                 !previewLoaded ||
                 !preview.contentWindow
@@ -1398,7 +1407,6 @@
 
 
         function updateURL() {
-
             const username =
                 usernameInput.value
                     .trim();
@@ -1415,12 +1423,10 @@
 
 
         function updateCustomization() {
-
             if (
                 output.style.display ===
                 'block'
             ) {
-
                 updateURL();
                 sendSettings();
             }
@@ -1430,7 +1436,6 @@
         backgroundColorInput.addEventListener(
             'input',
             function() {
-
                 backgroundColorText.value =
                     backgroundColorInput.value;
 
@@ -1442,7 +1447,6 @@
         backgroundColorText.addEventListener(
             'input',
             function() {
-
                 const color =
                     normalizeHex(
                         backgroundColorText.value
@@ -1466,7 +1470,6 @@
         accentColorInput.addEventListener(
             'input',
             function() {
-
                 accentColorText.value =
                     accentColorInput.value;
 
@@ -1478,7 +1481,6 @@
         accentColorText.addEventListener(
             'input',
             function() {
-
                 const color =
                     normalizeHex(
                         accentColorText.value
@@ -1502,7 +1504,6 @@
         opacityInput.addEventListener(
             'input',
             function() {
-
                 opacityText.value =
                     opacityInput.value;
 
@@ -1514,7 +1515,6 @@
         opacityText.addEventListener(
             'input',
             function() {
-
                 const value =
                     clampOpacity(
                         opacityText.value
@@ -1536,18 +1536,15 @@
             updateCustomization
         );
 
-
         showArtInput.addEventListener(
             'change',
             updateCustomization
         );
 
-
         showStatusInput.addEventListener(
             'change',
             updateCustomization
         );
-
 
         showCreditInput.addEventListener(
             'change',
@@ -1556,13 +1553,11 @@
 
 
         async function generateWidget() {
-
             const username =
                 usernameInput.value
                     .trim();
 
             if (!username) {
-
                 alert(
                     'Enter a Last.fm username.'
                 );
@@ -1577,7 +1572,6 @@
                 'Checking...';
 
             try {
-
                 const response =
                     await fetch(
                         `/api/lastfm?username=${encodeURIComponent(
@@ -1592,7 +1586,6 @@
                     !response.ok ||
                     data.error
                 ) {
-
                     alert(
                         data.message ||
                         'Last.fm user not found.'
@@ -1619,7 +1612,6 @@
                     'block';
 
             } catch (error) {
-
                 console.error(
                     error
                 );
@@ -1629,7 +1621,6 @@
                 );
 
             } finally {
-
                 generateButton.disabled =
                     false;
 
@@ -1642,7 +1633,6 @@
         preview.addEventListener(
             'load',
             function() {
-
                 previewLoaded =
                     true;
 
@@ -1660,9 +1650,9 @@
         usernameInput.addEventListener(
             'keydown',
             function(event) {
-
                 if (
-                    event.key === 'Enter'
+                    event.key ===
+                    'Enter'
                 ) {
                     generateWidget();
                 }
@@ -1673,7 +1663,6 @@
         copyButton.addEventListener(
             'click',
             async function() {
-
                 const widgetURL =
                     widgetURLInput.value;
 
@@ -1682,7 +1671,6 @@
                 }
 
                 try {
-
                     await navigator
                         .clipboard
                         .writeText(
@@ -1694,16 +1682,13 @@
 
                     setTimeout(
                         function() {
-
                             copyButton.textContent =
                                 'Copy';
-
                         },
                         1500
                     );
 
                 } catch (error) {
-
                     widgetURLInput.select();
 
                     document.execCommand(
