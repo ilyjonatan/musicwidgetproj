@@ -357,7 +357,8 @@
 
             align-items: center;
 
-            justify-content: space-between;
+            justify-content:
+                space-between;
 
             gap: 16px;
 
@@ -478,7 +479,6 @@
             display: inline-flex;
 
             align-items: center;
-
             justify-content: center;
 
             padding: 11px 17px;
@@ -504,7 +504,6 @@
             letter-spacing: 0.8px;
 
             text-decoration: none;
-
             text-transform: uppercase;
 
             cursor: pointer;
@@ -574,6 +573,11 @@
             font-size: 12px;
         }
 
+
+        /* =========================
+           PREVIEW
+        ========================= */
+
         .preview-wrapper {
             position: relative;
 
@@ -585,13 +589,39 @@
             display: flex;
 
             align-items: center;
-
             justify-content: center;
 
             overflow: hidden;
 
             background-color:
                 #0b0910;
+
+            border:
+                1px solid
+                var(--border-soft);
+
+            border-radius: 6px;
+
+            isolation: isolate;
+        }
+
+
+        /*
+         * Dot field is inset from the edges.
+         * This prevents the pattern from
+         * touching or bleeding into the border.
+         */
+
+        .preview-pattern {
+            position: absolute;
+
+            inset: 5px;
+
+            z-index: 0;
+
+            border-radius: 3px;
+
+            overflow: hidden;
 
             background-image:
                 radial-gradient(
@@ -600,7 +630,7 @@
                         146,
                         88,
                         199,
-                        0.18
+                        0.20
                     ) 1px,
                     transparent 1.25px
                 );
@@ -609,25 +639,17 @@
                 18px 18px;
 
             background-position:
-                9px 9px;
-
-            border:
-                1px solid
-                var(--border-soft);
-
-            border-radius: 6px;
+                center;
         }
 
-        .preview-wrapper::before {
-            content:
-                "LIVE PREVIEW";
 
+        .preview-label {
             position: absolute;
 
-            top: 9px;
-            left: 11px;
+            top: 10px;
+            left: 12px;
 
-            z-index: 2;
+            z-index: 3;
 
             font-family:
                 "Courier New",
@@ -642,20 +664,20 @@
                     146,
                     88,
                     199,
-                    0.55
+                    0.60
                 );
+
+            pointer-events: none;
         }
 
-        .preview-wrapper::after {
-            content:
-                "● SIGNAL ACTIVE";
 
+        .preview-status {
             position: absolute;
 
-            right: 11px;
-            bottom: 8px;
+            right: 12px;
+            bottom: 9px;
 
-            z-index: 2;
+            z-index: 3;
 
             font-family:
                 "Courier New",
@@ -670,11 +692,18 @@
                     166,
                     226,
                     46,
-                    0.55
+                    0.58
                 );
+
+            pointer-events: none;
         }
 
+
         iframe {
+            position: relative;
+
+            z-index: 2;
+
             display: block;
 
             width: 420px;
@@ -684,8 +713,14 @@
 
             border: 0;
 
-            background: transparent;
+            background:
+                transparent;
         }
+
+
+        /* =========================
+           DOWNLOAD
+        ========================= */
 
         .download-card {
             text-align: left;
@@ -783,9 +818,11 @@
                 );
         }
 
+
         @media (
             max-width: 600px
         ) {
+
             body {
                 padding:
                     30px 14px;
@@ -1095,10 +1132,23 @@
 
                 <div class="preview-wrapper">
 
+                    <div
+                        class="preview-pattern"
+                        aria-hidden="true"
+                    ></div>
+
+                    <span class="preview-label">
+                        LIVE PREVIEW
+                    </span>
+
                     <iframe
                         id="preview"
                         title="ZERO SIGNAL Last.fm Preview"
                     ></iframe>
+
+                    <span class="preview-status">
+                        ● SIGNAL ACTIVE
+                    </span>
 
                 </div>
 
@@ -1256,6 +1306,7 @@
                 'layout'
             );
 
+
         let previewLoaded =
             false;
 
@@ -1357,6 +1408,7 @@
             const params =
                 new URLSearchParams();
 
+
             params.set(
                 'user',
                 username
@@ -1402,6 +1454,7 @@
                 'accent',
                 settings.accent
             );
+
 
             return (
                 `${window.location.origin}` +
@@ -1607,11 +1660,13 @@
                 return;
             }
 
+
             generateButton.disabled =
                 true;
 
             generateButton.textContent =
                 'Checking...';
+
 
             try {
 
@@ -1622,8 +1677,10 @@
                         )}&_=${Date.now()}`
                     );
 
+
                 const data =
                     await response.json();
+
 
                 if (
                     !response.ok ||
@@ -1638,22 +1695,28 @@
                     return;
                 }
 
+
                 const widgetURL =
                     buildWidgetURL(
                         username
                     );
 
+
                 widgetURLInput.value =
                     widgetURL;
+
 
                 previewLoaded =
                     false;
 
+
                 preview.src =
                     widgetURL;
 
+
                 output.style.display =
                     'block';
+
 
             } catch (error) {
 
@@ -1661,14 +1724,17 @@
                     error
                 );
 
+
                 alert(
                     'Unable to check Last.fm right now.'
                 );
+
 
             } finally {
 
                 generateButton.disabled =
                     false;
+
 
                 generateButton.textContent =
                     'Generate Widget';
@@ -1715,9 +1781,11 @@
                 const widgetURL =
                     widgetURLInput.value;
 
+
                 if (!widgetURL) {
                     return;
                 }
+
 
                 try {
 
@@ -1727,8 +1795,10 @@
                             widgetURL
                         );
 
+
                     copyButton.textContent =
                         'Copied!';
+
 
                     setTimeout(
                         function() {
@@ -1740,9 +1810,11 @@
                         1500
                     );
 
+
                 } catch (error) {
 
                     widgetURLInput.select();
+
 
                     document.execCommand(
                         'copy'
